@@ -39,7 +39,7 @@ namespace EventOrganizationApp.Repository.Users
             }
 
             var userTaskForAnEvent = _context.Tasks
-                .Where(x => x.TaskId == eventId)
+                .Where(x => x.EventId == eventId)
                 .Where(x => x.OwnerId == userId)
                 .ToList();
 
