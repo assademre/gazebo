@@ -2,6 +2,7 @@
 using EventOrganizationApp.Data.Dto;
 using EventOrganizationApp.Interfaces.Users;
 using EventOrganizationApp.Models;
+using EventOrganizationApp.Repository.Users;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
@@ -39,6 +40,21 @@ namespace EventOrganizationApp.Controller
             }
 
             return Ok(createdEvents);
+        }
+
+        [HttpGet("eventId={eventId}/event-status")]
+        [ProducesResponseType(200, Type = typeof(string))]
+        [ProducesResponseType(400)]
+        public IActionResult GetStatusByEventId(int eventId)
+        {
+            var eventStatus = _eventRepository.GetStatusByEventId(eventId);
+
+            if (eventStatus == string.Empty)
+            {
+                return NotFound();
+            }
+
+            return Ok(eventStatus);
         }
     }
 }

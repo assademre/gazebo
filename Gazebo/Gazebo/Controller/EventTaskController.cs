@@ -21,7 +21,7 @@ namespace EventOrganizationApp.Controller
             _mapper = mapper;
         }
 
-        [HttpGet("{userId}/all-tasks")]
+        [HttpGet("userid={userId}/all-tasks")]
         [ProducesResponseType(200, Type = typeof(IList<Event>))]
         [ProducesResponseType(400)]
         public IActionResult GetAllUserTasks(int userId)
@@ -41,8 +41,8 @@ namespace EventOrganizationApp.Controller
             return Ok(allTasks);
         }
 
-        [HttpGet("{userId}/event-task")]
-        [ProducesResponseType(200, Type = typeof(IList<Event>))]
+        [HttpGet("userid={userId}&eventid={eventId}/event-task")]
+        [ProducesResponseType(200, Type = typeof(IList<EventTaskDto>))]
         [ProducesResponseType(400)]
         public IActionResult GetUserTasksForAnEvent(int userId, int eventId)
         {
@@ -59,6 +59,41 @@ namespace EventOrganizationApp.Controller
             }
 
             return Ok(userEventTask);
+        }
+
+        [HttpGet("eventid={eventId}/tasks")]
+        [ProducesResponseType(200, Type = typeof(IList<EventTaskDto>))]
+        [ProducesResponseType(400)]
+        public IActionResult GetTasksForEvent(int eventId)
+        {
+            var tasksList = _mapper.Map<IList<EventTaskDto>>(_eventTaskRepository.GetTasksForEvent(eventId));
+
+            if (tasksList.IsNullOrEmpty())
+            {
+                return NotFound();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            return Ok(tasksList);
+        }
+
+        [HttpGet("taskid={taskId}/task-status")]
+        [ProducesResponseType(200, Type = typeof(string))]
+        [ProducesResponseType(400)]
+        public IActionResult GetStatusByTaskId(int taskId)
+        {
+            var taskStatus = _eventTaskRepository.GetStatusByTaskId(taskId);
+
+            if (taskStatus == string.Empty)
+            {
+                return NotFound();
+            }
+
+            return Ok(taskStatus);
         }
     }
 }

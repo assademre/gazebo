@@ -4,11 +4,11 @@ using EventOrganizationApp.Models;
 
 namespace EventOrganizationApp.Repository.Users
 {
-    public class ProfileRepository : IProfileRepository
+    public class UserRepository : IUserRepository
     {
         private readonly DataContext _context;
 
-        public ProfileRepository(DataContext context)
+        public UserRepository(DataContext context)
         {
             _context = context;
         }
@@ -30,6 +30,18 @@ namespace EventOrganizationApp.Repository.Users
             }
 
             return userInfo;
+        }
+
+        public IList<User> GetUsersName()
+        {
+            var users = _context.Users.ToList();
+
+            if (users.Count() == 0)
+            {
+                return new List<User>();
+            }
+
+            return users;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using EventOrganizationApp.Data;
 using EventOrganizationApp.Interfaces.Users;
 using EventOrganizationApp.Models;
+using EventOrganizationApp.Models.Enums;
 
 namespace EventOrganizationApp.Repository.Users
 {
@@ -49,6 +50,40 @@ namespace EventOrganizationApp.Repository.Users
             }
 
             return userTaskForAnEvent;
+        }
+
+        public IList<EventsTask> GetTasksForEvent(int eventId)
+        {
+            if (eventId == 0)
+            {
+                throw new ArgumentException($"eventId {eventId} is not correct");
+            }
+
+            var tasksForAnEvent = _context.Tasks
+                .Where (x => x.EventId == eventId)
+                .ToList();
+
+            if (tasksForAnEvent == null || tasksForAnEvent.Count() == 0)
+            {
+                throw new ArgumentException("No event has been found");
+            }
+
+            return tasksForAnEvent;
+        }
+
+        public string GetStatusByTaskId(int taskId)
+        {
+            if (taskId == 0)
+            {
+                return string.Empty;
+            }
+
+            var taskStatus = _context.Tasks
+                .Where(x => x.TaskId == taskId)
+                .Select(x => ((Status)x.StatusId).ToString())
+                .FirstOrDefault() ?? string.Empty;
+
+            return taskStatus;
         }
     }
 }

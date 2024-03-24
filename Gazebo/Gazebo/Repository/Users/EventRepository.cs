@@ -1,6 +1,7 @@
 ﻿using EventOrganizationApp.Data;
 using EventOrganizationApp.Interfaces.Users;
 using EventOrganizationApp.Models;
+using EventOrganizationApp.Models.Enums;
 
 namespace EventOrganizationApp.Repository.Users
 {
@@ -29,6 +30,21 @@ namespace EventOrganizationApp.Repository.Users
             }
 
             return userEvents;
+        }
+
+        public string GetStatusByEventId(int eventId)
+        {
+            if (eventId == 0)
+            {
+                return string.Empty;
+            }
+
+            var eventStatus = _context.Events
+                .Where(x => x.EventId == eventId)
+                .Select(x => ((Status)x.StatusId).ToString())
+                .FirstOrDefault() ?? string.Empty;
+
+            return eventStatus;
         }
     }
 }

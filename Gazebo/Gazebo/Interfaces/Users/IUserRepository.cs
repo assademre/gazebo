@@ -2,8 +2,10 @@
 
 namespace EventOrganizationApp.Interfaces.Users
 {
-    public interface IProfileRepository
+    public interface IUserRepository
     {
         User GetUserInfo(int userId);
+
+        IList<User> GetUsersName();
     }
 }

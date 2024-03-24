@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EventOrganizationApp.Models;
 using EventOrganizationApp.Models.Enums;
+using Gazebo.Data.Dto;
 
 namespace EventOrganizationApp.Data.Dto.Mapper
 {
@@ -25,6 +26,14 @@ namespace EventOrganizationApp.Data.Dto.Mapper
             CreateMap<EventTaskDto, EventsTask>()
                 .ForMember(dest => dest.CurrencyId, opt => opt.MapFrom(src => src.Currency))
                 .ForMember(dest => dest.StatusId, opt => opt.MapFrom(src => src.Status.ToString()));
+
+            CreateMap<User, UserDto>()
+                .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId))
+                .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.Username));
+
+            CreateMap<UserDto, User>()
+                .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId))
+                .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.Username));
         }
     }
 }
