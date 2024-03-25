@@ -15,21 +15,22 @@ namespace EventOrganizationApp.Data.Dto.Mapper
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => Enum.GetName(typeof(Status), src.StatusId)));
 
             CreateMap<EventDto, Event>()
-                .ForMember(dest => dest.EventTypeId, opt => opt.MapFrom(src => (int)src.EventId))
-                .ForMember(dest => dest.CurrencyId, opt => opt.MapFrom(src => src.Currency))
-                .ForMember(dest => dest.StatusId, opt => opt.MapFrom(src => src.Status.ToString()));
+                .ForMember(dest => dest.EventTypeId, opt => opt.MapFrom(src => Enum.Parse(typeof(EventType), src.EventType)))
+                .ForMember(dest => dest.CurrencyId, opt => opt.MapFrom(src => (int)Enum.Parse(typeof(CurrencyModel), src.Currency)))
+                .ForMember(dest => dest.StatusId, opt => opt.MapFrom(src => (int)Enum.Parse(typeof(Status), src.Status)));
 
             CreateMap<EventsTask, EventTaskDto>()
                 .ForMember(dest => dest.Currency, opt => opt.MapFrom(src => (CurrencyModel)src.CurrencyId))
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => Enum.GetName(typeof(Status), src.StatusId)));
 
             CreateMap<EventTaskDto, EventsTask>()
-                .ForMember(dest => dest.CurrencyId, opt => opt.MapFrom(src => src.Currency))
-                .ForMember(dest => dest.StatusId, opt => opt.MapFrom(src => src.Status.ToString()));
+                .ForMember(dest => dest.CurrencyId, opt => opt.MapFrom(src => (int)Enum.Parse(typeof(CurrencyModel), src.Currency)))
+                .ForMember(dest => dest.StatusId, opt => opt.MapFrom(src => (int)Enum.Parse(typeof(Status), src.Status)));
 
             CreateMap<User, UserDto>()
                 .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId))
                 .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.Username));
+
 
             CreateMap<UserDto, User>()
                 .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId))

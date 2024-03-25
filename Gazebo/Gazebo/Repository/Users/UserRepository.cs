@@ -43,5 +43,24 @@ namespace EventOrganizationApp.Repository.Users
 
             return users;
         }
+
+        public bool CreateUser(User user)
+        {
+            if (user == null)
+            {
+                return false;
+            }
+
+            _context.Add(user);
+
+            return SaveChanges();
+        }
+
+        public bool SaveChanges()
+        {
+            var savedData =_context.SaveChanges();
+
+            return savedData > 0;
+        }
     }
 }

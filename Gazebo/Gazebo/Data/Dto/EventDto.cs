@@ -6,6 +6,7 @@ namespace EventOrganizationApp.Data.Dto
     public class EventDto
     {
         public int EventId { get; set; }
+        public int CreaterId { get; set; }
         public string EventType { get; set; }
         public string EventName { get; set; }
         public decimal Budget { get; set; }

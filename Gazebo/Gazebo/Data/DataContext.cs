@@ -1,6 +1,7 @@
 ﻿using EventOrganizationApp.Models;
 using EventOrganizationApp.Models.Enums;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 
@@ -24,7 +25,9 @@ namespace EventOrganizationApp.Data
                 .HasKey(c => c.UserId);
 
             modelBuilder.Entity<Event>()
-                .HasKey(e => e.EventId);
+                .HasKey(e => e.EventId)
+                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
 
             modelBuilder.Entity<Event>()
                 .HasOne<User>()

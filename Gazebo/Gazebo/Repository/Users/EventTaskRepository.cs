@@ -85,5 +85,24 @@ namespace EventOrganizationApp.Repository.Users
 
             return taskStatus;
         }
+
+        public bool CreateTask(EventsTask task)
+        {
+            if (task  == null)
+            {
+                return false;
+            }
+
+            _context.Add(task);
+
+            return SaveChanges();
+        }
+
+        public bool SaveChanges()
+        {
+            var savedData = _context.SaveChanges();
+
+            return savedData > 0;
+        }
     }
 }

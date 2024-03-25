@@ -1,4 +1,5 @@
-﻿using EventOrganizationApp.Models;
+﻿using EventOrganizationApp.Data.Dto;
+using EventOrganizationApp.Models;
 
 namespace EventOrganizationApp.Interfaces.Users
 {
@@ -6,5 +7,6 @@ namespace EventOrganizationApp.Interfaces.Users
     {
         IList<Event> GetEventsUserCreated(int userId);
         string GetStatusByEventId(int eventId);
+        bool CreateEvent(Event newEvent);
     }
 }

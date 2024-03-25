@@ -1,4 +1,5 @@
 ﻿using EventOrganizationApp.Data;
+using EventOrganizationApp.Data.Dto;
 using EventOrganizationApp.Interfaces.Users;
 using EventOrganizationApp.Models;
 using EventOrganizationApp.Models.Enums;
@@ -45,6 +46,25 @@ namespace EventOrganizationApp.Repository.Users
                 .FirstOrDefault() ?? string.Empty;
 
             return eventStatus;
+        }
+
+        public bool CreateEvent(Event newEvent)
+        {
+            if (newEvent == null)
+            {
+                return false;
+            }
+
+            _context.Add(newEvent);   
+            
+            return SaveChanges();
+        }
+
+        public bool SaveChanges()
+        {
+            var savedData = _context.SaveChanges();
+
+            return savedData > 0;
         }
     }
 }

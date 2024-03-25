@@ -2,9 +2,9 @@
 using EventOrganizationApp.Data.Dto;
 using EventOrganizationApp.Interfaces.Users;
 using EventOrganizationApp.Models;
+using EventOrganizationApp.Repository.Users;
 using Gazebo.Data.Dto;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 
 namespace EventOrganizationApp.Controller
 {
@@ -59,6 +59,26 @@ namespace EventOrganizationApp.Controller
             }
 
             return Ok(users);
+        }
+
+        [HttpPost]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        public IActionResult CreateUser([FromBody] User user)
+        {
+            var mappedUser = _mapper.Map<User>(user);
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!_profileRepository.CreateUser(mappedUser))
+            {
+                ModelState.AddModelError("", "Encounter an error while creating the user");
+            }
+
+            return Ok("Succesfully created!");
         }
     }
 }

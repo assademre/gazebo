@@ -9,5 +9,6 @@ namespace EventOrganizationApp.Interfaces.Users
         IList<EventsTask> GetUserTasksForAnEvent(int userId, int eventId);
         IList<EventsTask> GetTasksForEvent(int eventId);
         string GetStatusByTaskId(int taskId);
+        bool CreateTask(EventsTask task);
     }
 }

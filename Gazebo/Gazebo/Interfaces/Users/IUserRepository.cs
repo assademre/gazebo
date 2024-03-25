@@ -7,5 +7,7 @@ namespace EventOrganizationApp.Interfaces.Users
         User GetUserInfo(int userId);
 
         IList<User> GetUsersName();
+
+        bool CreateUser(User user);
     }
 }

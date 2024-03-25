@@ -5,6 +5,7 @@ using EventOrganizationApp.Models;
 using EventOrganizationApp.Repository.Users;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using System.Threading.Tasks;
 
 namespace EventOrganizationApp.Controller
 {
@@ -42,7 +43,7 @@ namespace EventOrganizationApp.Controller
             return Ok(createdEvents);
         }
 
-        [HttpGet("eventId={eventId}/event-status")]
+        [HttpGet("{eventId}/event-status")]
         [ProducesResponseType(200, Type = typeof(string))]
         [ProducesResponseType(400)]
         public IActionResult GetStatusByEventId(int eventId)
@@ -54,7 +55,32 @@ namespace EventOrganizationApp.Controller
                 return NotFound();
             }
 
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             return Ok(eventStatus);
+        }
+
+        [HttpPost]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        public IActionResult CreateEvent([FromBody] EventDto newEvent)
+        {
+            var mappedEvent = _mapper.Map<Event>(newEvent);
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!_eventRepository.CreateEvent(mappedEvent))
+            {
+                ModelState.AddModelError("", "Encounter an error while creating the event");
+            }
+
+            return Ok("Succesfully created!");
         }
     }
 }

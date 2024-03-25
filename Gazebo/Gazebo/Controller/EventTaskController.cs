@@ -21,7 +21,7 @@ namespace EventOrganizationApp.Controller
             _mapper = mapper;
         }
 
-        [HttpGet("userid={userId}/all-tasks")]
+        [HttpGet("{userId}/all-tasks")]
         [ProducesResponseType(200, Type = typeof(IList<Event>))]
         [ProducesResponseType(400)]
         public IActionResult GetAllUserTasks(int userId)
@@ -61,7 +61,7 @@ namespace EventOrganizationApp.Controller
             return Ok(userEventTask);
         }
 
-        [HttpGet("eventid={eventId}/tasks")]
+        [HttpGet("{eventId}/tasks")]
         [ProducesResponseType(200, Type = typeof(IList<EventTaskDto>))]
         [ProducesResponseType(400)]
         public IActionResult GetTasksForEvent(int eventId)
@@ -81,7 +81,7 @@ namespace EventOrganizationApp.Controller
             return Ok(tasksList);
         }
 
-        [HttpGet("taskid={taskId}/task-status")]
+        [HttpGet("{taskId}/task-status")]
         [ProducesResponseType(200, Type = typeof(string))]
         [ProducesResponseType(400)]
         public IActionResult GetStatusByTaskId(int taskId)
@@ -94,6 +94,26 @@ namespace EventOrganizationApp.Controller
             }
 
             return Ok(taskStatus);
+        }
+
+        [HttpPost]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        public IActionResult CreateTask([FromBody] EventTaskDto task)
+        {
+            var mappedTask = _mapper.Map<EventsTask>(task);
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!_eventTaskRepository.CreateTask(mappedTask))
+            {
+                ModelState.AddModelError("", "Encounter an error while creating the task");
+            }
+
+            return Ok("Succesfully created!");
         }
     }
 }
