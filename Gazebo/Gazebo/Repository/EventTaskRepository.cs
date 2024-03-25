@@ -1,9 +1,9 @@
 ﻿using EventOrganizationApp.Data;
-using EventOrganizationApp.Interfaces.Users;
 using EventOrganizationApp.Models;
 using EventOrganizationApp.Models.Enums;
+using Gazebo.Interfaces;
 
-namespace EventOrganizationApp.Repository.Users
+namespace Gazebo.Repository
 {
     public class EventTaskRepository : IEventTaskRepository
     {
@@ -60,7 +60,7 @@ namespace EventOrganizationApp.Repository.Users
             }
 
             var tasksForAnEvent = _context.Tasks
-                .Where (x => x.EventId == eventId)
+                .Where(x => x.EventId == eventId)
                 .ToList();
 
             if (tasksForAnEvent == null || tasksForAnEvent.Count() == 0)
@@ -88,7 +88,7 @@ namespace EventOrganizationApp.Repository.Users
 
         public bool CreateTask(EventsTask task)
         {
-            if (task  == null)
+            if (task == null)
             {
                 return false;
             }

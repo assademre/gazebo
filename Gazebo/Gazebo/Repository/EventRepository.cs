@@ -1,10 +1,10 @@
 ﻿using EventOrganizationApp.Data;
 using EventOrganizationApp.Data.Dto;
-using EventOrganizationApp.Interfaces.Users;
 using EventOrganizationApp.Models;
 using EventOrganizationApp.Models.Enums;
+using Gazebo.Interfaces;
 
-namespace EventOrganizationApp.Repository.Users
+namespace Gazebo.Repository
 {
     public class EventRepository : IEventRepository
     {
@@ -55,8 +55,8 @@ namespace EventOrganizationApp.Repository.Users
                 return false;
             }
 
-            _context.Add(newEvent);   
-            
+            _context.Add(newEvent);
+
             return SaveChanges();
         }
 

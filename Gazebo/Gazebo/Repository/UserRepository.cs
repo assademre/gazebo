@@ -1,8 +1,8 @@
 ﻿using EventOrganizationApp.Data;
-using EventOrganizationApp.Interfaces.Users;
 using EventOrganizationApp.Models;
+using Gazebo.Interfaces;
 
-namespace EventOrganizationApp.Repository.Users
+namespace Gazebo.Repository
 {
     public class UserRepository : IUserRepository
     {
@@ -23,7 +23,7 @@ namespace EventOrganizationApp.Repository.Users
             var userInfo = _context.Users
                 .Where(x => x.UserId == userId)
                 .FirstOrDefault() ?? new User();
-            
+
             if (userInfo.UserId == 0)
             {
                 return new User();
@@ -58,7 +58,7 @@ namespace EventOrganizationApp.Repository.Users
 
         public bool SaveChanges()
         {
-            var savedData =_context.SaveChanges();
+            var savedData = _context.SaveChanges();
 
             return savedData > 0;
         }
