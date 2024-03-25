@@ -1,7 +1,7 @@
 ﻿using EventOrganizationApp.Models;
 using System.Diagnostics.Eventing.Reader;
 
-namespace EventOrganizationApp.Interfaces.Users
+namespace Gazebo.Interfaces
 {
     public interface IEventTaskRepository
     {

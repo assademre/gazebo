@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using EventOrganizationApp.Data.Dto;
-using EventOrganizationApp.Interfaces.Users;
 using EventOrganizationApp.Models;
 using EventOrganizationApp.Repository.Users;
 using Gazebo.Data.Dto;
+using Gazebo.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EventOrganizationApp.Controller

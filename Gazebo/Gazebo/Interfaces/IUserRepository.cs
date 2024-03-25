@@ -1,6 +1,6 @@
 ﻿using EventOrganizationApp.Models;
 
-namespace EventOrganizationApp.Interfaces.Users
+namespace Gazebo.Interfaces
 {
     public interface IUserRepository
     {

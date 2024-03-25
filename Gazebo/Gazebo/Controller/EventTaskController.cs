@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using EventOrganizationApp.Data.Dto;
-using EventOrganizationApp.Interfaces.Users;
 using EventOrganizationApp.Models;
+using Gazebo.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 

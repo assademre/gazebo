@@ -1,6 +1,6 @@
 using EventOrganizationApp.Data;
-using EventOrganizationApp.Interfaces.Users;
-using EventOrganizationApp.Repository.Users;
+using Gazebo.Interfaces;
+using Gazebo.Repository;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
