@@ -23,14 +23,15 @@ namespace EventOrganizationApp.Controller
             _mapper = mapper;
         }
 
-        [HttpGet("{userId}/created-events")]
+        [HttpGet("{userId:int}/created-events")]
         [ProducesResponseType(200, Type = typeof(IList<Event>))]
         [ProducesResponseType(400)]
-        public IActionResult GetEventUserCreated(int userId)
+        public async Task<IActionResult> GetEventUserCreated([FromRoute] int userId)
         {
-            var createdEvents = _mapper.Map<IList<EventDto>>(_eventRepository.GetEventsUserCreated(userId));
+            var createdEvents = await _eventRepository.GetEventsUserCreated(userId);
+            var mappedEvents = _mapper.Map<IList<EventDto>>(createdEvents);
 
-            if (createdEvents.IsNullOrEmpty())
+            if (mappedEvents.IsNullOrEmpty())
             {
                 return NotFound();
             }
@@ -40,15 +41,15 @@ namespace EventOrganizationApp.Controller
                 return BadRequest(ModelState);
             }
 
-            return Ok(createdEvents);
+            return Ok(mappedEvents);
         }
 
-        [HttpGet("{eventId}/event-status")]
+        [HttpGet("{eventId:int}/event-status")]
         [ProducesResponseType(200, Type = typeof(string))]
         [ProducesResponseType(400)]
-        public IActionResult GetStatusByEventId(int eventId)
+        public async Task<IActionResult> GetStatusByEventId([FromRoute] int eventId)
         {
-            var eventStatus = _eventRepository.GetStatusByEventId(eventId);
+            var eventStatus = await _eventRepository.GetStatusByEventId(eventId);
 
             if (eventStatus == string.Empty)
             {
@@ -66,7 +67,7 @@ namespace EventOrganizationApp.Controller
         [HttpPost]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
-        public IActionResult CreateEvent([FromBody] EventDto newEvent)
+        public async Task<IActionResult> CreateEvent([FromBody] EventDto newEvent)
         {
             var mappedEvent = _mapper.Map<Event>(newEvent);
 
@@ -74,8 +75,9 @@ namespace EventOrganizationApp.Controller
             {
                 return BadRequest(ModelState);
             }
+            var result = await _eventRepository.CreateEvent(mappedEvent);
 
-            if (!_eventRepository.CreateEvent(mappedEvent))
+            if (!result)
             {
                 ModelState.AddModelError("", "Encounter an error while creating the event");
             }

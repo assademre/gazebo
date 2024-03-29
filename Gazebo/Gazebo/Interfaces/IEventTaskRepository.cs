@@ -1,14 +1,18 @@
-﻿using EventOrganizationApp.Models;
+﻿using EventOrganizationApp.Data.Dto;
+using EventOrganizationApp.Models;
+using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics.Eventing.Reader;
 
 namespace Gazebo.Interfaces
 {
     public interface IEventTaskRepository
     {
-        IList<EventsTask> GetAllUserTasks(int userId);
-        IList<EventsTask> GetUserTasksForAnEvent(int userId, int eventId);
-        IList<EventsTask> GetTasksForEvent(int eventId);
-        string GetStatusByTaskId(int taskId);
-        bool CreateTask(EventsTask task);
+        Task<IList<EventsTask>> GetAllUserTasks(int userId);
+        Task<IList<EventsTask>> GetUserTasksForAnEvent(int userId, int eventId);
+        Task<IList<EventsTask>> GetTasksForEvent(int eventId);
+        Task<EventsTask> GetTask(int taskId);
+        Task<bool> CreateTask(EventsTask task);
+        Task<bool> UpdateTask(EventsTask task);
+        Task<bool> DeleteTask(EventsTask task);
     }
 }

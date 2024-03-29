@@ -22,9 +22,9 @@ namespace EventOrganizationApp.Controller
             _mapper = mapper;
         }
 
-        [HttpGet("{userId}/profile")]
+        [HttpGet("{userId:int}/profile")]
         [ProducesResponseType(200, Type = typeof(User))]
-        public IActionResult GetProfileInfo(int userId)
+        public IActionResult GetProfileInfo([FromRoute] int userId)
         {
             var profileInfo = _profileRepository.GetUserInfo(userId);
 

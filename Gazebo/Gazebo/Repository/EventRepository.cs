@@ -1,8 +1,8 @@
 ﻿using EventOrganizationApp.Data;
-using EventOrganizationApp.Data.Dto;
 using EventOrganizationApp.Models;
 using EventOrganizationApp.Models.Enums;
 using Gazebo.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Gazebo.Repository
 {
@@ -14,16 +14,16 @@ namespace Gazebo.Repository
             _context = context;
         }
 
-        public IList<Event> GetEventsUserCreated(int userId)
+        public async Task<IList<Event>> GetEventsUserCreated(int userId)
         {
             if (userId == 0)
             {
                 return null;
             }
 
-            var userEvents = _context.Events
+            var userEvents = await _context.Events
                 .Where(x => x.CreaterId == userId)
-                .ToList();
+                .ToListAsync();
 
             if (userEvents == null || userEvents.Count() == 0)
             {
@@ -33,36 +33,36 @@ namespace Gazebo.Repository
             return userEvents;
         }
 
-        public string GetStatusByEventId(int eventId)
+        public async Task<string> GetStatusByEventId(int eventId)
         {
             if (eventId == 0)
             {
                 return string.Empty;
             }
 
-            var eventStatus = _context.Events
+            var eventStatus = await _context.Events
                 .Where(x => x.EventId == eventId)
                 .Select(x => ((Status)x.StatusId).ToString())
-                .FirstOrDefault() ?? string.Empty;
+                .FirstOrDefaultAsync() ?? string.Empty;
 
             return eventStatus;
         }
 
-        public bool CreateEvent(Event newEvent)
+        public async Task<bool> CreateEvent(Event newEvent)
         {
             if (newEvent == null)
             {
                 return false;
             }
 
-            _context.Add(newEvent);
+            await _context.AddAsync(newEvent);
 
-            return SaveChanges();
+            return await SaveChanges();
         }
 
-        public bool SaveChanges()
+        public async Task<bool> SaveChanges()
         {
-            var savedData = _context.SaveChanges();
+            var savedData = await _context.SaveChangesAsync();
 
             return savedData > 0;
         }

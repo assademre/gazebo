@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
 using EventOrganizationApp.Data.Dto;
 using EventOrganizationApp.Models;
+using EventOrganizationApp.Models.Enums;
 using Gazebo.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using System.Threading.Tasks;
 
 namespace EventOrganizationApp.Controller
 {
@@ -21,14 +24,15 @@ namespace EventOrganizationApp.Controller
             _mapper = mapper;
         }
 
-        [HttpGet("{userId}/all-tasks")]
+        [HttpGet("{userId:int}/all-tasks")]
         [ProducesResponseType(200, Type = typeof(IList<Event>))]
         [ProducesResponseType(400)]
-        public IActionResult GetAllUserTasks(int userId)
+        public async Task<IActionResult> GetAllUserTasks([FromRoute] int userId)
         {
-            var allTasks = _mapper.Map<IList<EventTaskDto>>(_eventTaskRepository.GetAllUserTasks(userId));
+            var allTasks = await _eventTaskRepository.GetAllUserTasks(userId);
+            var mappedTasks = _mapper.Map<IList<EventTaskDto>>(allTasks);
 
-            if (allTasks.IsNullOrEmpty())
+            if (mappedTasks.IsNullOrEmpty())
             {
                 return NotFound();
             }
@@ -38,17 +42,18 @@ namespace EventOrganizationApp.Controller
                 return BadRequest(ModelState);
             }
 
-            return Ok(allTasks);
+            return Ok(mappedTasks);
         }
 
-        [HttpGet("userid={userId}&eventid={eventId}/event-task")]
+        [HttpGet("userid={userId:int}&eventid={eventId:int}/event-task")]
         [ProducesResponseType(200, Type = typeof(IList<EventTaskDto>))]
         [ProducesResponseType(400)]
-        public IActionResult GetUserTasksForAnEvent(int userId, int eventId)
+        public async Task<IActionResult> GetUserTasksForAnEvent([FromRoute] int userId, [FromRoute] int eventId)
         {
-            var userEventTask = _mapper.Map<IList<EventTaskDto>>(_eventTaskRepository.GetUserTasksForAnEvent(userId, eventId));
+            var userEventTasks = await _eventTaskRepository.GetUserTasksForAnEvent(userId, eventId);
+            var mappedeventTasks = _mapper.Map<IList<EventTaskDto>>(userEventTasks);
 
-            if (userEventTask.IsNullOrEmpty())
+            if (mappedeventTasks.IsNullOrEmpty())
             {
                 return NotFound();
             }
@@ -58,17 +63,18 @@ namespace EventOrganizationApp.Controller
                 return BadRequest(ModelState);
             }
 
-            return Ok(userEventTask);
+            return Ok(mappedeventTasks);
         }
 
-        [HttpGet("{eventId}/tasks")]
+        [HttpGet("{eventId:int}/tasks")]
         [ProducesResponseType(200, Type = typeof(IList<EventTaskDto>))]
         [ProducesResponseType(400)]
-        public IActionResult GetTasksForEvent(int eventId)
+        public async Task<IActionResult> GetTasksForEvent([FromRoute] int eventId)
         {
-            var tasksList = _mapper.Map<IList<EventTaskDto>>(_eventTaskRepository.GetTasksForEvent(eventId));
+            var tasksList = await _eventTaskRepository.GetTasksForEvent(eventId);
+            var mappedList = _mapper.Map<IList<EventTaskDto>>(tasksList);
 
-            if (tasksList.IsNullOrEmpty())
+            if (mappedList.IsNullOrEmpty())
             {
                 return NotFound();
             }
@@ -78,28 +84,29 @@ namespace EventOrganizationApp.Controller
                 return BadRequest(ModelState);
             }
 
-            return Ok(tasksList);
+            return Ok(mappedList);
         }
 
-        [HttpGet("{taskId}/task-status")]
+        [HttpGet("{taskId:int}/task")]
         [ProducesResponseType(200, Type = typeof(string))]
         [ProducesResponseType(400)]
-        public IActionResult GetStatusByTaskId(int taskId)
+        public async Task<IActionResult> GetTask([FromRoute] int taskId)
         {
-            var taskStatus = _eventTaskRepository.GetStatusByTaskId(taskId);
+            var taskInfo = await _eventTaskRepository.GetTask(taskId);
+            var mappedTaskInfo = _mapper.Map<EventTaskDto>(taskInfo);
 
-            if (taskStatus == string.Empty)
+            if (mappedTaskInfo == null)
             {
                 return NotFound();
             }
 
-            return Ok(taskStatus);
+            return Ok(mappedTaskInfo);
         }
 
         [HttpPost]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
-        public IActionResult CreateTask([FromBody] EventTaskDto task)
+        public async Task<IActionResult> CreateTask([FromBody] EventTaskDto task)
         {
             var mappedTask = _mapper.Map<EventsTask>(task);
 
@@ -108,12 +115,71 @@ namespace EventOrganizationApp.Controller
                 return BadRequest(ModelState);
             }
 
-            if (!_eventTaskRepository.CreateTask(mappedTask))
+            var result = await _eventTaskRepository.CreateTask(mappedTask);
+            if (!result)
             {
                 ModelState.AddModelError("", "Encounter an error while creating the task");
             }
 
             return Ok("Succesfully created!");
+        }
+
+        [HttpPut("{taskId:int}/status")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        public async Task<IActionResult> ChangeTaskStatus([FromRoute] int taskId, [FromQuery] string status)
+        {
+            Status statusId;
+            if (!Enum.TryParse<Status>(status, out statusId))
+            {
+                ModelState.AddModelError("", "Status does not exist");
+            }
+
+            var task = await _eventTaskRepository.GetTask(taskId);
+            var mappedTask = _mapper.Map<EventsTask>(task);
+            mappedTask.StatusId = (int)statusId;
+            
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await _eventTaskRepository.UpdateTask(mappedTask);
+            if (!result)
+            {
+                ModelState.AddModelError("", "Encounter an error while updating the status");
+            }
+
+            return Ok("Succesfully updated!");
+        }
+
+        [HttpDelete("{taskId:int}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        public async Task<IActionResult> DeleteTask([FromRoute] int taskId)
+        {
+            if (taskId == 0)
+            {
+                ModelState.AddModelError("", "taskId is wrong");
+            }
+
+            var task = await _eventTaskRepository.GetTask(taskId);
+            var mappedTask = _mapper.Map<EventsTask>(task);
+
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await _eventTaskRepository.DeleteTask(mappedTask);
+            if (!result)
+            {
+                ModelState.AddModelError("", "Encounter an error while deleting the task");
+            }
+
+            return Ok("Succesfully deleted!");
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using EventOrganizationApp.Data;
 using EventOrganizationApp.Models;
-using EventOrganizationApp.Models.Enums;
 using Gazebo.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Gazebo.Repository
 {
@@ -13,16 +13,16 @@ namespace Gazebo.Repository
             _context = context;
         }
 
-        public IList<EventsTask> GetAllUserTasks(int userId)
+        public async Task<IList<EventsTask>> GetAllUserTasks(int userId)
         {
             if (userId == 0)
             {
                 throw new ArgumentException("userId is 0");
             }
 
-            var userTasks = _context.Tasks
+            var userTasks = await _context.Tasks
                 .Where(x => x.OwnerId == userId)
-                .ToList();
+                .ToListAsync();
 
             if (userTasks == null || userTasks.Count() == 0)
             {
@@ -32,17 +32,17 @@ namespace Gazebo.Repository
             return userTasks;
         }
 
-        public IList<EventsTask> GetUserTasksForAnEvent(int userId, int eventId)
+        public async Task<IList<EventsTask>> GetUserTasksForAnEvent(int userId, int eventId)
         {
             if (userId == 0 || eventId == 0)
             {
                 throw new ArgumentException($"userId {userId} or eventId {eventId} is 0");
             }
 
-            var userTaskForAnEvent = _context.Tasks
+            var userTaskForAnEvent = await _context.Tasks
                 .Where(x => x.EventId == eventId)
                 .Where(x => x.OwnerId == userId)
-                .ToList();
+                .ToListAsync();
 
             if (userTaskForAnEvent == null || userTaskForAnEvent.Count() == 0)
             {
@@ -52,16 +52,16 @@ namespace Gazebo.Repository
             return userTaskForAnEvent;
         }
 
-        public IList<EventsTask> GetTasksForEvent(int eventId)
+        public async Task<IList<EventsTask>> GetTasksForEvent(int eventId)
         {
             if (eventId == 0)
             {
                 throw new ArgumentException($"eventId {eventId} is not correct");
             }
 
-            var tasksForAnEvent = _context.Tasks
+            var tasksForAnEvent = await _context.Tasks
                 .Where(x => x.EventId == eventId)
-                .ToList();
+                .ToListAsync();
 
             if (tasksForAnEvent == null || tasksForAnEvent.Count() == 0)
             {
@@ -71,36 +71,59 @@ namespace Gazebo.Repository
             return tasksForAnEvent;
         }
 
-        public string GetStatusByTaskId(int taskId)
+        public async Task<EventsTask> GetTask(int taskId)
         {
             if (taskId == 0)
             {
-                return string.Empty;
+                return new EventsTask();
             }
 
-            var taskStatus = _context.Tasks
+            var taskStatus = await _context.Tasks
                 .Where(x => x.TaskId == taskId)
-                .Select(x => ((Status)x.StatusId).ToString())
-                .FirstOrDefault() ?? string.Empty;
+                .FirstOrDefaultAsync();
 
             return taskStatus;
         }
 
-        public bool CreateTask(EventsTask task)
+        public async Task<bool> CreateTask(EventsTask task)
         {
             if (task == null)
             {
                 return false;
             }
 
-            _context.Add(task);
+            await _context.AddAsync(task);
 
-            return SaveChanges();
+            return await SaveChanges();
         }
 
-        public bool SaveChanges()
+        public async Task<bool> UpdateTask(EventsTask task)
         {
-            var savedData = _context.SaveChanges();
+            if (task == null)
+            {
+                return false;
+            }
+
+            _context.Update(task);
+
+            return await SaveChanges();
+        }
+
+        public async Task<bool> DeleteTask(EventsTask task)
+        {
+            if (task == null)
+            {
+                return false;
+            }
+
+            _context.Remove(task);
+
+            return await SaveChanges();
+        }
+
+        private async Task<bool> SaveChanges()
+        {
+            var savedData = await _context.SaveChangesAsync();
 
             return savedData > 0;
         }
