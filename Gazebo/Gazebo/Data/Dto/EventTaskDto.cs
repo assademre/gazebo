@@ -19,6 +19,7 @@ namespace EventOrganizationApp.Data.Dto
         [MaxLength(50, ErrorMessage = "Place name cannot access 50 characters")]
         public string Place { get; set; }
         public string Status { get; set; }
+        public int OwnerId { get; set; }    
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
         public DateTime TaskDate { get; set; }

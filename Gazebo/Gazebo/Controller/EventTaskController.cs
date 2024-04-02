@@ -137,6 +137,11 @@ namespace EventOrganizationApp.Controller
 
             var task = await _eventTaskRepository.GetTask(taskId);
             var mappedTask = _mapper.Map<EventsTask>(task);
+
+            if (mappedTask == null)
+            {
+                return BadRequest(ModelState);
+            }
             mappedTask.StatusId = (int)statusId;
             
 

@@ -1,0 +1,83 @@
+/* src/components/Login.css */
+
+/* Apply Roboto font to the entire login page */
+body {
+  font-family: 'Roboto', sans-serif;
+}
+
+/* Apply different styles to specific elements */
+h1 {
+  font-family: 'Roboto', sans-serif; /* Apply Roboto font to h1 */
+  font-weight: 700; /* Bold font weight */
+}
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 100px; /* Increase top margin to lower the login page */
+}
+
+.logo-container {
+  margin-bottom: 40px; /* Increase bottom margin for the logo */
+}
+
+.logo-image {
+  width: 500px; /* Increase logo size */
+  height: auto;
+  /* Add other styles as needed */
+}
+
+form {
+  font-family: 'Roboto', sans-serif; /* Apply Roboto font to form elements */
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Apply rounded borders to input fields */
+input[type="text"],
+input[type="password"] {
+  font-family: 'Roboto', sans-serif; /* Apply Roboto font to input fields */
+  padding: 10px;
+  border-radius: 20px; /* Apply rounded borders */
+  border: 1px solid #ccc;
+  margin-bottom: 10px;
+  outline: none; /* Remove default outline */
+}
+
+/* Apply different styles to buttons */
+button {
+  font-family: 'Roboto', sans-serif; /* Apply Roboto font to buttons */
+  padding: 10px;
+  border-radius: 20px; /* Apply rounded borders */
+  border: none;
+  background-color: #007bff;
+  color: #fff;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+/* Style the "Sign Up" text */
+.signup-link {
+  margin-top: 10px;
+}
+
+.signup-text {
+  text-decoration: underline; /* Underline the text */
+  color: #007bff; /* Link color */
+  cursor: pointer;
+}
+
+/* Style the "Forgot password?" link */
+.forgot-password {
+  margin-top: 10px;
+  text-decoration: underline; /* Underline the text */
+  color: #007bff; /* Link color */
+  cursor: pointer;
+}
+
+/* Add other styles as needed */

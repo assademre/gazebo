@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
 using EventOrganizationApp.Data.Dto;
 using EventOrganizationApp.Models;
-using Gazebo.Repository;
 using Gazebo.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using System.Threading.Tasks;
 
 namespace EventOrganizationApp.Controller
 {

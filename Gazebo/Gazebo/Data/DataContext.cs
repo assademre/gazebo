@@ -1,15 +1,16 @@
 ﻿using EventOrganizationApp.Models;
-using EventOrganizationApp.Models.Enums;
+using Gazebo.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.Extensions.Logging;
-using System.Threading.Tasks;
+using System.Reflection.Emit;
 
 namespace EventOrganizationApp.Data
 {
-    public class DataContext : DbContext
+    public class DataContext : IdentityDbContext<AppUser>
     {
-        public DataContext(DbContextOptions<DataContext> options) : base(options)
+        public DataContext(DbContextOptions options) : base(options)
         {
             
         }
@@ -19,36 +20,51 @@ namespace EventOrganizationApp.Data
         public DbSet<Event> Events { get; set; }
         public DbSet<EventsTask> Tasks { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder builder)
         {
-            modelBuilder.Entity<User>()
+            base.OnModelCreating(builder);
+
+            builder.Entity<User>()
                 .HasKey(c => c.UserId);
 
-            modelBuilder.Entity<Event>()
+            builder.Entity<Event>()
                 .HasKey(e => e.EventId)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-
-            modelBuilder.Entity<Event>()
+            builder.Entity<Event>()
                 .HasOne<User>()
                 .WithMany()
                 .HasForeignKey(e => e.CreaterId);
 
-            modelBuilder.Entity<EventsTask>()
+            builder.Entity<EventsTask>()
                 .HasKey(et => et.TaskId);
 
-            modelBuilder.Entity<EventsTask>()
+            builder.Entity<EventsTask>()
                 .HasOne<Event>()
                 .WithMany()
-                .HasForeignKey(et => et.EventId);
+                .HasForeignKey(et => et.EventId)
+                .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<EventsTask>()
+            builder.Entity<EventsTask>()
                 .HasOne<User>()
                 .WithMany()
                 .HasForeignKey(et => et.OwnerId);
 
-            modelBuilder.Entity<User>()
-                .HasKey(u => u.UserId);
+            List<IdentityRole> roles = new List<IdentityRole>
+            {
+                new IdentityRole
+                {
+                    Name = "Admin",
+                    NormalizedName = "ADMIN",
+                },
+                new IdentityRole
+                {
+                    Name = "User",
+                    NormalizedName = "USER",
+                },
+            };
+
+            builder.Entity<IdentityRole>().HasData(roles);
         }
     }
 }
