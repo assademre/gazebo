@@ -30,12 +30,21 @@ try {
     return response.data;
 } catch (error) {
     throw error.response.data || error.message;
-}
-};
+    }
+    };
 
 export const getUsernameAPI = async (userId) => {
     try {
         const response = await api.get(`/api/user/${userId}/profile`);
+        return response.data;
+    } catch (error) {
+        throw error.response.data || error.message;
+    }
+    };
+
+export const getEventByEventIdAPI = async (eventId) => {
+    try {
+        const response = await api.get(`/api/event/${eventId}/event-status`);
         return response.data;
     } catch (error) {
         throw error.response.data || error.message;

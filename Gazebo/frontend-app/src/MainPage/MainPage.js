@@ -1,35 +1,47 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { fetchTasksAPI, getUsernameAPI } from "../api";
+import { fetchTasksAPI, getUsernameAPI, getEventByEventIdAPI } from "../api";
 import "./MainPage.css";
 
 function MainPage() {
   const [events, setEvents] = useState([]);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
   const [user, setUsername] = useState("");
+  const [eventNames, setEventNames] = useState({});
 
   useEffect(() => {
-    fetchEvents();
-    fetchUsername();
+    fetchData();
   }, []);
 
-  const fetchEvents = async () => {
+  const fetchData = async () => {
     try {
       const userId = 1;
       const eventsData = await fetchTasksAPI(userId);
       setEvents(eventsData);
+
+      const usernameData = await getUsernameAPI(userId);
+      setUsername(usernameData.name);
+
+      const eventIds = eventsData.map(event => event.eventId);
+      for (const eventId of eventIds) {
+        const eventName = await fetchEventName(eventId);
+        setEventNames(prevState => ({
+          ...prevState,
+          [eventId]: eventName
+        }));
+      }
     } catch (error) {
-      console.error('Error fetching events:', error);
+      console.error('Error fetching data:', error);
     }
   };
 
-  const fetchUsername = async () => {
+  const fetchEventName = async (eventId) => {
     try {
-        const userId = 1;
-      const usernameData = await getUsernameAPI(userId);
-      setUsername(usernameData.name);
+      const eventName = await getEventByEventIdAPI(eventId);
+      return eventName;
     } catch (error) {
-      console.error('Error fetching username:', error);
+      console.error('Error fetching event name:', error);
+      return '';
     }
   };
 
@@ -41,7 +53,6 @@ function MainPage() {
     setSortConfig({ key, direction });
   };
 
-
   const formatISODate = (dateString) => {
     const dateObj = new Date(dateString);
     const day = dateObj.getDate().toString().padStart(2, '0');
@@ -49,7 +60,6 @@ function MainPage() {
     const year = dateObj.getFullYear();
     return `${day}-${month}-${year}`;
   };
-
 
   const sortedTasks = [...events].sort((a, b) => {
     if (sortConfig.key && a[sortConfig.key] && b[sortConfig.key]) {
@@ -99,7 +109,7 @@ function MainPage() {
               )}
             </th>
             <th onClick={() => handleSort('eventId')}>
-              Event Id {sortConfig.key === 'eventId' && (
+              Event Name {sortConfig.key === 'eventId' && (
                 sortConfig.direction === 'asc' ? '▼' : '▲'
               )}
             </th>
@@ -112,7 +122,7 @@ function MainPage() {
               <td>{formatISODate(task.taskDate)}</td>
               <td>{task.status}</td>
               <td>{task.budget}</td>
-              <td>{task.eventId}</td>
+              <td>{eventNames[task.eventId] || 'Loading...'}</td>
             </tr>
           ))}
         </tbody>
