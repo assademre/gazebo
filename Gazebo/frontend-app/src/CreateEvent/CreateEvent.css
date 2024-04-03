@@ -1,43 +1,73 @@
 .container {
     max-width: 500px;
-    margin: 0 auto;
+    margin: 50px auto;
     padding: 20px;
-    border: 1px solid #ccc;
     border-radius: 8px;
-    background-color: #f9f9f9;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .title {
+    font-size: 20px;
   }
   
   .label {
-    margin-bottom: 5px;
+    margin-bottom: 8px;
     font-weight: bold;
+    color: black; /* Font color changed to black */
   }
   
-  .input-field {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 10px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-  }
-  
+  .input-field,
   .select-field {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 10px;
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin-bottom: 16px;
     border-radius: 4px;
     border: 1px solid #ccc;
+    transition: border-color 0.3s ease;
+  }
+  
+  .input-field:focus,
+  .select-field:focus {
+    outline: none;
+    border-color: #007bff;
   }
   
   .button {
+    display: inline-block;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .button:hover {
+    background-color: #0056b3;
+  }
+  
+  .input-field:hover,
+  .select-field:hover {
+    border-color: #007bff;
+  }
+
+  .back-to-main-button {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
     padding: 10px 20px;
     border: none;
     border-radius: 4px;
     background-color: #007bff;
     color: #fff;
     cursor: pointer;
+    transition: background-color 0.3s ease;
   }
   
-  .button:hover {
+  .back-to-main-button:hover {
     background-color: #0056b3;
   }
   

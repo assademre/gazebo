@@ -43,7 +43,7 @@ function CreateEvent() {
 
   return (
     <div className="container">
-      <div>Create a new Event</div>
+      <div className="title">Create a new Event</div>
       <div className="label">Event Type</div>
       <select className="select-field" value={eventType} onChange={(e) => setEventType(e.target.value)}>
         <option value="Default">Default</option>
@@ -72,7 +72,7 @@ function CreateEvent() {
 
       <button className="button" onClick={() => handleSave()}>Create Event</button>
 
-      <button onClick={handleBack}>Back to Main Page</button>
+      <button className="back-to-main-button" onClick={handleBack}>Back to Main Page</button>
     </div>
   );
 }

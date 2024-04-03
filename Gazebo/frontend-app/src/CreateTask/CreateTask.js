@@ -74,7 +74,7 @@ function CreateTask() {
 
       <button className="button" onClick={() => handleSave()}>Create Task</button>
 
-      <button onClick={handleBack}>Back to Main Page</button>
+      <button className="back-to-main-button" onClick={handleBack}>Back to Main Page</button>
     </div>
   );
 }

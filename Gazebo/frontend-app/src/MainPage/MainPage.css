@@ -7,6 +7,20 @@
     background-color: #f0f0f0;
   }
   
+  .welcome-message {
+    font-size: 50px;
+  }
+
+  .name {
+    animation: colorChange 5s infinite alternate;
+  }
+
+  @keyframes colorChange {
+    0% { color: blue; }
+    50% { color: green; } 
+    100% { color: red; } 
+  }
+
   .button-container {
     margin-top: 30px;
   }

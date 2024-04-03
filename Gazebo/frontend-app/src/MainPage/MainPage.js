@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { fetchTasksAPI } from "../api";
+import { fetchTasksAPI, getUsernameAPI } from "../api";
 import "./MainPage.css";
 
 function MainPage() {
   const [events, setEvents] = useState([]);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
+  const [user, setUsername] = useState("");
 
   useEffect(() => {
     fetchEvents();
+    fetchUsername();
   }, []);
 
   const fetchEvents = async () => {
@@ -18,6 +20,16 @@ function MainPage() {
       setEvents(eventsData);
     } catch (error) {
       console.error('Error fetching events:', error);
+    }
+  };
+
+  const fetchUsername = async () => {
+    try {
+        const userId = 1;
+      const usernameData = await getUsernameAPI(userId);
+      setUsername(usernameData.name);
+    } catch (error) {
+      console.error('Error fetching username:', error);
     }
   };
 
@@ -53,6 +65,10 @@ function MainPage() {
 
   return (
     <div className="main-page">
+      <div className="welcome-message">
+        Welcome <span className="name">{user}</span>
+      </div>
+
       <div className="button-container">
         <Link to="/create-task" className="button">Create Task</Link>
         <Link to="/create-event" className="button">Create Event</Link>
