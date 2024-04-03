@@ -1,15 +1,20 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { fetchTasksAPI, getUsernameAPI, getEventByEventIdAPI } from "../api";
-import "./MainPage.css";
+import React, { useEffect, useState } from "react";
+import { fetchTasksAPI, getEventByEventIdAPI } from "../api";
+import "./GetTasks.css";
+import { useNavigate } from "react-router-dom";
 import statusOptions from "../helpers/statusOptions";
 import currencySymbols from "../helpers/currencySymbols";
 
-function MainPage() {
+function GetTasks() {
   const [events, setEvents] = useState([]);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
-  const [user, setUsername] = useState("");
   const [eventNames, setEventNames] = useState({});
+
+  const navigate = useNavigate();
+
+  const handleBack = () => {
+    navigate(-1);
+  };
 
   useEffect(() => {
     fetchData();
@@ -20,10 +25,7 @@ function MainPage() {
       const userId = 1;
       const eventsData = await fetchTasksAPI(userId);
       setEvents(eventsData);
-
-      const usernameData = await getUsernameAPI(userId);
-      setUsername(usernameData.name);
-
+      
       const eventIds = eventsData.map(event => event.eventId);
       for (const eventId of eventIds) {
         const eventName = await fetchEventName(eventId);
@@ -35,6 +37,14 @@ function MainPage() {
     } catch (error) {
       console.error('Error fetching data:', error);
     }
+  };
+
+  const handleSort = (key) => {
+    let direction = 'asc';
+    if (sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    }
+    setSortConfig({ key, direction });
   };
 
   const fetchEventName = async (eventId) => {
@@ -57,14 +67,6 @@ function MainPage() {
     return currencySymbol ? currencySymbol.label : "currency";
   };
 
-  const handleSort = (key) => {
-    let direction = 'asc';
-    if (sortConfig.key === key && sortConfig.direction === 'asc') {
-      direction = 'desc';
-    }
-    setSortConfig({ key, direction });
-  };
-
   const formatISODate = (dateString) => {
     const dateObj = new Date(dateString);
     const day = dateObj.getDate().toString().padStart(2, '0');
@@ -72,10 +74,6 @@ function MainPage() {
     const year = dateObj.getFullYear();
     return `${day}-${month}-${year}`;
   };
-
-  const today = new Date();
-  const futureDate = new Date();
-  futureDate.setDate(today.getDate() + 5);
 
   const sortedTasks = [...events].sort((a, b) => {
     if (sortConfig.key && a[sortConfig.key] && b[sortConfig.key]) {
@@ -89,28 +87,10 @@ function MainPage() {
     return 0;
   });
 
-  const filteredTasks = sortedTasks.filter(task => {
-    const taskDate = new Date(task.taskDate);
-    return taskDate < futureDate && !['cancelled', 'completed'].includes(task.status.toLowerCase());
-  });
-
   return (
-    <div className="main-page">
-      <div className="welcome-message">
-        Welcome <span className="name">{user}</span>
-      </div>
+    <div className="get-events-page">
 
-      <div className="button-container">
-        <Link to="/create-task" className="button">Create Task</Link>
-        <Link to="/create-event" className="button">Create Event</Link>
-      </div>
-
-      <div className="top-right-buttons">
-        <Link to="/get-events" className="button">My Events</Link>
-        <Link to="/get-tasks" className="button">My Tasks</Link>
-      </div>
-
-      <h2>My Upcoming Tasks</h2>
+      <h2>My Tasks</h2>
       <table className="tasks-table">
         <thead>
           <tr>
@@ -130,11 +110,15 @@ function MainPage() {
                 sortConfig.direction === 'asc' ? '▼' : '▲'
               )}
             </th>
-            <th>Event Name</th>
+            <th onClick={() => handleSort('eventId')}>
+              Event Name {sortConfig.key === 'eventId' && (
+                sortConfig.direction === 'asc' ? '▼' : '▲'
+              )}
+            </th>
           </tr>
         </thead>
         <tbody>
-          {filteredTasks.map(task => (
+          {sortedTasks.map(task => (
             <tr key={task.taskId}>
               <td>{task.taskName}</td>
               <td>{formatISODate(task.taskDate)}</td>
@@ -145,8 +129,11 @@ function MainPage() {
           ))}
         </tbody>
       </table>
+
+      <button className="back-to-main-button" onClick={handleBack}>Back to Main Page</button>
+      
     </div>
   );
 }
-
-export default MainPage;
+  
+export default GetTasks;

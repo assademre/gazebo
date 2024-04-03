@@ -66,5 +66,19 @@ namespace Gazebo.Repository
 
             return savedData > 0;
         }
+
+        public async Task<Event> GetEventByEventId(int eventId)
+        {
+            if (eventId == 0)
+            {
+                return null;
+            }
+
+            var result = await _context.Events
+                .Where(x => x.EventId == eventId)
+                .FirstOrDefaultAsync();
+
+            return result;
+        }
     }
 }

@@ -31,7 +31,7 @@ try {
 } catch (error) {
     throw error.response.data || error.message;
     }
-    };
+  };
 
 export const getUsernameAPI = async (userId) => {
     try {
@@ -44,12 +44,21 @@ export const getUsernameAPI = async (userId) => {
 
 export const getEventByEventIdAPI = async (eventId) => {
     try {
-        const response = await api.get(`/api/event/${eventId}/event-status`);
+        const response = await api.get(`/api/event/${eventId}/event`);
         return response.data;
     } catch (error) {
         throw error.response.data || error.message;
     }
     };
+
+export const getEventByUserIdAPI = async (userId) => {
+  try {
+      const response = await api.get(`/api/event/${userId}/created-events`);
+      return response.data;
+  } catch (error) {
+      throw error.response.data || error.message;
+  }
+  };
 
 export default api;
 

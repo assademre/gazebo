@@ -42,6 +42,28 @@ namespace EventOrganizationApp.Controller
             return Ok(mappedEvents);
         }
 
+        [HttpGet("{eventId:int}/event")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        public async Task<IActionResult> GetEventByEventId([FromRoute] int eventId)
+        {
+            var wholeEvent = await _eventRepository.GetEventByEventId(eventId);
+
+            var mappedEvents = _mapper.Map<EventDto>(wholeEvent);
+
+            if (mappedEvents == null)
+            {
+                return NotFound();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            return Ok(mappedEvents);
+        }
+
         [HttpGet("{eventId:int}/event-status")]
         [ProducesResponseType(200, Type = typeof(string))]
         [ProducesResponseType(400)]
