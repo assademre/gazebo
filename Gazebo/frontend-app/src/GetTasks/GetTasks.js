@@ -4,6 +4,7 @@ import "./GetTasks.css";
 import { useNavigate } from "react-router-dom";
 import statusOptions from "../helpers/statusOptions";
 import currencySymbols from "../helpers/currencySymbols";
+import Layout from "../NavigationBar/Layout";
 
 function GetTasks() {
   const [events, setEvents] = useState([]);
@@ -13,7 +14,7 @@ function GetTasks() {
   const navigate = useNavigate();
 
   const handleBack = () => {
-    navigate(-1);
+    navigate('/');
   };
 
   useEffect(() => {
@@ -88,51 +89,53 @@ function GetTasks() {
   });
 
   return (
-    <div className="get-events-page">
+    <Layout>
+        <div className="get-events-page">
 
-      <h2>My Tasks</h2>
-      <table className="tasks-table">
-        <thead>
-          <tr>
-            <th onClick={() => handleSort('taskName')}>
-              Task Name {sortConfig.key === 'taskName' && (
-                sortConfig.direction === 'asc' ? '▼' : '▲'
-              )}
-            </th>
-            <th onClick={() => handleSort('taskDate')}>
-              Task Date {sortConfig.key === 'taskDate' && (
-                sortConfig.direction === 'asc' ? '▼' : '▲'
-              )}
-            </th>
-            <th>Status</th>
-            <th onClick={() => handleSort('budget')}>
-              Budget {sortConfig.key === 'budget' && (
-                sortConfig.direction === 'asc' ? '▼' : '▲'
-              )}
-            </th>
-            <th onClick={() => handleSort('eventId')}>
-              Event Name {sortConfig.key === 'eventId' && (
-                sortConfig.direction === 'asc' ? '▼' : '▲'
-              )}
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {sortedTasks.map(task => (
-            <tr key={task.taskId}>
-              <td>{task.taskName}</td>
-              <td>{formatISODate(task.taskDate)}</td>
-              <td>{getStatusLabel(task.status)}</td>
-              <td>{task.budget}{getCurrencyLabel(task.currency)}</td>
-              <td>{eventNames[task.eventId] || 'Loading...'}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+<h2>My Tasks</h2>
+<table className="tasks-table">
+  <thead>
+    <tr>
+      <th onClick={() => handleSort('taskName')}>
+        Task Name {sortConfig.key === 'taskName' && (
+          sortConfig.direction === 'asc' ? '▼' : '▲'
+        )}
+      </th>
+      <th onClick={() => handleSort('taskDate')}>
+        Task Date {sortConfig.key === 'taskDate' && (
+          sortConfig.direction === 'asc' ? '▼' : '▲'
+        )}
+      </th>
+      <th>Status</th>
+      <th onClick={() => handleSort('budget')}>
+        Budget {sortConfig.key === 'budget' && (
+          sortConfig.direction === 'asc' ? '▼' : '▲'
+        )}
+      </th>
+      <th onClick={() => handleSort('eventId')}>
+        Event Name {sortConfig.key === 'eventId' && (
+          sortConfig.direction === 'asc' ? '▼' : '▲'
+        )}
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    {sortedTasks.map(task => (
+      <tr key={task.taskId}>
+        <td>{task.taskName}</td>
+        <td>{formatISODate(task.taskDate)}</td>
+        <td>{getStatusLabel(task.status)}</td>
+        <td>{task.budget}{getCurrencyLabel(task.currency)}</td>
+        <td>{eventNames[task.eventId] || 'Loading...'}</td>
+      </tr>
+    ))}
+  </tbody>
+</table>
 
-      <button className="back-to-main-button" onClick={handleBack}>Back to Main Page</button>
-      
-    </div>
+<button className="button" onClick={handleBack}>Back to Main Page</button>
+
+</div>
+    </Layout>
   );
 }
   

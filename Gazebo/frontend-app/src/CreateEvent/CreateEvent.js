@@ -3,6 +3,7 @@ import { createEventAPI } from "../api";
 import statusOptions from "../helpers/statusOptions";
 import "./CreateEvent.css";
 import { useNavigate } from "react-router-dom";
+import Layout from "../NavigationBar/Layout";
 
 function CreateEvent() {
   const [createrId, setCreaterId] = useState(1);
@@ -16,7 +17,7 @@ function CreateEvent() {
   const navigate = useNavigate();
 
   const handleBack = () => {
-    navigate(-1);
+    navigate('/');
   };
 
   const handleSave = async () => {
@@ -42,7 +43,8 @@ function CreateEvent() {
   }
 
   return (
-    <div className="container">
+    <Layout>
+      <div className="container">
       <div className="title">Create a new Event</div>
       <div className="label">Event Type</div>
       <select className="select-field" value={eventType} onChange={(e) => setEventType(e.target.value)}>
@@ -70,10 +72,11 @@ function CreateEvent() {
         ))}
       </select> */}
 
-      <button className="button" onClick={() => handleSave()}>Create Event</button>
+      <button className="button" onClick={handleBack}>Back to Main Page</button>
 
-      <button className="back-to-main-button" onClick={handleBack}>Back to Main Page</button>
+      <button className="button" onClick={() => handleSave()}>Create Event</button>
     </div>
+    </Layout>
   );
 }
 

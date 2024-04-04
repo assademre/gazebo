@@ -4,6 +4,7 @@ import { fetchTasksAPI, getUsernameAPI, getEventByEventIdAPI } from "../api";
 import "./MainPage.css";
 import statusOptions from "../helpers/statusOptions";
 import currencySymbols from "../helpers/currencySymbols";
+import Layout from "../NavigationBar/Layout";
 
 function MainPage() {
   const [events, setEvents] = useState([]);
@@ -95,7 +96,8 @@ function MainPage() {
   });
 
   return (
-    <div className="main-page">
+    <Layout>
+      <div className="main-page">
       <div className="welcome-message">
         Welcome <span className="name">{user}</span>
       </div>
@@ -105,10 +107,10 @@ function MainPage() {
         <Link to="/create-event" className="button">Create Event</Link>
       </div>
 
-      <div className="top-right-buttons">
+      {/* <div className="top-right-buttons">
         <Link to="/get-events" className="button">My Events</Link>
         <Link to="/get-tasks" className="button">My Tasks</Link>
-      </div>
+      </div> */}
 
       <h2>My Upcoming Tasks</h2>
       <table className="tasks-table">
@@ -146,6 +148,7 @@ function MainPage() {
         </tbody>
       </table>
     </div>
+    </Layout>
   );
 }
 

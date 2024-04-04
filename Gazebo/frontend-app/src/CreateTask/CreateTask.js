@@ -3,6 +3,7 @@ import { createTaskAPI } from "../api";
 import statusOptions from "../helpers/statusOptions";
 import "./CreateTask.css";
 import { useNavigate } from "react-router-dom";
+import Layout from "../NavigationBar/Layout";
 
 function CreateTask() {
   const [ownerId, setOwnerId] = useState('');
@@ -17,7 +18,7 @@ function CreateTask() {
   const navigate = useNavigate();
 
   const handleBack = () => {
-    navigate(-1);
+    navigate('/');
   };
 
   const handleSave = async () => {
@@ -43,7 +44,8 @@ function CreateTask() {
   }
 
   return (
-    <div className="container">
+    <Layout>
+      <div className="container">
       <div>Create a new Task</div>
 
       <div className="label">Owner Id</div>
@@ -72,10 +74,11 @@ function CreateTask() {
         ))}
       </select> */}
 
-      <button className="button" onClick={() => handleSave()}>Create Task</button>
+      <button className="button" onClick={handleBack}>Back to Main Page</button>
 
-      <button className="back-to-main-button" onClick={handleBack}>Back to Main Page</button>
+      <button className="button" onClick={() => handleSave()}>Create Task</button>
     </div>
+    </Layout>
   );
 }
 
