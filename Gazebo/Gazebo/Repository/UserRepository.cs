@@ -56,7 +56,7 @@ namespace Gazebo.Repository
             return SaveChanges();
         }
 
-        public bool SaveChanges()
+        internal bool SaveChanges()
         {
             var savedData = _context.SaveChanges();
 

@@ -1,4 +1,5 @@
 import axios from "axios";
+import { UserProfileToken } from "./Models/User";
 
 const api = axios.create({
   headers: {
@@ -43,13 +44,13 @@ export const getUsernameAPI = async (userId) => {
     };
 
 export const getEventByEventIdAPI = async (eventId) => {
-    try {
-        const response = await api.get(`/api/event/${eventId}/event`);
-        return response.data;
-    } catch (error) {
-        throw error.response.data || error.message;
-    }
-    };
+  try {
+      const response = await api.get(`/api/event/${eventId}/event`);
+      return response.data;
+  } catch (error) {
+      throw error.response.data || error.message;
+  }
+};
 
 export const getEventByUserIdAPI = async (userId) => {
   try {
@@ -58,7 +59,16 @@ export const getEventByUserIdAPI = async (userId) => {
   } catch (error) {
       throw error.response.data || error.message;
   }
-  };
+};
+
+export const loginAPI = async (username, password) => {
+  try {
+      const response = await api.post(`/api/user-access/login`, {username: username, password: password});
+      return response;
+  } catch (error) {
+      throw error.response.data || error.message;
+  }
+};
 
 export default api;
 

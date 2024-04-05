@@ -2,6 +2,7 @@ using EventOrganizationApp.Data;
 using Gazebo.Interfaces;
 using Gazebo.Models;
 using Gazebo.Repository;
+using Gazebo.Security;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,8 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IEventRepository, EventRepository>();
 builder.Services.AddScoped<IEventTaskRepository, EventTaskRepository>();
+builder.Services.AddScoped<IUserAccessRepository, UserAccessRepository>();
+builder.Services.AddScoped<IHashPassword, PasswordHash>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -51,9 +54,13 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = true,
         ValidAudience = builder.Configuration["JWT:Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(
-            System.Text.Encoding.UTF8.GetBytes(builder.Configuration["JWT:SigningKey"]))
+            System.Text.Encoding.UTF8.GetBytes(builder.Configuration["JWT:SigningKey"])),
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true
     };
 });
+
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
