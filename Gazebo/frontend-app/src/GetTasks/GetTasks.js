@@ -14,7 +14,7 @@ function GetTasks() {
   const navigate = useNavigate();
 
   const handleBack = () => {
-    navigate('/');
+    navigate('/main-page');
   };
 
   useEffect(() => {

@@ -1,17 +1,25 @@
 import React, { useState } from 'react';
 import { loginAPI } from '../api';
+import { useNavigate } from 'react-router-dom';
 import './Login.css';
 
-const Login = () => {
+const Login = ({ onLoginSuccess }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const navigate = useNavigate();
 
     const handleLogin = async (e) => {
         e.preventDefault();
+        console.log('Logging in...')
         try {
-            const userData = await loginAPI(username, password); // Use username for login
-            console.log('Login Success:', userData);
+            const userData = await loginAPI(username, password);
+            const token = userData.data.token;
+            const userId = userData.data.userId;
+            localStorage.setItem('token', token);
+            localStorage.setItem('userId', userId)
+            onLoginSuccess()
+            navigate('/main-page');
         } catch (error) {
             setError(error.message);
             console.error('Login Error:', error);

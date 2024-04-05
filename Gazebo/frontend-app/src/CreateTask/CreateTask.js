@@ -18,7 +18,7 @@ function CreateTask() {
   const navigate = useNavigate();
 
   const handleBack = () => {
-    navigate('/');
+    navigate('/main-page');
   };
 
   const handleSave = async () => {

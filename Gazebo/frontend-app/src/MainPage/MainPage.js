@@ -18,7 +18,7 @@ function MainPage() {
 
   const fetchData = async () => {
     try {
-      const userId = 1;
+      const userId = 2;
       const eventsData = await fetchTasksAPI(userId);
       setEvents(eventsData);
 

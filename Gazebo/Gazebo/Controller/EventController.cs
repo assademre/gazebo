@@ -2,6 +2,7 @@
 using EventOrganizationApp.Data.Dto;
 using EventOrganizationApp.Models;
 using Gazebo.Interfaces;
+using Gazebo.Security;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
@@ -12,20 +13,34 @@ namespace EventOrganizationApp.Controller
     public class EventController : ControllerBase
     {
         private readonly IEventRepository _eventRepository;
-
+        private readonly ITokenValidator _tokenValidator;
         public IMapper _mapper;
 
-        public EventController(IEventRepository eventRepository, IMapper mapper)
+        public EventController(IEventRepository eventRepository, IMapper mapper, ITokenValidator tokenValidator)
         {
             _eventRepository = eventRepository;
             _mapper = mapper;
+            _tokenValidator = tokenValidator;
         }
 
         [HttpGet("{userId:int}/created-events")]
         [ProducesResponseType(200, Type = typeof(IList<Event>))]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> GetEventUserCreated([FromRoute] int userId)
+        public async Task<IActionResult> GetEventUserCreated([FromHeader(Name = "Authorization")] string authorizationHeader, [FromRoute] int userId)
         {
+            if (string.IsNullOrEmpty(authorizationHeader) || !authorizationHeader.StartsWith("Bearer "))
+            {
+                return Unauthorized();
+            }
+
+            string token = authorizationHeader.Substring("Bearer ".Length).Trim();
+
+            var principal = _tokenValidator.ValidateToken(token);
+            if (principal == null || !principal.Identity.IsAuthenticated)
+            {
+                return Unauthorized();
+            }
+
             var createdEvents = await _eventRepository.GetEventsUserCreated(userId);
             var mappedEvents = _mapper.Map<IList<EventDto>>(createdEvents);
 
@@ -42,7 +57,7 @@ namespace EventOrganizationApp.Controller
             return Ok(mappedEvents);
         }
 
-        [HttpGet("{eventId:int}/event")]
+    [HttpGet("{eventId:int}/event")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetEventByEventId([FromRoute] int eventId)

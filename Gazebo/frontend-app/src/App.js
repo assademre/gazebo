@@ -12,28 +12,21 @@ function App() {
 
   const handleLoginSuccess = () => {
     setIsLoggedIn(true);
+    console.log("handle login part")
   };
+
 
   return (
     <Router>
       <div>
         <Routes>
-          {isLoggedIn ? (
-            <>
-              <Route path="/" element={<MainPage />} />
-              <Route path="/create-event" element={<CreateEvent />} />
-              <Route path="/create-task" element={<CreateTask />} />
-              <Route path="/get-events" element={<GetEvents />} />
-              <Route path="/get-tasks" element={<GetTasks />} />
-              <Route path="/login" element={<Login />} />
-            </>
-          ) : (
-            <Route
-              path="/"
-              element={<Login onLoginSuccess={handleLoginSuccess} />}
-            />
-          )}
-          <Route path="/*" element={<Navigate to="/" replace />} />
+          <Route path="/main-page" element={isLoggedIn ? <MainPage /> : <Login onLoginSuccess={handleLoginSuccess} />} />
+          <Route path="/create-event" element={<CreateEvent />} />
+          <Route path="/create-task" element={<CreateTask />} />
+          <Route path="/get-events" element={<GetEvents />} />
+          <Route path="/get-tasks" element={<GetTasks />} />
+          <Route path="/login" element={<Login onLoginSuccess={handleLoginSuccess} />} />
+          <Route path="*" element={<Navigate to="/login" />} />
         </Routes>
       </div>
     </Router>

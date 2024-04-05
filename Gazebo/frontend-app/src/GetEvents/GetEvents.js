@@ -13,7 +13,7 @@ function GetEvents() {
   const navigate = useNavigate();
 
   const handleBack = () => {
-    navigate('/');
+    navigate('/main-page');
   };
 
   useEffect(() => {
@@ -22,7 +22,7 @@ function GetEvents() {
 
   const fetchData = async () => {
     try {
-      const userId = 1;
+      const userId = 2;
       const eventsData = await getEventByUserIdAPI(userId);
       setEvents(eventsData);
     } catch (error) {

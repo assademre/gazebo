@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import Layout from "../NavigationBar/Layout";
 
 function CreateEvent() {
-  const [createrId, setCreaterId] = useState(1);
+  const [createrId, setCreaterId] = useState(() => localStorage.getItem('userId') ?? 0);
   const [eventType, setEventType] = useState('Default');
   const [eventName, setEventName] = useState('');
   const [budget, setBudget] = useState(0);
@@ -17,7 +17,7 @@ function CreateEvent() {
   const navigate = useNavigate();
 
   const handleBack = () => {
-    navigate('/');
+    navigate('/main-page');
   };
 
   const handleSave = async () => {

@@ -1,10 +1,23 @@
 import axios from "axios";
-import { UserProfileToken } from "./Models/User";
 
 const api = axios.create({
   headers: {
-    "Content-Type": "application/json",
-  },
+    "Content-Type": "application/json"
+  }
+});
+
+const getToken = () => {
+  return localStorage.getItem('token');
+};
+
+api.interceptors.request.use(config => {
+  const token = getToken();
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+}, error => {
+  return Promise.reject(error);
 });
 
 export const createEventAPI = async (data) => {
@@ -71,4 +84,3 @@ export const loginAPI = async (username, password) => {
 };
 
 export default api;
-

@@ -21,20 +21,20 @@ namespace Gazebo.Repository
             _userRepository = userRepository;
         }
 
-        public async Task<bool> UserLogin(string username, string password)
+        public async Task<int> UserLogin(string username, string password)
         {
            if (username == null || password == null)
             {
-                return false;
+                return 0;
             }
 
             var hashedPassword = _hashPassword.HashPassword(password);
 
             var respond = _context.UserAccess
                 .Where(x => x.Username == username && x.PasswordHash == hashedPassword)
-                .IsNullOrEmpty();
+                .FirstOrDefault();
 
-            return !respond;
+            return respond?.UserId ?? 0;
         }
 
         public async Task<bool> UserSignUp(string username, string password, string name, string surname, string email, string phoneNumber)
