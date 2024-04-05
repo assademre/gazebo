@@ -6,7 +6,7 @@ import "./NavBar.css";
 const NavBar = () => {
     return (
         <nav className='navbar-container'>
-            <Link to="/">
+            <Link to="/main-page">
                 <img src={image} className='logo' alt="logo" />
             </Link>
             <ul className='nav__links'>

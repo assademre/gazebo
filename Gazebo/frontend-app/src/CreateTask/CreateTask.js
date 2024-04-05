@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import Layout from "../NavigationBar/Layout";
 
 function CreateTask() {
-  const [ownerId, setOwnerId] = useState('');
+  const [ownerId, setOwnerId] = useState(() => localStorage.getItem('userId') ?? 0);
   const [eventId, setEventId] = useState('');
   const [taskName, setTaskName] = useState('');
   const [budget, setBudget] = useState(0);

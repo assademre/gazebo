@@ -22,7 +22,7 @@ function GetEvents() {
 
   const fetchData = async () => {
     try {
-      const userId = 2;
+      const userId = localStorage.getItem('userId');
       const eventsData = await getEventByUserIdAPI(userId);
       setEvents(eventsData);
     } catch (error) {
