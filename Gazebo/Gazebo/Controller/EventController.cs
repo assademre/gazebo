@@ -23,7 +23,7 @@ namespace EventOrganizationApp.Controller
         }
 
         [HttpGet("{userId:int}/created-events")]
-        [Authorize]
+        [Authorize(Policy = "UserIdRequired")]
         [ProducesResponseType(200, Type = typeof(IList<Event>))]
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetEventUserCreated([FromRoute] int userId)
@@ -44,7 +44,8 @@ namespace EventOrganizationApp.Controller
             return Ok(mappedEvents);
         }
 
-    [HttpGet("{eventId:int}/event")]
+        [HttpGet("{eventId:int}/event")]
+        [Authorize]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetEventByEventId([FromRoute] int eventId)
@@ -66,7 +67,9 @@ namespace EventOrganizationApp.Controller
             return Ok(mappedEvents);
         }
 
+
         [HttpGet("{eventId:int}/event-status")]
+        [Authorize]
         [ProducesResponseType(200, Type = typeof(string))]
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetStatusByEventId([FromRoute] int eventId)
@@ -87,6 +90,7 @@ namespace EventOrganizationApp.Controller
         }
 
         [HttpPost]
+        [Authorize]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         public async Task<IActionResult> CreateEvent([FromBody] EventDto newEvent)

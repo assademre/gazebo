@@ -37,7 +37,7 @@ namespace Gazebo.Controller
                 return BadRequest(ModelState);
             }
 
-            var token = _tokenGenerator.GenerateToken(login.Username);
+            var token = _tokenGenerator.GenerateToken(userId.ToString());
 
             return Ok(new { Token = token, UserId = userId });
         }
@@ -52,9 +52,9 @@ namespace Gazebo.Controller
                 return BadRequest(ModelState);
             }
 
-            if (!await _userAccessRepository.UserSignUp(signUp.Username, signUp.Password, signUp.Name, signUp.Surname, signUp.Email, signUp.PhoneNumber))
+            if (!await _userAccessRepository.UserSignUp(signUp))
             {
-                ModelState.AddModelError("", "Encounter an error while creating the user");
+                return BadRequest("Encountered an error during signing up");
             }
 
             return Ok("Succesfully created!");

@@ -7,7 +7,7 @@ namespace Gazebo.Security
 {
     public interface ITokenGenerator
     {
-        string GenerateToken(string username);
+        string GenerateToken(string userId);
     }
 
     public class TokenGenerator : ITokenGenerator
@@ -19,13 +19,13 @@ namespace Gazebo.Security
             _configuration = configuration;
         }
 
-        public string GenerateToken(string username)
+        public string GenerateToken(string userId)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(GetSecretKey());
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[] { new Claim("username", username) }),
+                Subject = new ClaimsIdentity(new[] { new Claim("userId", userId) }),
                 Expires = DateTime.UtcNow.AddDays(5),
                 Audience = _configuration["Jwt:Audience"],
                 Issuer = _configuration["Jwt:Issuer"],

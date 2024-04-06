@@ -96,11 +96,14 @@ builder.Services.AddAuthentication(options =>
 });
 
 
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("userIdRequired", policy =>
+        policy.RequireClaim("userId"));
+});
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

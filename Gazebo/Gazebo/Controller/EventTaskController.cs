@@ -3,6 +3,7 @@ using EventOrganizationApp.Data.Dto;
 using EventOrganizationApp.Models;
 using EventOrganizationApp.Models.Enums;
 using Gazebo.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
@@ -24,7 +25,9 @@ namespace EventOrganizationApp.Controller
             _mapper = mapper;
         }
 
+        
         [HttpGet("{userId:int}/all-tasks")]
+        [Authorize]
         [ProducesResponseType(200, Type = typeof(IList<Event>))]
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetAllUserTasks([FromRoute] int userId)
@@ -46,6 +49,7 @@ namespace EventOrganizationApp.Controller
         }
 
         [HttpGet("userid={userId:int}&eventid={eventId:int}/event-task")]
+        [Authorize]
         [ProducesResponseType(200, Type = typeof(IList<EventTaskDto>))]
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetUserTasksForAnEvent([FromRoute] int userId, [FromRoute] int eventId)
@@ -67,6 +71,7 @@ namespace EventOrganizationApp.Controller
         }
 
         [HttpGet("{eventId:int}/tasks")]
+        [Authorize]
         [ProducesResponseType(200, Type = typeof(IList<EventTaskDto>))]
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetTasksForEvent([FromRoute] int eventId)
@@ -88,6 +93,7 @@ namespace EventOrganizationApp.Controller
         }
 
         [HttpGet("{taskId:int}/task")]
+        [Authorize]
         [ProducesResponseType(200, Type = typeof(string))]
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetTask([FromRoute] int taskId)
@@ -104,6 +110,7 @@ namespace EventOrganizationApp.Controller
         }
 
         [HttpPost]
+        [Authorize]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         public async Task<IActionResult> CreateTask([FromBody] EventTaskDto task)
@@ -125,6 +132,7 @@ namespace EventOrganizationApp.Controller
         }
 
         [HttpPut("{taskId:int}/status")]
+        [Authorize]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         public async Task<IActionResult> ChangeTaskStatus([FromRoute] int taskId, [FromQuery] string status)
@@ -160,6 +168,7 @@ namespace EventOrganizationApp.Controller
         }
 
         [HttpDelete("{taskId:int}")]
+        [Authorize]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         public async Task<IActionResult> DeleteTask([FromRoute] int taskId)

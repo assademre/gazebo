@@ -83,4 +83,13 @@ export const loginAPI = async (username, password) => {
   }
 };
 
+export const signupAPI = async (formData) => {
+  try {
+    const response = await api.post('/api/user-access/signup', formData);
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response.data.message || 'Failed to signup');
+  }
+};
+
 export default api;

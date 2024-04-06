@@ -18,7 +18,6 @@ namespace EventOrganizationApp.Data.Dto
         public string Currency { get; set; }
 
         [Required]
-        [MinLength(5, ErrorMessage = "Place name must be minimum 5 characters")]
         [MaxLength(50, ErrorMessage = "Place name cannot access 50 characters")]
         public string Place { get; set; }
         public string Status { get; set; }

@@ -29,25 +29,25 @@ namespace Gazebo.Repository
 
             var hashedPassword = _hashPassword.HashPassword(password);
 
-            var respond = _context.UserAccess
+            var respond =  _context.UserAccess
                 .Where(x => x.Username == username && x.PasswordHash == hashedPassword)
                 .FirstOrDefault();
 
             return respond?.UserId ?? 0;
         }
 
-        public async Task<bool> UserSignUp(string username, string password, string name, string surname, string email, string phoneNumber)
+        public async Task<bool> UserSignUp(SignUp signup)
         {
-            if (await IsUsernameNotExist(username))
+            if (await IsUsernameOrEmailExists(signup.Username, signup.Email))
             {
                 return false;
             }
 
-            var hashedPassword = _hashPassword.HashPassword(password);
+            var hashedPassword = _hashPassword.HashPassword(signup.Password);
 
             var newUser = new UserAccess
             {
-                Username = username,
+                Username = signup.Username,
                 PasswordHash = hashedPassword
             };
 
@@ -64,7 +64,7 @@ namespace Gazebo.Repository
             }
 
             var addedUser = _context.UserAccess
-                .Where(x =>  x.Username == username)
+                .Where(x =>  x.Username == signup.Username)
                 .FirstOrDefault();
 
             if (addedUser == null)
@@ -76,24 +76,24 @@ namespace Gazebo.Repository
             {
                 UserId = addedUser.UserId,
                 Username = addedUser.Username,
-                Name = name,
-                Surname = surname,
-                PhoneNumber = phoneNumber,
-                Email = email
+                Name = signup.Name,
+                Surname = signup.Surname,
+                PhoneNumber = signup.PhoneNumber,
+                Email = signup.Email
             };
 
             return _userRepository.CreateUser(newUserInfo);
         }
 
-        internal async Task<bool> IsUsernameNotExist(string username)
+        internal async Task<bool> IsUsernameOrEmailExists(string username, string email)
         {
-            if (username == string.Empty)
+            if (username == string.Empty || email == string.Empty)
             {
                 return false;
             }
 
-            var response = await _context.UserAccess
-                .Where(x => x.Username == username)
+            var response = await _context.Users
+                .Where(x => x.Username == username || x.Email == email)
                 .ToListAsync();
 
             return response.Count > 0;

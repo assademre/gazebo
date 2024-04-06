@@ -5,6 +5,7 @@ using Gazebo.Repository;
 using Gazebo.Data.Dto;
 using Gazebo.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EventOrganizationApp.Controller
 {
@@ -23,6 +24,7 @@ namespace EventOrganizationApp.Controller
         }
 
         [HttpGet("{userId:int}/profile")]
+        [Authorize]
         [ProducesResponseType(200, Type = typeof(User))]
         public IActionResult GetProfileInfo([FromRoute] int userId)
         {
@@ -43,6 +45,7 @@ namespace EventOrganizationApp.Controller
 
 
         [HttpGet("user-list")]
+        [Authorize]
         [ProducesResponseType(200, Type = typeof(User))]
         public IActionResult GetUsersName()
         {

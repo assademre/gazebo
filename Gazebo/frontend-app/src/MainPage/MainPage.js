@@ -18,7 +18,7 @@ function MainPage() {
 
   const fetchData = async () => {
     try {
-      const userId = 2;
+      const userId = localStorage.userId;
       const eventsData = await fetchTasksAPI(userId);
       setEvents(eventsData);
 
@@ -106,12 +106,7 @@ function MainPage() {
         <Link to="/create-task" className="button">Create Task</Link>
         <Link to="/create-event" className="button">Create Event</Link>
       </div>
-
-      {/* <div className="top-right-buttons">
-        <Link to="/get-events" className="button">My Events</Link>
-        <Link to="/get-tasks" className="button">My Tasks</Link>
-      </div> */}
-
+      
       <h2>My Upcoming Tasks</h2>
       <table className="tasks-table">
         <thead>
@@ -122,7 +117,7 @@ function MainPage() {
               )}
             </th>
             <th onClick={() => handleSort('taskDate')}>
-              Task Date {sortConfig.key === 'taskDate' && (
+              Due Date {sortConfig.key === 'taskDate' && (
                 sortConfig.direction === 'asc' ? '▼' : '▲'
               )}
             </th>

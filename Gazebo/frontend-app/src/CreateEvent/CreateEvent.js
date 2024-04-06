@@ -1,9 +1,11 @@
 import React, { Fragment, useState } from "react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import { createEventAPI } from "../api";
-import statusOptions from "../helpers/statusOptions";
 import "./CreateEvent.css";
 import { useNavigate } from "react-router-dom";
 import Layout from "../NavigationBar/Layout";
+import currencySymbols from "../helpers/currencySymbols";
 
 function CreateEvent() {
   const [createrId, setCreaterId] = useState(() => localStorage.getItem('userId') ?? 0);
@@ -13,6 +15,7 @@ function CreateEvent() {
   const [currency, setCurrency] = useState('');
   const [place, setPlace] = useState('');
   const [status, setStatus] = useState('NotStarted');
+  const [eventDate, setEventDate] = useState('');
 
   const navigate = useNavigate();
 
@@ -31,7 +34,7 @@ function CreateEvent() {
       status: status,
       createdDate: new Date().toISOString(),
       updatedDate: new Date().toISOString(),
-      eventDate: new Date().toISOString(),
+      eventDate: eventDate.toISOString(),
     };
 
     try {
@@ -58,19 +61,18 @@ function CreateEvent() {
       <div className="label">Budget</div>
       <input type="number" className="input-field" value={budget} onChange={(e) => setBudget(parseInt(e.target.value))} />
 
-      <div className="label">Currency</div>
-      <input type="text" className="input-field" value={currency} onChange={(e) => setCurrency(e.target.value)} />
+      <select className="select-field" value={currency} onChange={(e) => setCurrency(e.target.value)}>
+          <option value="">Select Currency</option>
+          {currencySymbols.map((option) => (
+            <option key={option.value} value={option.value}>{option.label}</option>
+          ))}
+        </select>
 
       <div className="label">Place</div>
       <input type="text" className="input-field" value={place} onChange={(e) => setPlace(e.target.value)} />
 
-      {/* <div className="label">Status</div>
-      <select className="select-field" value={status} onChange={(e) => setStatus(e.target.value)}>
-        <option value="">Select Status</option>
-        {statusOptions.map((option) => (
-          <option key={option.value} value={option.value}>{option.label}</option>
-        ))}
-      </select> */}
+      <div className="label">Event Date</div>
+        <DatePicker selected={eventDate} onChange={(date) => setEventDate(date)} />
 
       <button className="button" onClick={handleBack}>Back to Main Page</button>
 
