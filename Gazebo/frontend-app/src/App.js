@@ -7,6 +7,7 @@ import GetEvents from "./GetEvents/GetEvents";
 import GetTasks from "./GetTasks/GetTasks";
 import Login from "./LoginPage/Login";
 import SignupPage from "./Signup/SignupPage";
+import Logout from "./Logout/Logout";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -28,6 +29,7 @@ function App() {
           <Route path="/get-events" element={<GetEvents />} />
           <Route path="/get-tasks" element={<GetTasks />} />
           <Route path="/login" element={<Login onLoginSuccess={handleLoginSuccess} />} />
+          <Route path="/logout" element={<Logout />} />
           <Route path="*" element={<Navigate to="/signup" />} />
         </Routes>
       </div>

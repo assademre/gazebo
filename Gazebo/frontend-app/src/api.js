@@ -92,4 +92,13 @@ export const signupAPI = async (formData) => {
   }
 };
 
+export const logoutAPI = async () => {
+  try {
+    const response = await api.post('/api/user-access/logout');
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response.data.message || 'Failed to logout');
+  }
+};
+
 export default api;

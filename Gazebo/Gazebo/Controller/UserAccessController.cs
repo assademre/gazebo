@@ -2,6 +2,7 @@
 using Gazebo.Interfaces;
 using Gazebo.Models;
 using Gazebo.Security;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Gazebo.Controller
@@ -45,6 +46,7 @@ namespace Gazebo.Controller
         [HttpPost("signup")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
         public async Task<IActionResult> UserSignUp([FromBody] SignUp signUp)
         {
             if (!ModelState.IsValid)
@@ -58,6 +60,13 @@ namespace Gazebo.Controller
             }
 
             return Ok("Succesfully created!");
+        }
+
+        [HttpPost("logout")]
+        [Authorize]
+        public IActionResult Logout()
+        {
+            return Ok(new { message = "Logout successful" });
         }
     }
 }
