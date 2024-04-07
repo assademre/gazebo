@@ -83,7 +83,7 @@ function GetEvents() {
         )}
       </th>
       <th onClick={() => handleSort('eventDate')}>
-        Event Date {sortConfig.key === 'eventDate' && (
+        Due Date {sortConfig.key === 'eventDate' && (
           sortConfig.direction === 'asc' ? '▼' : '▲'
         )}
       </th>

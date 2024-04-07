@@ -71,7 +71,7 @@ function CreateEvent() {
       <div className="label">Place</div>
       <input type="text" className="input-field" value={place} onChange={(e) => setPlace(e.target.value)} />
 
-      <div className="label">Event Date</div>
+      <div className="label">Event Due Date</div>
         <DatePicker selected={eventDate} onChange={(date) => setEventDate(date)} />
 
       <button className="button" onClick={handleBack}>Back to Main Page</button>

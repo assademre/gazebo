@@ -102,7 +102,7 @@ function GetTasks() {
         )}
       </th>
       <th onClick={() => handleSort('taskDate')}>
-        Task Date {sortConfig.key === 'taskDate' && (
+        Due Date {sortConfig.key === 'taskDate' && (
           sortConfig.direction === 'asc' ? '▼' : '▲'
         )}
       </th>

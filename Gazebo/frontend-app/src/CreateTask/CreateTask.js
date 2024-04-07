@@ -99,7 +99,7 @@ function CreateTask() {
           ))}
         </select>  */}
 
-      <div className="label">Task Date</div>
+      <div className="label">Task Due Date</div>
         <DatePicker selected={taskDate} onChange={(date) => setTaskDate(date)} />
 
         <button className="button" onClick={handleBack}>Back to Main Page</button>
