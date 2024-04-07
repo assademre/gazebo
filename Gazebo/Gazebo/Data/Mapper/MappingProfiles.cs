@@ -15,7 +15,7 @@ namespace EventOrganizationApp.Data.Dto.Mapper
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => Enum.GetName(typeof(Status), src.StatusId)));
 
             CreateMap<EventDto, Event>()
-                .ForMember(dest => dest.EventTypeId, opt => opt.MapFrom(src => Enum.Parse(typeof(EventType), src.EventType)))
+                .ForMember(dest => dest.EventTypeId, opt => opt.MapFrom(src => (int)Enum.Parse(typeof(EventType), src.EventType)))
                 .ForMember(dest => dest.CurrencyId, opt => opt.MapFrom(src => (int)Enum.Parse(typeof(CurrencyModel), src.Currency)))
                 .ForMember(dest => dest.StatusId, opt => opt.MapFrom(src => (int)Enum.Parse(typeof(Status), src.Status)));
 
