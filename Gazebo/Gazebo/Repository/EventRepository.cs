@@ -60,6 +60,18 @@ namespace Gazebo.Repository
             return await SaveChanges();
         }
 
+        public async Task<bool> UpdateEvent(Event updatedEvent)
+        {
+            if (updatedEvent == null)
+            {
+                return false;
+            }
+
+            _context.Update(updatedEvent);
+
+            return await SaveChanges();
+        }
+
         public async Task<bool> SaveChanges()
         {
             var savedData = await _context.SaveChangesAsync();

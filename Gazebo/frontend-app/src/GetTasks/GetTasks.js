@@ -90,51 +90,50 @@ function GetTasks() {
 
   return (
     <Layout>
-        <div className="get-events-page">
+      <div className="get-events-page">
+        <h2>My Tasks</h2>
+        <table className="tasks-table">
+          <thead>
+            <tr>
+              <th onClick={() => handleSort('taskName')}>
+                Task Name {sortConfig.key === 'taskName' && (
+                  sortConfig.direction === 'asc' ? '▼' : '▲'
+                )}
+              </th>
+              <th onClick={() => handleSort('taskDate')}>
+                Due Date {sortConfig.key === 'taskDate' && (
+                  sortConfig.direction === 'asc' ? '▼' : '▲'
+                )}
+              </th>
+              <th>Status</th>
+              <th onClick={() => handleSort('budget')}>
+                Budget {sortConfig.key === 'budget' && (
+                  sortConfig.direction === 'asc' ? '▼' : '▲'
+                )}
+              </th>
+              <th onClick={() => handleSort('eventId')}>
+                Event Name {sortConfig.key === 'eventId' && (
+                  sortConfig.direction === 'asc' ? '▼' : '▲'
+                )}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {sortedTasks.map(task => (
+              <tr key={task.taskId}>
+                <td>{task.taskName}</td>
+                <td>{formatISODate(task.taskDate)}</td>
+                <td>{getStatusLabel(task.status)}</td>
+                <td>{task.budget}{getCurrencyLabel(task.currency)}</td>
+                <td>{eventNames[task.eventId] || 'Loading...'}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
 
-<h2>My Tasks</h2>
-<table className="tasks-table">
-  <thead>
-    <tr>
-      <th onClick={() => handleSort('taskName')}>
-        Task Name {sortConfig.key === 'taskName' && (
-          sortConfig.direction === 'asc' ? '▼' : '▲'
-        )}
-      </th>
-      <th onClick={() => handleSort('taskDate')}>
-        Due Date {sortConfig.key === 'taskDate' && (
-          sortConfig.direction === 'asc' ? '▼' : '▲'
-        )}
-      </th>
-      <th>Status</th>
-      <th onClick={() => handleSort('budget')}>
-        Budget {sortConfig.key === 'budget' && (
-          sortConfig.direction === 'asc' ? '▼' : '▲'
-        )}
-      </th>
-      <th onClick={() => handleSort('eventId')}>
-        Event Name {sortConfig.key === 'eventId' && (
-          sortConfig.direction === 'asc' ? '▼' : '▲'
-        )}
-      </th>
-    </tr>
-  </thead>
-  <tbody>
-    {sortedTasks.map(task => (
-      <tr key={task.taskId}>
-        <td>{task.taskName}</td>
-        <td>{formatISODate(task.taskDate)}</td>
-        <td>{getStatusLabel(task.status)}</td>
-        <td>{task.budget}{getCurrencyLabel(task.currency)}</td>
-        <td>{eventNames[task.eventId] || 'Loading...'}</td>
-      </tr>
-    ))}
-  </tbody>
-</table>
+        <button className="button" onClick={handleBack}>Back to Main Page</button>
 
-<button className="button" onClick={handleBack}>Back to Main Page</button>
-
-</div>
+        </div>
     </Layout>
   );
 }

@@ -74,12 +74,21 @@ export const getEventByUserIdAPI = async (userId) => {
   }
 };
 
-export const loginAPI = async (username, password) => {
+export const updateEventAPI = async (data) => {
   try {
-      const response = await api.post(`/api/user-access/login`, {username: username, password: password});
-      return response;
+    const response = await api.put('/api/event', data);
+    return response.data;
   } catch (error) {
-      throw error.response.data || error.message;
+    throw new Error(error.response.data.message || 'Failed to update');
+  }
+};
+
+export const updateTaskAPI = async () => {
+  try {
+    const response = await api.put('/api/event-task');
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response.data.message || 'Failed to update');
   }
 };
 
@@ -89,6 +98,15 @@ export const signupAPI = async (formData) => {
     return response.data;
   } catch (error) {
     throw new Error(error.response.data.message || 'Failed to signup');
+  }
+};
+
+export const loginAPI = async (username, password) => {
+  try {
+      const response = await api.post(`/api/user-access/login`, {username: username, password: password});
+      return response;
+  } catch (error) {
+      throw error.response.data || error.message;
   }
 };
 

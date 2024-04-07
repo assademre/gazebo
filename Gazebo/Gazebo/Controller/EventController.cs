@@ -2,6 +2,7 @@
 using EventOrganizationApp.Data.Dto;
 using EventOrganizationApp.Models;
 using Gazebo.Interfaces;
+using Gazebo.Repository;
 using Gazebo.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -109,6 +110,28 @@ namespace EventOrganizationApp.Controller
             }
 
             return Ok("Succesfully created!");
+        }
+
+        [HttpPut]
+        [Authorize]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        public async Task<IActionResult> EditEvent([FromBody] EventDto eventDto)
+        {
+            var mappedEvent = _mapper.Map<Event>(eventDto);
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await _eventRepository.UpdateEvent(mappedEvent);
+            if (!result)
+            {
+                ModelState.AddModelError("", "Encounter an error while updating the task");
+            }
+
+            return Ok("Succesfully updated!");
         }
     }
 }

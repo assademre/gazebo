@@ -131,6 +131,28 @@ namespace EventOrganizationApp.Controller
             return Ok("Succesfully created!");
         }
 
+        [HttpPut]
+        [Authorize]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        public async Task<IActionResult> EditTask([FromBody] EventTaskDto task)
+        {
+            var mappedTask = _mapper.Map<EventsTask>(task);
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await _eventTaskRepository.UpdateTask(mappedTask);
+            if (!result)
+            {
+                ModelState.AddModelError("", "Encounter an error while updating the task");
+            }
+
+            return Ok("Succesfully updated!");
+        }
+
         [HttpPut("{taskId:int}/status")]
         [Authorize]
         [ProducesResponseType(200)]
