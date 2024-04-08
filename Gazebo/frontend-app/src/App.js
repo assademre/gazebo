@@ -7,9 +7,10 @@ import CreateEvent from "./Events/CreateEvent/CreateEvent";
 import CreateTask from "./Tasks/CreateTask/CreateTask";
 import GetEvents from "./Events/GetEvents/GetEvents";
 import GetTasks from "./Tasks/GetTasks/GetTasks";
-import Login from "./LoginPage/Login";
-import SignupPage from "./Signup/SignupPage";
-import Logout from "./Logout/Logout";
+import Login from "./AccountManagement/LoginPage/Login";
+import SignupPage from "./AccountManagement/Signup/SignupPage";
+import Logout from "./AccountManagement/Logout/Logout";
+import Splash from "./AccountManagement/SplashScreen/Splash";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -24,14 +25,15 @@ function App() {
       <div>
         {signupSuccessMessage && <div>{signupSuccessMessage}</div>}
         <Routes>
+          <Route path="/" element={<Splash />} />
           <Route path="/signup" element={<SignupPage setSignupSuccessMessage={setSignupSuccessMessage} />} />
+          <Route path="/login" element={<Login onLoginSuccess={handleLoginSuccess} />} />
+          <Route path="/logout" element={<Logout />} />
           <Route path="/main-page" element={isLoggedIn ? <MainPage /> : <Login onLoginSuccess={handleLoginSuccess} />} />
           <Route path="/create-event" element={<CreateEvent />} />
           <Route path="/create-task" element={<CreateTask />} />
           <Route path="/get-events" element={<GetEvents />} />
           <Route path="/get-tasks" element={<GetTasks />} />
-          <Route path="/login" element={<Login onLoginSuccess={handleLoginSuccess} />} />
-          <Route path="/logout" element={<Logout />} />
           <Route path="/event/:eventId" element={<Event />} />
           <Route path="/task/:taskId" element={<Task />} />
           <Route path="*" element={<Navigate to="/signup" />} />

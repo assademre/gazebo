@@ -1,0 +1,45 @@
+.splash-screen {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+}
+
+.logo-splash {
+    width: 400px;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+.text {
+    max-width: 100ch;
+  }
+
+.splash-content {
+    margin-bottom: 20px;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+}
+
+.login-button, .signup-button {
+    padding: 12px 24px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #24252A;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin: 0 10px;
+}
+
+.login-button:hover, .signup-button:hover {
+    background-color: #0088a9;
+}

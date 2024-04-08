@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import image from "../logo.png";
 import "./NavBar.css";
-import Logout from '../Logout/Logout';
 
 const NavBar = () => {
     return (

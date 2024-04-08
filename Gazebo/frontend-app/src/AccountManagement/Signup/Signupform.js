@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { signupAPI } from '../api';
+import { signupAPI } from '../../api';
 
 const SignupForm = () => {
   const [formData, setFormData] = useState({
