@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { fetchTasksAPI, getEventByEventIdAPI } from "./../../api";
 import "./GetTasks.css";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import statusOptions from "./../../helpers/statusOptions";
 import currencySymbols from "./../../helpers/currencySymbols";
 import Layout from "./../../NavigationBar/Layout";
@@ -121,7 +121,7 @@ function GetTasks() {
           <tbody>
             {sortedTasks.map(task => (
               <tr key={task.taskId}>
-                <td>{task.taskName}</td>
+                <td><Link className="task" to={`/task/${task.taskId}`}>{task.taskName}</Link></td>
                 <td>{formatISODate(task.taskDate)}</td>
                 <td>{getStatusLabel(task.status)}</td>
                 <td>{task.budget}{getCurrencyLabel(task.currency)}</td>

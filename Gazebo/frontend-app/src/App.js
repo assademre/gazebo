@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import MainPage from "./MainPage/MainPage";
 import Event from "./Events/Event/Event";
+import Task from "./Tasks/Task/Task";
 import CreateEvent from "./Events/CreateEvent/CreateEvent";
 import CreateTask from "./Tasks/CreateTask/CreateTask";
 import GetEvents from "./Events/GetEvents/GetEvents";
@@ -31,7 +32,8 @@ function App() {
           <Route path="/get-tasks" element={<GetTasks />} />
           <Route path="/login" element={<Login onLoginSuccess={handleLoginSuccess} />} />
           <Route path="/logout" element={<Logout />} />
-          <Route path="/event/:eventId" element={<Event />} /> // Add this route for event detail
+          <Route path="/event/:eventId" element={<Event />} />
+          <Route path="/task/:taskId" element={<Task />} />
           <Route path="*" element={<Navigate to="/signup" />} />
         </Routes>
       </div>

@@ -65,6 +65,15 @@ export const getEventByEventIdAPI = async (eventId) => {
   }
 };
 
+export const getTaskByTaskIdAPI = async (taskId) => {
+  try {
+      const response = await api.get(`/api/event-task/${taskId}/task`);
+      return response.data;
+  } catch (error) {
+      throw error.response.data || error.message;
+  }
+};
+
 export const getEventByUserIdAPI = async (userId) => {
   try {
       const response = await api.get(`/api/event/${userId}/created-events`);
@@ -83,9 +92,9 @@ export const updateEventAPI = async (data) => {
   }
 };
 
-export const updateTaskAPI = async () => {
+export const updateTaskAPI = async (data) => {
   try {
-    const response = await api.put('/api/event-task');
+    const response = await api.put('/api/event-task', data);
     return response.data;
   } catch (error) {
     throw new Error(error.response.data.message || 'Failed to update');
