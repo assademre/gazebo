@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { fetchTasksAPI, getEventByEventIdAPI } from "../api";
-import "./GetTasks.css";
-import { useNavigate } from "react-router-dom";
-import statusOptions from "../helpers/statusOptions";
-import currencySymbols from "../helpers/currencySymbols";
-import Layout from "../NavigationBar/Layout";
+import { Link, useNavigate } from "react-router-dom";
+import { getEventByUserIdAPI } from "./../../api";
+import "./GetEvents.css";
+import statusOptions from "../../helpers/statusOptions";
+import currencySymbols from "../../helpers/currencySymbols";
+import Layout from "../../NavigationBar/Layout";
 
-function GetTasks() {
+function GetEvents() {
   const [events, setEvents] = useState([]);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
-  const [eventNames, setEventNames] = useState({});
 
   const navigate = useNavigate();
 
@@ -24,37 +23,10 @@ function GetTasks() {
   const fetchData = async () => {
     try {
       const userId = localStorage.getItem('userId');
-      const eventsData = await fetchTasksAPI(userId);
+      const eventsData = await getEventByUserIdAPI(userId);
       setEvents(eventsData);
-      
-      const eventIds = eventsData.map(event => event.eventId);
-      for (const eventId of eventIds) {
-        const eventName = await fetchEventName(eventId);
-        setEventNames(prevState => ({
-          ...prevState,
-          [eventId]: eventName
-        }));
-      }
     } catch (error) {
       console.error('Error fetching data:', error);
-    }
-  };
-
-  const handleSort = (key) => {
-    let direction = 'asc';
-    if (sortConfig.key === key && sortConfig.direction === 'asc') {
-      direction = 'desc';
-    }
-    setSortConfig({ key, direction });
-  };
-
-  const fetchEventName = async (eventId) => {
-    try {
-      const event = await getEventByEventIdAPI(eventId);
-      return event.eventName;
-    } catch (error) {
-      console.error('Error fetching event name:', error);
-      return '';
     }
   };
 
@@ -66,6 +38,15 @@ function GetTasks() {
   const getCurrencyLabel = (currency) => {
     const currencySymbol = currencySymbols.find(symbol => symbol.value === currency);
     return currencySymbol ? currencySymbol.label : "currency";
+  };
+
+
+  const handleSort = (key) => {
+    let direction = 'asc';
+    if (sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    }
+    setSortConfig({ key, direction });
   };
 
   const formatISODate = (dateString) => {
@@ -91,17 +72,18 @@ function GetTasks() {
   return (
     <Layout>
       <div className="get-events-page">
-        <h2>My Tasks</h2>
+
+        <h2>My Events</h2>
         <table className="tasks-table">
           <thead>
             <tr>
-              <th onClick={() => handleSort('taskName')}>
-                Task Name {sortConfig.key === 'taskName' && (
+              <th onClick={() => handleSort('eventName')}>
+                Event Name {sortConfig.key === 'eventName' && (
                   sortConfig.direction === 'asc' ? '▼' : '▲'
                 )}
               </th>
-              <th onClick={() => handleSort('taskDate')}>
-                Due Date {sortConfig.key === 'taskDate' && (
+              <th onClick={() => handleSort('eventDate')}>
+                Due Date {sortConfig.key === 'eventDate' && (
                   sortConfig.direction === 'asc' ? '▼' : '▲'
                 )}
               </th>
@@ -111,21 +93,17 @@ function GetTasks() {
                   sortConfig.direction === 'asc' ? '▼' : '▲'
                 )}
               </th>
-              <th onClick={() => handleSort('eventId')}>
-                Event Name {sortConfig.key === 'eventId' && (
-                  sortConfig.direction === 'asc' ? '▼' : '▲'
-                )}
-              </th>
+              <th>Event Type</th>
             </tr>
           </thead>
           <tbody>
-            {sortedTasks.map(task => (
-              <tr key={task.taskId}>
-                <td>{task.taskName}</td>
-                <td>{formatISODate(task.taskDate)}</td>
-                <td>{getStatusLabel(task.status)}</td>
-                <td>{task.budget}{getCurrencyLabel(task.currency)}</td>
-                <td>{eventNames[task.eventId] || 'Loading...'}</td>
+            {sortedTasks.map(event => (
+              <tr key={event.eventId}>
+                <td><Link className="event" to={`/event/${event.eventId}`}>{event.eventName}</Link></td>
+                <td>{formatISODate(event.eventDate)}</td>
+                <td>{getStatusLabel(event.status)}</td>
+                <td>{event.budget}{getCurrencyLabel(event.currency)}</td>
+                <td>{event.eventType}</td>
               </tr>
             ))}
           </tbody>
@@ -133,9 +111,9 @@ function GetTasks() {
 
         <button className="button" onClick={handleBack}>Back to Main Page</button>
 
-        </div>
+      </div>
     </Layout>
   );
 }
-  
-export default GetTasks;
+
+export default GetEvents;

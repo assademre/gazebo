@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import MainPage from "./MainPage/MainPage";
-import CreateTask from "./CreateTask/CreateTask";
-import CreateEvent from "./CreateEvent/CreateEvent";
-import GetEvents from "./GetEvents/GetEvents";
-import GetTasks from "./GetTasks/GetTasks";
+import Event from "./Events/Event/Event";
+import CreateEvent from "./Events/CreateEvent/CreateEvent";
+import CreateTask from "./Tasks/CreateTask/CreateTask";
+import GetEvents from "./Events/GetEvents/GetEvents";
+import GetTasks from "./Tasks/GetTasks/GetTasks";
 import Login from "./LoginPage/Login";
 import SignupPage from "./Signup/SignupPage";
 import Logout from "./Logout/Logout";
-import Event from "./Event/Event";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);

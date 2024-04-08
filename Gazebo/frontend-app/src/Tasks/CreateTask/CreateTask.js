@@ -1,11 +1,11 @@
 import React, { Fragment, useState, useEffect } from "react";
-import { createTaskAPI, getEventByUserIdAPI } from "../api";
+import { createTaskAPI, getEventByUserIdAPI } from "./../../api";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./CreateTask.css";
 import { useNavigate } from "react-router-dom";
-import Layout from "../NavigationBar/Layout";
-import currencySymbols from "../helpers/currencySymbols";
+import Layout from "./../../NavigationBar/Layout";
+import currencySymbols from "./../../helpers/currencySymbols";
 
 function CreateTask() {
   const [ownerId, setOwnerId] = useState(() => localStorage.getItem('userId') ?? 0);

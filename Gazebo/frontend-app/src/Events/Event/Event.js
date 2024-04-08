@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getEventByEventIdAPI, updateEventAPI } from '../api';
+import { getEventByEventIdAPI, updateEventAPI } from './../../api';
 import { format } from 'date-fns';
-import statusOptions from '../helpers/statusOptions';
+import statusOptions from '../../helpers/statusOptions';
 import "./Event.css";
+import Layout from '../../NavigationBar/Layout';
 
 function Event() {
   const { eventId } = useParams();
@@ -60,6 +61,8 @@ function Event() {
   const formattedDate = format(new Date(event.eventDate), 'dd-MM-yyyy');
 
   return (
+    <Layout>
+      
     <div className="event-page-container">
       <div className="event-details">
         <div className="event-detail-item">
@@ -108,6 +111,7 @@ function Event() {
         )}
       </div>
     </div>
+    </Layout>
   );
 }
 

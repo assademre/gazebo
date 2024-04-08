@@ -1,11 +1,11 @@
 import React, { Fragment, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { createEventAPI } from "../api";
+import { createEventAPI } from "./../../api";
 import "./CreateEvent.css";
 import { useNavigate } from "react-router-dom";
-import Layout from "../NavigationBar/Layout";
-import currencySymbols from "../helpers/currencySymbols";
+import Layout from "../../NavigationBar/Layout";
+import currencySymbols from "../../helpers/currencySymbols";
 
 function CreateEvent() {
   const [createrId, setCreaterId] = useState(() => localStorage.getItem('userId') ?? 0);
