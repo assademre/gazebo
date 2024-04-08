@@ -36,7 +36,7 @@ function App() {
           <Route path="/get-tasks" element={<GetTasks />} />
           <Route path="/event/:eventId" element={<Event />} />
           <Route path="/task/:taskId" element={<Task />} />
-          <Route path="*" element={<Navigate to="/signup" />} />
+          <Route path="*" element={<Navigate to="/login" />} />
         </Routes>
       </div>
     </Router>
