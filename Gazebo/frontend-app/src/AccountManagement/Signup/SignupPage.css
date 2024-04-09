@@ -54,4 +54,22 @@
   button:hover {
     background-color: #0088a9;
   }
+
+  .error-container {
+    display: flex;
+    align-items: center;
+  }
+  
+  .error-image {
+    width: 20px;
+    margin-right: 5px;
+  }
+  
+  .error-message {
+    color: red;
+  }
+  
+  input[type="text"].error-input {
+    border: 1px solid red;
+  }
   

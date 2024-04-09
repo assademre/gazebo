@@ -20,6 +20,22 @@ namespace Gazebo.Controller
             _tokenGenerator = tokenGenerator;
         }
 
+        [HttpGet("username-availability/{username}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        public async Task<IActionResult> IsUsernameTaken([FromRoute] string username)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var isUsernameTaken = await _userAccessRepository.IsUsernameOrEmailExists(username);
+
+            return Ok(new { Response = isUsernameTaken });
+        }
+
         [HttpPost("login")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]

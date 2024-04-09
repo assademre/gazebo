@@ -5,6 +5,7 @@ using Gazebo.Interfaces;
 using Gazebo.Models;
 using Gazebo.Security;
 using Microsoft.EntityFrameworkCore;
+using System.Web.Helpers;
 
 namespace Gazebo.Repository
 {
@@ -83,6 +84,20 @@ namespace Gazebo.Repository
             };
 
             return _userRepository.CreateUser(newUserInfo);
+        }
+
+        public async Task<bool> IsUsernameOrEmailExists(string username)
+        {
+            if (username == string.Empty)
+            {
+                return false;
+            }
+
+            var response = await _context.Users
+                .Where(x => x.Username == username)
+                .ToListAsync();
+
+            return response.Count > 0;
         }
 
         internal async Task<bool> IsUsernameOrEmailExists(string username, string email)

@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { signupAPI } from '../../api';
+import { signupAPI, checkUsernameAvailabilityAPI } from '../../api';
 
 const SignupForm = () => {
   const [formData, setFormData] = useState({
@@ -13,7 +13,26 @@ const SignupForm = () => {
   });
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [usernameAvailable, setUsernameAvailable] = useState(true);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const checkUsernameAvailability = async () => {
+      try {
+        const isTaken = await checkUsernameAvailabilityAPI(formData.username);
+        console.log(formData.username, isTaken.response)
+        setUsernameAvailable(!isTaken.response);
+        console.log(usernameAvailable)
+      } catch (error) {
+        console.error('Error checking username availability:', error);
+        setUsernameAvailable(false);
+      }
+    };
+
+    if (formData.username.trim() !== '') {
+      checkUsernameAvailability();
+    }
+  }, [formData.username]);
 
   const handleChange = (e) => {
     setFormData({
@@ -42,7 +61,17 @@ const SignupForm = () => {
       <form className='signup-form' onSubmit={handleSubmit}>
         <div>
           <label>Username:</label>
-          <input type="text" name="username" value={formData.username} onChange={handleChange} required />
+          <input
+            type="text"
+            name="username"
+            value={formData.username}
+            onChange={handleChange}
+            required
+            className={usernameAvailable ? '' : 'error-input'}
+          />
+          {!usernameAvailable && (
+            <div className="error-message">Username not available</div>
+          )}
         </div>
         <div>
           <label>Password:</label>
@@ -64,7 +93,7 @@ const SignupForm = () => {
           <label>Phone Number:</label>
           <input type="tel" name="phoneNumber" value={formData.phoneNumber} onChange={handleChange} required />
         </div>
-        <button type="submit" disabled={isLoading}>{isLoading ? 'Signing up...' : 'Signup'}</button>
+        <button type="submit" disabled={!usernameAvailable || isLoading}>{isLoading ? 'Signing up...' : 'Signup'}</button>
       </form>
       <Link className='login-link' to="/login">Already have an account? Login</Link>
       {error && <div className="error-message">{error}</div>}

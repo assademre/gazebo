@@ -101,6 +101,15 @@ export const updateTaskAPI = async (data) => {
   }
 };
 
+export const checkUsernameAvailabilityAPI = async (username) => {
+  try {
+    const response = await api.get(`/api/user-access/username-availability/${username}`);
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response.data.message || 'Username is taken');
+  }
+};
+
 export const signupAPI = async (formData) => {
   try {
     const response = await api.post('/api/user-access/signup', formData);
