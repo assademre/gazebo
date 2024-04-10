@@ -128,7 +128,29 @@ namespace EventOrganizationApp.Controller
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetTask([FromRoute] int taskId)
         {
+            var claim = User.Claims
+               .FirstOrDefault(x => x.Type == "userId");
+
+            if (claim == null)
+            {
+                return BadRequest("The userId claim is missing");
+            }
+            var userIdString = claim?.Value;
+
+            if (!int.TryParse(userIdString, out int userId))
+            {
+                return BadRequest("The userId claim is not a valid integer");
+            }
+
             var taskInfo = await _eventTaskRepository.GetTask(taskId);
+
+            var isUserMember = await _eventMemberRepository.IsUserMember(taskInfo.EventId, userId);
+
+            if (!isUserMember)
+            {
+                return BadRequest("User has no access to this task");
+            }
+
             var mappedTaskInfo = _mapper.Map<EventTaskDto>(taskInfo);
 
             if (mappedTaskInfo == null)
@@ -165,7 +187,7 @@ namespace EventOrganizationApp.Controller
                 IsAdmin = false
             };
 
-            var isUserAdded = await _eventMemberRepository.IsEventMemberAlreadyAdded(task.EventId, task.OwnerId);
+            var isUserAdded = await _eventMemberRepository.IsUserMember(task.EventId, task.OwnerId);
             if (isUserAdded)
             {
                 return Ok("Succesfully created!");

@@ -26,7 +26,7 @@ namespace Gazebo.Repository
             return await SaveChanges();
         }
 
-        public async Task<bool> IsEventMemberAlreadyAdded(int eventId, int userId)
+        public async Task<bool> IsUserMember(int eventId, int userId)
         {
             if (eventId == 0 || userId == 0)
             {
