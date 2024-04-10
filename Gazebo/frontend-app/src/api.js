@@ -38,18 +38,18 @@ export const createTaskAPI = async (data) => {
     }
   };
 
-export const fetchTasksAPI = async (userId) => {
+export const fetchTasksAPI = async () => {
 try {
-    const response = await api.get(`/api/event-task/${userId}/all-tasks`);
+    const response = await api.get(`/api/event-task/all-tasks`);
     return response.data;
 } catch (error) {
     throw error.response.data || error.message;
     }
   };
 
-export const getUsernameAPI = async (userId) => {
+export const getUsernameAPI = async () => {
     try {
-        const response = await api.get(`/api/user/${userId}/profile`);
+        const response = await api.get(`/api/user/profile`);
         return response.data;
     } catch (error) {
         throw error.response.data || error.message;
@@ -74,9 +74,9 @@ export const getTaskByTaskIdAPI = async (taskId) => {
   }
 };
 
-export const getEventByUserIdAPI = async (userId) => {
+export const getEventByUserIdAPI = async () => {
   try {
-      const response = await api.get(`/api/event/${userId}/created-events`);
+      const response = await api.get(`/api/event/created-events`);
       return response.data;
   } catch (error) {
       throw error.response.data || error.message;

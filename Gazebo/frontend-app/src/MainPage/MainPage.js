@@ -18,11 +18,10 @@ function MainPage() {
 
   const fetchData = async () => {
     try {
-      const userId = localStorage.userId;
-      const eventsData = await fetchTasksAPI(userId);
+      const eventsData = await fetchTasksAPI();
       setEvents(eventsData);
 
-      const usernameData = await getUsernameAPI(userId);
+      const usernameData = await getUsernameAPI();
       setUsername(usernameData.name);
 
       const eventIds = eventsData.map(event => event.eventId);
@@ -41,6 +40,7 @@ function MainPage() {
   const fetchEventName = async (eventId) => {
     try {
       const event = await getEventByEventIdAPI(eventId);
+      console.log(event)
       return event.eventName;
     } catch (error) {
       console.error('Error fetching event name:', error);

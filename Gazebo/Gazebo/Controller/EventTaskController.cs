@@ -26,12 +26,26 @@ namespace EventOrganizationApp.Controller
         }
 
         
-        [HttpGet("{userId:int}/all-tasks")]
+        [HttpGet("all-tasks")]
         [Authorize]
         [ProducesResponseType(200, Type = typeof(IList<Event>))]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> GetAllUserTasks([FromRoute] int userId)
+        public async Task<IActionResult> GetAllUserTasks()
         {
+            var claim = User.Claims
+                .FirstOrDefault(x => x.Type == "userId");
+
+            if (claim == null)
+            {
+                return BadRequest("The userId claim is missing");
+            }
+            var userIdString = claim?.Value;
+
+            if (!int.TryParse(userIdString, out int userId))
+            {
+                return BadRequest("The userId claim is not a valid integer");
+            }
+
             var allTasks = await _eventTaskRepository.GetAllUserTasks(userId);
             var mappedTasks = _mapper.Map<IList<EventTaskDto>>(allTasks);
 
@@ -48,12 +62,26 @@ namespace EventOrganizationApp.Controller
             return Ok(mappedTasks);
         }
 
-        [HttpGet("userid={userId:int}&eventid={eventId:int}/event-task")]
+        [HttpGet("eventid={eventId:int}/event-task")]
         [Authorize]
         [ProducesResponseType(200, Type = typeof(IList<EventTaskDto>))]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> GetUserTasksForAnEvent([FromRoute] int userId, [FromRoute] int eventId)
+        public async Task<IActionResult> GetUserTasksForAnEvent([FromRoute] int eventId)
         {
+            var claim = User.Claims
+                .FirstOrDefault(x => x.Type == "userId");
+
+            if (claim == null)
+            {
+                return BadRequest("The userId claim is missing");
+            }
+            var userIdString = claim?.Value;
+
+            if (!int.TryParse(userIdString, out int userId))
+            {
+                return BadRequest("The userId claim is not a valid integer");
+            }
+
             var userEventTasks = await _eventTaskRepository.GetUserTasksForAnEvent(userId, eventId);
             var mappedeventTasks = _mapper.Map<IList<EventTaskDto>>(userEventTasks);
 

@@ -7,6 +7,7 @@ using Gazebo.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
 
 namespace EventOrganizationApp.Controller
 {
@@ -23,12 +24,26 @@ namespace EventOrganizationApp.Controller
             _mapper = mapper;
         }
 
-        [HttpGet("{userId:int}/created-events")]
-        [Authorize(Policy = "UserIdRequired")]
+        [HttpGet("created-events")]
+        [Authorize]
         [ProducesResponseType(200, Type = typeof(IList<Event>))]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> GetEventUserCreated([FromRoute] int userId)
+        public async Task<IActionResult> GetEventUserCreated()
         {
+            var claim = User.Claims
+                .FirstOrDefault(x => x.Type == "userId");
+
+            if (claim == null)
+            {
+                return BadRequest("The userId claim is missing");
+            }
+            var userIdString = claim?.Value;
+
+            if (!int.TryParse(userIdString, out int userId))
+            {
+                return BadRequest("The userId claim is not a valid integer");
+            }
+
             var createdEvents = await _eventRepository.GetEventsUserCreated(userId);
             var mappedEvents = _mapper.Map<IList<EventDto>>(createdEvents);
 

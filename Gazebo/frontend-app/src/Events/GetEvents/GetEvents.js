@@ -22,8 +22,7 @@ function GetEvents() {
 
   const fetchData = async () => {
     try {
-      const userId = localStorage.getItem('userId');
-      const eventsData = await getEventByUserIdAPI(userId);
+      const eventsData = await getEventByUserIdAPI();
       setEvents(eventsData);
     } catch (error) {
       console.error('Error fetching data:', error);

@@ -23,11 +23,25 @@ namespace EventOrganizationApp.Controller
             _mapper = mapper;
         }
 
-        [HttpGet("{userId:int}/profile")]
+        [HttpGet("profile")]
         [Authorize]
         [ProducesResponseType(200, Type = typeof(User))]
-        public IActionResult GetProfileInfo([FromRoute] int userId)
+        public IActionResult GetProfileInfo()
         {
+            var claim = User.Claims
+                .FirstOrDefault(x => x.Type == "userId");
+
+            if (claim == null)
+            {
+                return BadRequest("The userId claim is missing");
+            }
+            var userIdString = claim?.Value;
+
+            if (!int.TryParse(userIdString, out int userId))
+            {
+                return BadRequest("The userId claim is not a valid integer");
+            }
+
             var profileInfo = _profileRepository.GetUserInfo(userId);
 
             if (profileInfo.UserId == 0)

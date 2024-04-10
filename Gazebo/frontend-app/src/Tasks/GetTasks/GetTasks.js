@@ -23,8 +23,7 @@ function GetTasks() {
 
   const fetchData = async () => {
     try {
-      const userId = localStorage.getItem('userId');
-      const eventsData = await fetchTasksAPI(userId);
+      const eventsData = await fetchTasksAPI();
       setEvents(eventsData);
       
       const eventIds = eventsData.map(event => event.eventId);
