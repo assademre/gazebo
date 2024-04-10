@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using System.Reflection.Emit;
 
 namespace EventOrganizationApp.Data
 {
@@ -16,10 +15,10 @@ namespace EventOrganizationApp.Data
         }
 
         public DbSet<User> Users { get; set; }
-        public DbSet<EventMember> EventMembers { get; set; }
         public DbSet<Event> Events { get; set; }
         public DbSet<EventsTask> Tasks { get; set; }
         public DbSet<UserAccess> UserAccess { get; set; }
+        public DbSet<EventMember> EventMembers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -53,6 +52,9 @@ namespace EventOrganizationApp.Data
                 .HasOne<User>()
                 .WithMany()
                 .HasForeignKey(et => et.OwnerId);
+
+            builder.Entity<EventMember>()
+                .HasKey(c => c.UserId);
 
             List<IdentityRole> roles = new List<IdentityRole>
             {

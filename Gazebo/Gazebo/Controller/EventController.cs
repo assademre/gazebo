@@ -16,12 +16,14 @@ namespace EventOrganizationApp.Controller
     public class EventController : ControllerBase
     {
         private readonly IEventRepository _eventRepository;
+        private readonly IEventMemberRepository _eventMemberRepository;
         public IMapper _mapper;
 
-        public EventController(IEventRepository eventRepository, IMapper mapper)
+        public EventController(IEventRepository eventRepository, IMapper mapper, IEventMemberRepository eventMemberRepository)
         {
             _eventRepository = eventRepository;
             _mapper = mapper;
+            _eventMemberRepository = eventMemberRepository;
         }
 
         [HttpGet("created-events")]
@@ -122,6 +124,27 @@ namespace EventOrganizationApp.Controller
             if (!result)
             {
                 ModelState.AddModelError("", "Encounter an error while creating the event");
+            }
+
+            var eventId = await _eventRepository.GetEventIdByEventNameAndUserId(newEvent.CreaterId, newEvent.EventName);
+
+            if (eventId == 0)
+            {
+                return BadRequest("Encounter an error while creating the event");
+            }
+
+            var eventMember = new EventMember
+            {
+                EventId = eventId,
+                UserId = newEvent.CreaterId,
+                IsAdmin = true
+            };
+
+            var response = await _eventMemberRepository.AddEventMember(eventMember);
+
+            if (!response)
+            {
+                return BadRequest("Encounter an error while creating the event");
             }
 
             return Ok("Succesfully created!");

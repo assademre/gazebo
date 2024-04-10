@@ -48,6 +48,21 @@ namespace Gazebo.Repository
             return eventStatus;
         }
 
+        public async Task<int> GetEventIdByEventNameAndUserId(int userId, string eventName)
+        {
+            if (userId == 0 || eventName == string.Empty)
+            {
+                return 0;
+            }
+
+            var eventId = await _context.Events
+                .Where(x => x.CreaterId == userId && x.EventName == eventName)
+                .Select(x => x.EventId)
+                .FirstOrDefaultAsync();
+
+            return eventId;
+        }
+
         public async Task<bool> CreateEvent(Event newEvent)
         {
             if (newEvent == null)
@@ -72,13 +87,6 @@ namespace Gazebo.Repository
             return await SaveChanges();
         }
 
-        public async Task<bool> SaveChanges()
-        {
-            var savedData = await _context.SaveChangesAsync();
-
-            return savedData > 0;
-        }
-
         public async Task<Event> GetEventByEventId(int eventId)
         {
             if (eventId == 0)
@@ -91,6 +99,13 @@ namespace Gazebo.Repository
                 .FirstOrDefaultAsync();
 
             return result;
+        }
+
+        public async Task<bool> SaveChanges()
+        {
+            var savedData = await _context.SaveChangesAsync();
+
+            return savedData > 0;
         }
     }
 }

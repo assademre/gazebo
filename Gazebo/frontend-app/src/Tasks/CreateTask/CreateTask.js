@@ -26,6 +26,7 @@ function CreateTask() {
   const fetchEventOptions = async () => {
     try {
       const events = await getEventByUserIdAPI();
+      console.log(events)
       const options = events.map(event => ({
         label: event.eventName,
         value: event.eventId

@@ -3,11 +3,11 @@ using EventOrganizationApp.Data.Dto;
 using EventOrganizationApp.Models;
 using EventOrganizationApp.Models.Enums;
 using Gazebo.Interfaces;
+using Gazebo.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using System.Threading.Tasks;
 
 namespace EventOrganizationApp.Controller
 {
@@ -16,13 +16,15 @@ namespace EventOrganizationApp.Controller
     public class EventTaskController : ControllerBase
     {
         private readonly IEventTaskRepository _eventTaskRepository;
+        private readonly IEventMemberRepository _eventMemberRepository;
 
         public IMapper _mapper;
 
-        public EventTaskController(IEventTaskRepository eventTaskRepository, IMapper mapper)
+        public EventTaskController(IEventTaskRepository eventTaskRepository, IMapper mapper, IEventMemberRepository eventMemberRepository)
         {
             _eventTaskRepository = eventTaskRepository;
             _mapper = mapper;
+            _eventMemberRepository = eventMemberRepository;
         }
 
         
@@ -154,6 +156,26 @@ namespace EventOrganizationApp.Controller
             if (!result)
             {
                 ModelState.AddModelError("", "Encounter an error while creating the task");
+            }
+
+            var eventMember = new EventMember
+            {
+                EventId = task.EventId,
+                UserId = task.OwnerId,
+                IsAdmin = false
+            };
+
+            var isUserAdded = await _eventMemberRepository.IsEventMemberAlreadyAdded(task.EventId, task.OwnerId);
+            if (isUserAdded)
+            {
+                return Ok("Succesfully created!");
+            }
+
+            var response = await _eventMemberRepository.AddEventMember(eventMember);
+
+            if (!response)
+            {
+                return BadRequest("Encounter an error while creating the event");
             }
 
             return Ok("Succesfully created!");

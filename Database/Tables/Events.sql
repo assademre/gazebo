@@ -14,5 +14,7 @@ CREATE TABLE Events (
 	CONSTRAINT FK_Events_Currency FOREIGN KEY (currencyId) REFERENCES Currency(currencyId),
 	CONSTRAINT FK_Events_CreaterId FOREIGN KEY (createrId) REFERENCES Users(userId),
 	CONSTRAINT FK_Events_EventTypeId FOREIGN KEY (eventTypeId) REFERENCES EventTypes(eventTypeId),
-	CONSTRAINT FK_Events_Status FOREIGN KEY (statusId) REFERENCES Status(statusId)
+	CONSTRAINT FK_Events_Status FOREIGN KEY (statusId) REFERENCES Status(statusId),
+
+	CONSTRAINT UQ_UserId_EventName UNIQUE (createrId, eventName)
 )

@@ -4,9 +4,8 @@ namespace EventOrganizationApp.Models
 {
     public class EventMember
     {
-        public int EventMemberId { get; set; }
-        public EventType Event { get; set; }
-        public User User { get; set; }
-        public EventsTask Tasks { get; set; }
+        public int EventId { get; set; }
+        public int UserId { get; set; }
+        public bool IsAdmin { get; set; }
     }
 }

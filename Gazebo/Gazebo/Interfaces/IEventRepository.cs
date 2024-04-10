@@ -7,6 +7,7 @@ namespace Gazebo.Interfaces
     {
         Task<IList<Event>> GetEventsUserCreated(int userId);
         Task<string> GetStatusByEventId(int eventId);
+        Task<int> GetEventIdByEventNameAndUserId(int userId, string eventName);
         Task<bool> CreateEvent(Event newEvent);
         Task<bool> UpdateEvent(Event newEvent);
         Task<Event> GetEventByEventId(int eventId);
