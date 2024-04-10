@@ -1,5 +1,5 @@
-import React, { Fragment, useState, useEffect } from "react";
-import { createTaskAPI, getEventByUserIdAPI } from "./../../api";
+import React, { useState, useEffect } from "react";
+import { createTaskAPI, getEventByUserIdAPI, getUsersAPI } from "./../../api";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./CreateTask.css";
@@ -17,16 +17,20 @@ function CreateTask() {
   const [status, setStatus] = useState('NotStarted');
   const [eventOptions, setEventOptions] = useState([]);
   const [taskDate, setTaskDate] = useState('');
+  const [users, setUsers] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filteredUsers, setFilteredUsers] = useState([]);
+  const [taskOwner, setTaskOwner] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchEventOptions();
+    fetchUsers();
   }, []);
 
   const fetchEventOptions = async () => {
     try {
       const events = await getEventByUserIdAPI();
-      console.log(events)
       const options = events.map(event => ({
         label: event.eventName,
         value: event.eventId
@@ -34,6 +38,16 @@ function CreateTask() {
       setEventOptions(options);
     } catch (error) {
       console.error("Error fetching event options:", error);
+    }
+  };
+
+  const fetchUsers = async () => {
+    try {
+      const usersData = await getUsersAPI();
+      setUsers(usersData);
+      setFilteredUsers(usersData);
+    } catch (error) {
+      console.error("Error fetching users:", error);
     }
   };
 
@@ -61,12 +75,35 @@ function CreateTask() {
     } catch (error) {
       alert(error);
     }
-  }
+  };
+
+  useEffect(() => {
+    const results = users.filter(user =>
+      user.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredUsers(results);
+  }, [searchTerm, users]);
 
   return (
     <Layout>
       <div className="container">
         <div>Create a new Task</div>
+
+        <div className="label">Task Owner</div>
+        <input
+          type="text"
+          className="input-field"
+          placeholder="Search Task Owner..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        <div className="user-list">
+          {filteredUsers.map(user => (
+            <div key={user.userId} onClick={() => setTaskOwner(user.name)}>
+              {user.username}
+            </div>
+          ))}
+        </div>
 
         <div className="label">Event</div>
         <select className="select-field" value={eventId} onChange={(e) => setEventId(e.target.value)}>
@@ -92,15 +129,7 @@ function CreateTask() {
         <div className="label">Place</div>
         <input type="text" className="input-field" value={place} onChange={(e) => setPlace(e.target.value)} />
 
-        {/* <div className="label">Status</div>
-        <select className="select-field" value={status} onChange={(e) => setStatus(e.target.value)}>
-          <option value="">Select Status</option>
-          {statusOptions.map((option) => (
-            <option key={option.value} value={option.value}>{option.label}</option>
-          ))}
-        </select>  */}
-
-      <div className="label">Task Due Date</div>
+        <div className="label">Task Due Date</div>
         <DatePicker selected={taskDate} onChange={(date) => setTaskDate(date)} />
 
         <button className="button" onClick={handleBack}>Back to Main Page</button>
