@@ -58,3 +58,47 @@
   .back-to-main-button:hover {
     background-color: #0056b3;
 }
+
+
+.user-list div {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.user-list div:hover {
+  background-color: #f0f0f0;
+}
+
+.input-field:focus + .user-list {
+  visibility: visible;
+}
+
+.autocomplete-suggestions {
+  position: absolute;
+  z-index: 1000;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-top: none;
+  width: calc(100% - 2px);
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.autocomplete-suggestions > div {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.autocomplete-suggestions > div:hover {
+  background-color: #f0f0f0;
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+}
+
+.checkbox-container span {
+  font-weight: normal;
+  margin: 0;
+}

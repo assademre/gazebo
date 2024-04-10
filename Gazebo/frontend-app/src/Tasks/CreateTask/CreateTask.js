@@ -21,6 +21,8 @@ function CreateTask() {
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [taskOwner, setTaskOwner] = useState('');
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [isMeClicked, setIsMeClicked] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -79,11 +81,21 @@ function CreateTask() {
 
   useEffect(() => {
     const results = users.filter(user =>
-      user.name.toLowerCase().includes(searchTerm.toLowerCase())
+      user.username.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredUsers(results);
   }, [searchTerm, users]);
 
+  const handleUserClick = (user) => {
+    setTaskOwner(user.name);
+    setOwnerId(user.userId);
+    setSearchTerm(user.username);
+    setShowSuggestions(false);
+    if (isMeClicked) {
+      localStorage.setItem('userId', user.userId);
+    }
+  };
+  
   return (
     <Layout>
       <div className="container">
@@ -95,15 +107,29 @@ function CreateTask() {
           className="input-field"
           placeholder="Search Task Owner..."
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          onChange={(e) => {
+            setSearchTerm(e.target.value);
+            setShowSuggestions(true);
+          }}
+          disabled={isMeClicked}
         />
-        <div className="user-list">
-          {filteredUsers.map(user => (
-            <div key={user.userId} onClick={() => setTaskOwner(user.name)}>
-              {user.username}
-            </div>
-          ))}
-        </div>
+        <label className="checkbox-container">
+          <input
+            type="checkbox"
+            checked={isMeClicked}
+            onChange={() => setIsMeClicked(!isMeClicked)}
+          /> 
+          <span>Assign this task to me</span>
+        </label>
+        {showSuggestions && searchTerm && (
+          <div className="autocomplete-suggestions">
+            {filteredUsers.map((user) => (
+              <div key={user.userId} onClick={() => handleUserClick(user)}>
+                {user.username}
+              </div>
+            ))}
+          </div>
+        )}
 
         <div className="label">Event</div>
         <select className="select-field" value={eventId} onChange={(e) => setEventId(e.target.value)}>
@@ -134,7 +160,7 @@ function CreateTask() {
 
         <button className="button" onClick={handleBack}>Back to Main Page</button>
 
-        <button className="button" onClick={() => handleSave()}>Create Task</button>
+        <button className="button" onClick={handleSave}>Create Task</button>
       </div>
     </Layout>
   );
