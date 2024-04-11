@@ -125,7 +125,7 @@ function GetTasks() {
                 <td>{getStatusLabel(task.status)}</td>
                 <td>{task.budget}{getCurrencyLabel(task.currency)}</td>
                 <td>{eventNames[task.eventId] || 'Loading...'}</td>
-                <td><button onClick={() => navigate(`/task/${task.taskId}`)}>Edit</button></td>
+                <td><button onClick={() => navigate(`/edit-task/${task.taskId}`)}>Edit</button></td>
               </tr>
             ))}
           </tbody>

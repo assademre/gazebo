@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getEventByEventIdAPI, updateEventAPI } from './../../api';
+import { getEventByEventIdAPI, updateEventAPI } from '../../api';
 import { format } from 'date-fns';
 import statusOptions from '../../helpers/statusOptions';
-import "./Event.css";
+import "./EditEvent.css";
 import Layout from '../../NavigationBar/Layout';
 
-function Event() {
+function EditEvent() {
   const { eventId } = useParams();
   const [event, setEvent] = useState(null);
   const [editMode, setEditMode] = useState(false);
@@ -115,4 +115,4 @@ function Event() {
   );
 }
 
-export default Event;
+export default EditEvent;

@@ -25,6 +25,7 @@ function GetEvents() {
       const eventsData = await getEventByUserIdAPI();
       setEvents(eventsData);
     } catch (error) {
+      console.log(error);
       console.error('Error fetching data:', error);
     }
   };
@@ -103,13 +104,12 @@ function GetEvents() {
                 <td>{getStatusLabel(event.status)}</td>
                 <td>{event.budget}{getCurrencyLabel(event.currency)}</td>
                 <td>{event.eventType}</td>
+                <td><button onClick={() => navigate(`/edit-event/${event.eventId}`)}>Edit</button></td>
               </tr>
             ))}
           </tbody>
         </table>
-
         <button className="button" onClick={handleBack}>Back to Main Page</button>
-
       </div>
     </Layout>
   );

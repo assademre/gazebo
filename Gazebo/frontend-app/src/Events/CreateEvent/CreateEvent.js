@@ -40,7 +40,10 @@ function CreateEvent() {
     try {
       const result = await createEventAPI(data);
       alert(result);
+      console.log(result);
+      navigate('/get-events');
     } catch (error) {
+      console.log(error);
       alert(error);
     }
   }
@@ -75,7 +78,6 @@ function CreateEvent() {
         <DatePicker selected={eventDate} onChange={(date) => setEventDate(date)} />
 
       <button className="button" onClick={handleBack}>Back to Main Page</button>
-
       <button className="button" onClick={() => handleSave()}>Create Event</button>
     </div>
     </Layout>

@@ -73,3 +73,14 @@ header {
     align-items: center;
     padding: 30px 10%;
 }
+
+.notification-bell {
+    color: #edf0f1;
+    font-size: 20px;
+    cursor: pointer;
+    margin-left: 20px;
+}
+
+.notification-bell:hover {
+    color: #0088a9;
+}

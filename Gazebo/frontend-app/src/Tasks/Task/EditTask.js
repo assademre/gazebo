@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getTaskByTaskIdAPI, updateTaskAPI } from './../../api';
+import { getTaskByTaskIdAPI, updateTaskAPI } from '../../api';
 import { format } from 'date-fns';
 import statusOptions from '../../helpers/statusOptions';
-import "./Task.css";
+import "./EditTask.css";
 import Layout from '../../NavigationBar/Layout';
 
-function Task() {
+function EditTask() {
   const { taskId } = useParams();
   const [task, setTask] = useState(null);
   const [editMode, setEditMode] = useState(false);
@@ -115,4 +115,4 @@ function Task() {
   );
 }
 
-export default Task;
+export default EditTask;

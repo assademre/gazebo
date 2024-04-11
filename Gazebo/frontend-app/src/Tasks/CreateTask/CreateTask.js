@@ -74,6 +74,7 @@ function CreateTask() {
     try {
       const result = await createTaskAPI(data);
       alert(result);
+      navigate('/get-tasks');
     } catch (error) {
       alert(error);
     }
