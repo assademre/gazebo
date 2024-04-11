@@ -74,7 +74,8 @@ function GetEvents() {
       <div className="get-events-page">
 
         <h2>My Events</h2>
-        <table className="tasks-table">
+        <div className="events-table-container">
+        <table className="events-table">
           <thead>
             <tr>
               <th onClick={() => handleSort('eventName')}>
@@ -94,21 +95,27 @@ function GetEvents() {
                 )}
               </th>
               <th>Event Type</th>
+              <th></th>
             </tr>
           </thead>
-          <tbody>
-            {sortedTasks.map(event => (
-              <tr key={event.eventId}>
-                <td><Link className="event" to={`/event/${event.eventId}`}>{event.eventName}</Link></td>
-                <td>{formatISODate(event.eventDate)}</td>
-                <td>{getStatusLabel(event.status)}</td>
-                <td>{event.budget}{getCurrencyLabel(event.currency)}</td>
-                <td>{event.eventType}</td>
-                <td><button onClick={() => navigate(`/edit-event/${event.eventId}`)}>Edit</button></td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+          </table>
+          <div className="events-table-body">
+            <table className="events-table">
+              <tbody>
+                {sortedTasks.map(event => (
+                  <tr key={event.eventId}>
+                    <td><Link className="event" to={`/event/${event.eventId}`}>{event.eventName}</Link></td>
+                    <td>{formatISODate(event.eventDate)}</td>
+                    <td>{getStatusLabel(event.status)}</td>
+                    <td>{event.budget}{getCurrencyLabel(event.currency)}</td>
+                    <td>{event.eventType}</td>
+                    <td><button onClick={() => navigate(`/edit-event/${event.eventId}`)}>Edit</button></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
         <button className="button" onClick={handleBack}>Back to Main Page</button>
       </div>
     </Layout>

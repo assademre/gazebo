@@ -91,6 +91,7 @@ function GetTasks() {
     <Layout>
       <div className="get-events-page">
         <h2>My Tasks</h2>
+        <div className="task-table-container">
         <table className="tasks-table">
           <thead>
             <tr>
@@ -115,22 +116,27 @@ function GetTasks() {
                   sortConfig.direction === 'asc' ? '▼' : '▲'
                 )}
               </th>
+              <th></th>
             </tr>
           </thead>
-          <tbody>
-            {sortedTasks.map(task => (
-              <tr key={task.taskId}>
-                <td><Link className="task" to={`/task/${task.taskId}`}>{task.taskName}</Link></td>
-                <td>{formatISODate(task.taskDate)}</td>
-                <td>{getStatusLabel(task.status)}</td>
-                <td>{task.budget}{getCurrencyLabel(task.currency)}</td>
-                <td>{eventNames[task.eventId] || 'Loading...'}</td>
-                <td><button onClick={() => navigate(`/edit-task/${task.taskId}`)}>Edit</button></td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-
+          </table>
+          <div className="table-body">
+            <table className="tasks-table">
+              <tbody>
+                {sortedTasks.map(task => (
+                  <tr key={task.taskId}>
+                    <td><Link className="task" to={`/task/${task.taskId}`}>{task.taskName}</Link></td>
+                    <td>{formatISODate(task.taskDate)}</td>
+                    <td>{getStatusLabel(task.status)}</td>
+                    <td>{task.budget}{getCurrencyLabel(task.currency)}</td>
+                    <td>{eventNames[task.eventId] || 'Loading...'}</td>
+                    <td><button onClick={() => navigate(`/edit-task/${task.taskId}`)}>Edit</button></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
         <button className="button" onClick={handleBack}>Back to Main Page</button>
 
         </div>
