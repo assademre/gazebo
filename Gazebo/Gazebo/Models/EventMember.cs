@@ -1,6 +1,4 @@
-﻿using EventOrganizationApp.Models.Enums;
-
-namespace EventOrganizationApp.Models
+﻿namespace EventOrganizationApp.Models
 {
     public class EventMember
     {

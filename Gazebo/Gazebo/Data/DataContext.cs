@@ -19,6 +19,7 @@ namespace EventOrganizationApp.Data
         public DbSet<EventsTask> Tasks { get; set; }
         public DbSet<UserAccess> UserAccess { get; set; }
         public DbSet<EventMember> EventMembers { get; set; }
+        public DbSet<Notification>Notifications { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -55,6 +56,9 @@ namespace EventOrganizationApp.Data
 
             builder.Entity<EventMember>()
                 .HasKey(c => c.UserId);
+
+            builder.Entity<Notification>()
+                .HasKey(c => c.NotificationId);
 
             List<IdentityRole> roles = new List<IdentityRole>
             {

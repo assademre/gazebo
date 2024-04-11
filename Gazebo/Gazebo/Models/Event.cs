@@ -1,5 +1,4 @@
-﻿using EventOrganizationApp.Models.Enums;
-
+﻿
 namespace EventOrganizationApp.Models
 {
     public class Event

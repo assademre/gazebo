@@ -110,6 +110,16 @@ export const updateTaskAPI = async (data) => {
   }
 };
 
+export const getNotificationsAPI = async () => {
+  try {
+    const response = await api.get(`/api/notifications`);
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response.data.message || 'Failed while getting notifications');
+  }
+};
+
+// User Access API Calls
 export const checkUsernameAvailabilityAPI = async (username) => {
   try {
     const response = await api.get(`/api/user-access/username-availability/${username}`);

@@ -16,18 +16,29 @@ namespace EventOrganizationApp.Controller
     public class EventTaskController : ControllerBase
     {
         private readonly IEventTaskRepository _eventTaskRepository;
+        private readonly IEventRepository _eventRepository;
         private readonly IEventMemberRepository _eventMemberRepository;
+        private readonly INotificationRepository _notificationRepository;
+        private readonly IUserRepository _userRepository;
 
         public IMapper _mapper;
 
-        public EventTaskController(IEventTaskRepository eventTaskRepository, IMapper mapper, IEventMemberRepository eventMemberRepository)
+        public EventTaskController(IEventTaskRepository eventTaskRepository,
+            IEventRepository eventRepository,
+            IEventMemberRepository eventMemberRepository,
+            INotificationRepository notificationRepository,
+            IUserRepository userRepository,
+            IMapper mapper)
         {
             _eventTaskRepository = eventTaskRepository;
-            _mapper = mapper;
+            _eventRepository = eventRepository;
             _eventMemberRepository = eventMemberRepository;
+            _notificationRepository = notificationRepository;
+            _userRepository = userRepository;
+            _mapper = mapper;
         }
 
-        
+
         [HttpGet("all-tasks")]
         [Authorize]
         [ProducesResponseType(200, Type = typeof(IList<Event>))]
@@ -167,6 +178,20 @@ namespace EventOrganizationApp.Controller
         [ProducesResponseType(400)]
         public async Task<IActionResult> CreateTask([FromBody] EventTaskDto task)
         {
+            var claim = User.Claims
+               .FirstOrDefault(x => x.Type == "userId");
+
+            if (claim == null)
+            {
+                return BadRequest("The userId claim is missing");
+            }
+            var userIdString = claim?.Value;
+
+            if (!int.TryParse(userIdString, out int userId))
+            {
+                return BadRequest("The userId claim is not a valid integer");
+            }
+
             var mappedTask = _mapper.Map<EventsTask>(task);
 
             if (!ModelState.IsValid)
@@ -188,16 +213,20 @@ namespace EventOrganizationApp.Controller
             };
 
             var isUserAdded = await _eventMemberRepository.IsUserMember(task.EventId, task.OwnerId);
-            if (isUserAdded)
+            if (!isUserAdded)
             {
-                return Ok("Succesfully created!");
+                await _eventMemberRepository.AddEventMember(eventMember);
             }
 
-            var response = await _eventMemberRepository.AddEventMember(eventMember);
+            var eventInfo = await _eventRepository.GetEventByEventId(task.EventId);
 
-            if (!response)
+            var createrName = _userRepository.GetUserInfo(userId).Username;
+
+            var notificationResponse = await _notificationRepository.CreateNewTaskNotification(task.OwnerId, createrName, eventInfo.EventName);
+
+            if (!notificationResponse)
             {
-                return BadRequest("Encounter an error while creating the event");
+                return BadRequest("Encounter an error while creating the notification");
             }
 
             return Ok("Succesfully created!");
