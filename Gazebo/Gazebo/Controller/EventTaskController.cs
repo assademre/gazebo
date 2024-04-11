@@ -3,10 +3,8 @@ using EventOrganizationApp.Data.Dto;
 using EventOrganizationApp.Models;
 using EventOrganizationApp.Models.Enums;
 using Gazebo.Interfaces;
-using Gazebo.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 
 namespace EventOrganizationApp.Controller

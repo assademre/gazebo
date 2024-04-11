@@ -1,23 +1,39 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import "./NotificationPanel.css";
+import { getNotificationsAPI } from '../../api';
 
-const NotificationPanel = () => {
-    const notifications = [
-        { id: 1, message: "Notification 1" },
-        { id: 2, message: "Notification 2" },
-        { id: 3, message: "Notification 3" },
-    ];
+const NotificationPanel = ({ setNotifications: updateNotifications }) => {
+    const [notifications, setNotificationsLocal] = useState([]);
+
+    useEffect(() => {
+        getNotificationsAPI()
+            .then(data => {
+                const unreadNotifications = data.filter(notification => !notification.isRead);
+                setNotificationsLocal(unreadNotifications);
+                updateNotifications(unreadNotifications);
+            })
+            .catch(error => {
+                console.error('Error fetching notifications:', error);
+            });
+    }, [updateNotifications]);
+
+    const handleNotificationClick = (notificationId) => {
+        console.log('Notification clicked:', notificationId);
+    };
 
     return (
         <div className="notification-panel">
-            <div className="notification-header">
-            </div>
+            <div className="notification-header"></div>
             <div className="notifications-list">
-                {notifications.map(notification => (
-                    <div key={notification.id} className="notification-item">
-                        <p>{notification.message}</p>
-                    </div>
-                ))}
+                {notifications.length > 0 ? (
+                    notifications.map(notification => (
+                        <a key={notification.notificationId} href="#" className="notification-item" onClick={() => handleNotificationClick(notification.notificationId)}>
+                            <p>{notification.body}</p>
+                        </a>
+                    ))
+                ) : (
+                    <p>No new notification</p>
+                )}
             </div>
         </div>
     );

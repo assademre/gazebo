@@ -112,7 +112,7 @@ export const updateTaskAPI = async (data) => {
 
 export const getNotificationsAPI = async () => {
   try {
-    const response = await api.get(`/api/notifications`);
+    const response = await api.get(`/api/notification`);
     return response.data;
   } catch (error) {
     throw new Error(error.response.data.message || 'Failed while getting notifications');

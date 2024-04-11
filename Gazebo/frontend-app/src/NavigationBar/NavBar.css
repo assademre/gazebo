@@ -84,3 +84,19 @@ header {
 .notification-bell:hover {
     color: #0088a9;
 }
+
+.notification-badge {
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 14px;
+}
+
