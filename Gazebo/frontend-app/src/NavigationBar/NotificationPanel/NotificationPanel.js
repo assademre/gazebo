@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import "./NotificationPanel.css";
-import { getNotificationsAPI } from '../../api';
+import { getNotificationsAPI, updateNotificationAPI  } from '../../api';
 
 const NotificationPanel = ({ setNotifications: updateNotifications }) => {
     const [notifications, setNotificationsLocal] = useState([]);
@@ -19,6 +19,13 @@ const NotificationPanel = ({ setNotifications: updateNotifications }) => {
 
     const handleNotificationClick = (notificationId) => {
         console.log('Notification clicked:', notificationId);
+        updateNotificationAPI(notificationId)
+            .then(() => {
+                setNotificationsLocal(prevNotifications => prevNotifications.filter(notification => notification.notificationId !== notificationId));
+            })
+            .catch(error => {
+                console.error('Error updating notification status:', error);
+            });
     };
 
     return (

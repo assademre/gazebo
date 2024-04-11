@@ -110,6 +110,16 @@ export const updateTaskAPI = async (data) => {
   }
 };
 
+//Notification API Calls
+export const updateNotificationAPI = async (notificationId) => {
+  try {
+    const response = await api.put(`/api/notification`, notificationId);
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response.data.message || 'Failed while updating notification');
+  }
+};
+
 export const getNotificationsAPI = async () => {
   try {
     const response = await api.get(`/api/notification`);
