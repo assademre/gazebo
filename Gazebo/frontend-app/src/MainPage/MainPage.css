@@ -1,81 +1,105 @@
-  .main-page {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      background-color: #f0f0f0;
-    }
-    
-    .welcome-message {
-      font-size: 50px;
-    }
+.main-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f0f0f0;
+}
 
-    .name {
-      animation: colorChange 2s infinite alternate;
-    }
+.welcome-message {
+  font-size: 50px;
+  margin-top: 250px;
+}
 
-    @keyframes colorChange {
-      0% { color: blue; }
-      50% { color: green; } 
-      100% { color: red; } 
-    }
+.name {
+  animation: colorChange 2s infinite alternate;
+}
 
-    .button-container {
-      margin-top: 30px;
-    }
-    
-    .button {
-      display: inline-block;
-      padding: 15px 30px;
-      margin: 10px;
-      font-size: 18px;
-      font-weight: bold;
-      text-decoration: none;
-      color: #fff;
-      background-color: #24252A;
-      border: 2px solid #24252A;
-      border-radius: 12px;
-      transition: background-color 0.3s ease, border-color 0.3s ease;
-  }
-  
-  .button:hover {
-      background-color: #0088a9;
-      border-color: #0088a9;
-  }
+@keyframes colorChange {
+  0% { color: blue; }
+  50% { color: green; } 
+  100% { color: red; } 
+}
 
-    .top-right-buttons {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      display: flex;
-    }
-    
-    
-    table {
-      width: 80%;
-      margin-top: 30px;
-      border-collapse: collapse;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-    }
-    
-    thead {
-      background-color: #24252A;
-      color: #fff;
-    } 
-    
-    th, td {
-      padding: 12px;
-      text-align: left;
-    }
-    
-    th {
-      cursor: pointer;
-    }
-    
-    th:hover {
-      background-color: #0088a9;
-    }
-    
+.button-container {
+  margin-top: 30px;
+}
+
+.button {
+  display: inline-block;
+  padding: 15px 30px;
+  margin: 10px;
+  font-size: 18px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #fff;
+  background-color: #24252A;
+  border: 2px solid #24252A;
+  border-radius: 12px;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.button:hover {
+  background-color: #0088a9;
+  border-color: #0088a9;
+}
+
+.top-right-buttons {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+}
+
+.main-page-table {
+  width: 80%;
+  margin-top: 30px;
+  border-collapse: collapse;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+thead {
+  background-color: #24252A;
+  color: #fff;
+} 
+
+th, td {
+  padding: 12px;
+  text-align: left;
+}
+
+th {
+  cursor: pointer;
+}
+
+th:hover {
+  background-color: #0088a9;
+}
+
+.main-page-table-container {
+  width: 100%;
+  margin: 100px auto;
+  max-height: 400px;
+  overflow: hidden;
+  text-align: center;
+}
+
+.main-page-table-body {
+  overflow-y: scroll;
+  width: 100%;
+  height: 100%;
+  max-height: 350px;
+}
+
+.tasks-table {
+  margin: auto;
+  text-align: left;
+}
+
+.main-page-table th,
+.main-page-table td {
+  width: calc(100% / 6);
+}

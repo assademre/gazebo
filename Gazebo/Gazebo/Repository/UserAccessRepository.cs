@@ -48,7 +48,7 @@ namespace Gazebo.Repository
 
             var newUser = new UserAccess
             {
-                Username = signup.Username,
+                Username = signup.Username.ToLower(),
                 PasswordHash = hashedPassword
             };
 

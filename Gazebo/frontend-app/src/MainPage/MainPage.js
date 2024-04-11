@@ -108,6 +108,7 @@ function MainPage() {
       </div>
       
       <h2>My Upcoming Tasks</h2>
+      <div className="main-page-table-container">
       <table className="tasks-table">
         <thead>
           <tr>
@@ -130,18 +131,23 @@ function MainPage() {
             <th>Event Name</th>
           </tr>
         </thead>
-        <tbody>
-          {filteredTasks.map(task => (
-            <tr key={task.taskId}>
-              <td>{task.taskName}</td>
-              <td>{formatISODate(task.taskDate)}</td>
-              <td>{getStatusLabel(task.status)}</td>
-              <td>{task.budget}{getCurrencyLabel(task.currency)}</td>
-              <td>{eventNames[task.eventId] || 'Loading...'}</td>
-            </tr>
-          ))}
-        </tbody>
       </table>
+        <div className="main-page-table-body">
+          <table className="tasks-table">
+            <tbody>
+              {filteredTasks.map(task => (
+                <tr key={task.taskId}>
+                  <td>{task.taskName}</td>
+                  <td>{formatISODate(task.taskDate)}</td>
+                  <td>{getStatusLabel(task.status)}</td>
+                  <td>{task.budget}{getCurrencyLabel(task.currency)}</td>
+                  <td>{eventNames[task.eventId] || 'Loading...'}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
     </Layout>
   );

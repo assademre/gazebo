@@ -31,7 +31,7 @@ namespace Gazebo.Controller
                 return BadRequest(ModelState);
             }
 
-            var isUsernameTaken = await _userAccessRepository.IsUsernameOrEmailExists(username);
+            var isUsernameTaken = await _userAccessRepository.IsUsernameOrEmailExists(username.ToLower());
 
             return Ok(new { Response = isUsernameTaken });
         }
