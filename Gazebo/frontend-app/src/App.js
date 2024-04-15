@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import MainPage from "./MainPage/MainPage";
-import EditEvent from "./Events/Event/EditEvent";
-import EditTask from "./Tasks/Task/EditTask";
+import EditEvent from "./Events/EditEvent/EditEvent";
+import EditTask from "./Tasks/EditTask/EditTask";
+import Task from "./Tasks/Task/Task"
+import Event from "./Events/Event/Event";
 import CreateEvent from "./Events/CreateEvent/CreateEvent";
 import CreateTask from "./Tasks/CreateTask/CreateTask";
 import GetEvents from "./Events/GetEvents/GetEvents";
@@ -34,6 +36,8 @@ function App() {
           <Route path="/create-task" element={<CreateTask />} />
           <Route path="/get-events" element={<GetEvents />} />
           <Route path="/get-tasks" element={<GetTasks />} />
+          <Route path="/event/:eventId" element={<Event />} />
+          <Route path="/task/:taskId" element={<Task />} />
           <Route path="/edit-event/:eventId" element={<EditEvent />} />
           <Route path="/edit-task/:taskId" element={<EditTask />} />
           <Route path="*" element={<Navigate to="/login" />} />
