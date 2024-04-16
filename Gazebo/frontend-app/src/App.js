@@ -13,6 +13,7 @@ import Login from "./AccountManagement/LoginPage/Login";
 import SignupPage from "./AccountManagement/Signup/SignupPage";
 import Logout from "./AccountManagement/Logout/Logout";
 import Splash from "./AccountManagement/SplashScreen/Splash";
+import NotificationPage from "./NavigationBar/NotificationPage/NotificationPage";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -41,6 +42,7 @@ function App() {
           <Route path="/edit-event/:eventId" element={<EditEvent />} />
           <Route path="/edit-task/:taskId" element={<EditTask />} />
           <Route path="*" element={<Navigate to="/login" />} />
+          <Route path="/notifications" element={<NotificationPage />} />
         </Routes>
       </div>
     </Router>

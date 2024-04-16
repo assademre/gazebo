@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import "./NotificationPanel.css";
-import { getNotificationsAPI, updateNotificationAPI  } from '../../api';
+import { getNotificationsAPI, updateNotificationAPI } from '../../api';
+import { useNavigate } from 'react-router-dom';
+import './NotificationPanel.css';
 
 const NotificationPanel = ({ setNotifications: updateNotifications }) => {
     const [notifications, setNotificationsLocal] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         getNotificationsAPI()
@@ -18,10 +20,9 @@ const NotificationPanel = ({ setNotifications: updateNotifications }) => {
     }, [updateNotifications]);
 
     const handleNotificationClick = (notificationId) => {
-        console.log('Notification clicked:', notificationId);
         updateNotificationAPI(notificationId)
             .then(() => {
-                setNotificationsLocal(prevNotifications => prevNotifications.filter(notification => notification.notificationId !== notificationId));
+                navigate('/notifications');
             })
             .catch(error => {
                 console.error('Error updating notification status:', error);
@@ -34,9 +35,9 @@ const NotificationPanel = ({ setNotifications: updateNotifications }) => {
             <div className="notifications-list">
                 {notifications.length > 0 ? (
                     notifications.map(notification => (
-                        <a key={notification.notificationId} href="#" className="notification-item" onClick={() => handleNotificationClick(notification.notificationId)}>
+                        <div key={notification.notificationId} className="notification-item" onClick={() => handleNotificationClick(notification.notificationId)}>
                             <p>{notification.body}</p>
-                        </a>
+                        </div>
                     ))
                 ) : (
                     <p>No new notification</p>
