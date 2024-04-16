@@ -1,0 +1,36 @@
+.task-page-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f0f0f0;
+    padding: 20px;
+  }
+  
+  .task-details {
+    width: 20%;
+    height: 15vh;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+  }
+  
+  
+  .task-detail-item {
+    margin-bottom: 10px;
+    width: 50%;
+  }
+  
+  .task-detail-item input[type="date"] {
+    width: 100%;
+  }
+  
+  .task-details button {
+    width: 100px;
+    height: 40px;
+    font-size: 16px;
+  }
+ 

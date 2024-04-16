@@ -1,0 +1,15 @@
+.footer {
+    background-color: #24252A;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+.registered-trademark {
+    position: relative;
+    font-size: smaller;
+    vertical-align: top;
+}

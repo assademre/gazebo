@@ -43,15 +43,14 @@ function EditTask() {
       const updatedTaskData = { ...updatedTask, updatedDate: currentDate };
       await updateTaskAPI(updatedTaskData);
       setTask(updatedTaskData);
-      setEditMode(false);
+      navigate('/get-tasks')
     } catch (error) {
       console.error('Error updating task:', error);
     }
   };
 
   const handleCancel = () => {
-    setUpdatedTask({ ...task });
-    setEditMode(false);
+    navigate(-1);
   };
 
   if (!task) {
@@ -66,29 +65,23 @@ function EditTask() {
     <div className="task-page-container">
       <div className="task-details">
         <div className="task-detail-item">
-          <strong>Task Name:</strong> {editMode ? (
+        <strong>Task Name:</strong> 
             <input
               type="text"
-              value={updatedTask.taskName}
+              value={updatedTask.taskName || ''}
               onChange={(e) => setUpdatedTask({ ...updatedTask, taskName: e.target.value })}
             />
-          ) : (
-            <span>{task.taskName}</span>
-          )}
-        </div>
-        <div className="task-detail-item">
-          <strong>Task Date:</strong> {editMode ? (
-            <input
-              type="date"
-              value={updatedTask.taskDate || formattedDate}
-              onChange={(e) => setUpdatedTask({ ...updatedTask, taskDate: e.target.value })}
-            />
-          ) : (
-            <span>{formattedDate}</span>
-          )}
-        </div>
+          </div>
+          <div className="edit-task-detail-item">
+          <strong>Task Date:</strong> 
+          <input
+            type="date"
+            value={updatedTask.taskDate ? format(new Date(updatedTask.taskDate), 'yyyy-MM-dd') : ''}
+            onChange={(e) => setUpdatedTask({ ...updatedTask, taskDate: e.target.value })}
+          />
+          </div>
         <div className="event-detail-item">
-          <strong>Status:</strong> {editMode ? (
+          <strong>Status:</strong>
             <select
               value={updatedTask.status}
               onChange={(e) => setUpdatedTask({ ...updatedTask, status: e.target.value })}
@@ -97,20 +90,13 @@ function EditTask() {
                 <option key={option.value} value={option.value}>{option.label}</option>
               ))}
             </select>
-          ) : (
-            <span>{getStatusLabel(task.status)}</span>
-          )}
-        </div>
-        {editMode ? (
-          <>
+            </div>
+            <div className="button-container">
             <button onClick={handleSave}>Save</button>
             <button onClick={handleCancel}>Cancel</button>
-          </>
-        ) : (
-          <button onClick={handleEdit}>Edit</button>
-        )}
+            </div>
+        </div>
       </div>
-    </div>
     </Layout>
   );
 }
