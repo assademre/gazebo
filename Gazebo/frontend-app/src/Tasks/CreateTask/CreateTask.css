@@ -40,6 +40,11 @@
   .button:hover {
     background-color: #24252A;
   }
+
+  .button-container {
+    display: flex;
+    justify-content: space-between;
+  }
   
   .back-to-main-button {
     position: fixed;
@@ -57,6 +62,11 @@
   
   .back-to-main-button:hover {
     background-color: #0056b3;
+}
+
+.button-container .button {
+  flex: 1;
+  margin-right: 10px;
 }
 
 

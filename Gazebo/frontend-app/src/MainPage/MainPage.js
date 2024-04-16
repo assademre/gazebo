@@ -82,8 +82,8 @@ function MainPage() {
         </div>
 
         <div className="button-container">
-          <Link to="/create-task" className="button">Create Task</Link>
           <Link to="/create-event" className="button">Create Event</Link>
+          <Link to="/create-task" className="button">Create Task</Link>
         </div>
         
         <h2>My Upcoming Tasks</h2>

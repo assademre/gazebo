@@ -2,7 +2,7 @@
   width: 100%;
   margin: 100px auto;
   max-height: 400px;
-  overflow-y: scroll;
+  overflow: hidden;
   text-align: center;
 }
 
@@ -13,31 +13,44 @@
   max-height: 350px;
 }
 
-.tasks-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: auto;
-  text-align: left;
-}
+thead {
+  background-color: #24252A;
+  color: #fff;
+} 
 
 .tasks-table th,
 .tasks-table td {
+  width: calc(100% / 6);
   padding: 8px;
   text-align: left;
   border-bottom: 1px solid #ddd;
-  width: calc(100% / 6);
+}
+
+th, td {
+  padding: 12px;
+  text-align: left;
+}
+
+th {
+  cursor: pointer;
+}
+
+th:hover {
+  background-color: #0088a9;
 }
 
 .task {
   color: black;
 }
 
-table {
+.tasks-table {
   width: 80%;
   margin-top: 30px;
   border-collapse: collapse;
   border-radius: 12px;
   overflow: hidden;
+  margin: auto;
+  text-align: left;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
 }
 

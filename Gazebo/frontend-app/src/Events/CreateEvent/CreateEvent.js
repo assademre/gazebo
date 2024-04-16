@@ -76,9 +76,10 @@ function CreateEvent() {
 
       <div className="label">Event Due Date</div>
         <DatePicker selected={eventDate} onChange={(date) => setEventDate(date)} />
-
-      <button className="button" onClick={handleBack}>Back to Main Page</button>
-      <button className="button" onClick={() => handleSave()}>Create Event</button>
+        <div className="button-container">
+        <button className="button" onClick={handleBack}>Back to Main Page</button>
+        <button className="button" onClick={() => handleSave()}>Create Event</button>
+        </div>
     </div>
     </Layout>
   );

@@ -159,9 +159,10 @@ function CreateTask() {
         <div className="label">Task Due Date</div>
         <DatePicker selected={taskDate} onChange={(date) => setTaskDate(date)} />
 
-        <button className="button" onClick={handleBack}>Back to Main Page</button>
-
-        <button className="button" onClick={handleSave}>Create Task</button>
+        <div className="button-container">
+          <button className="button" onClick={handleBack}>Back to Main Page</button>
+          <button className="button" onClick={handleSave}>Create Task</button>
+        </div>
       </div>
     </Layout>
   );

@@ -40,7 +40,7 @@ const NotificationPanel = ({ setNotifications: updateNotifications }) => {
                         </div>
                     ))
                 ) : (
-                    <p>No new notification</p>
+                    <p onClick={() => navigate('/notifications')}>No new notification</p>
                 )}
             </div>
         </div>

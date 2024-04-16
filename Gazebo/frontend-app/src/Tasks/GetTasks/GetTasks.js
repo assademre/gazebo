@@ -100,7 +100,7 @@ function GetTasks() {
               </tr>
             </thead>
             </table>
-            <div className="tasks-table-body">
+            <div className="task-table-body">
             <table className="tasks-table">
             <tbody>
               {sortedTasks.map(task => (
