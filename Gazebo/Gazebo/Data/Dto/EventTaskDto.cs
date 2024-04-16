@@ -6,6 +6,7 @@ namespace EventOrganizationApp.Data.Dto
     {
         public int TaskId { get; set; }
         public int EventId { get; set; }
+        public string EventName { get; set; }
 
         [Required]
         [MinLength(5, ErrorMessage = "Task name must be minimum 5 characters")]

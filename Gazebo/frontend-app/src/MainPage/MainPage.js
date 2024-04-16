@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { fetchTasksAPI, getUsernameAPI, getEventByEventIdAPI } from "../api";
+import { fetchTasksAPI, getUsernameAPI } from "../api";
 import "./MainPage.css";
 import statusOptions from "../helpers/statusOptions";
 import currencySymbols from "../helpers/currencySymbols";
@@ -10,7 +10,6 @@ function MainPage() {
   const [events, setEvents] = useState([]);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
   const [user, setUsername] = useState("");
-  const [eventNames, setEventNames] = useState({});
 
   useEffect(() => {
     fetchData();
@@ -23,28 +22,8 @@ function MainPage() {
 
       const usernameData = await getUsernameAPI();
       setUsername(usernameData.name);
-
-      const eventIds = eventsData.map(event => event.eventId);
-      for (const eventId of eventIds) {
-        const eventName = await fetchEventName(eventId);
-        setEventNames(prevState => ({
-          ...prevState,
-          [eventId]: eventName
-        }));
-      }
     } catch (error) {
       console.error('Error fetching data:', error);
-    }
-  };
-
-  const fetchEventName = async (eventId) => {
-    try {
-      const event = await getEventByEventIdAPI(eventId);
-      console.log(event)
-      return event.eventName;
-    } catch (error) {
-      console.error('Error fetching event name:', error);
-      return '';
     }
   };
 
@@ -98,42 +77,39 @@ function MainPage() {
   return (
     <Layout>
       <div className="main-page">
-      <div className="welcome-message">
-        Welcome <span className="name">{user}</span>
-      </div>
+        <div className="welcome-message">
+          Welcome <span className="name">{user}</span>
+        </div>
 
-      <div className="button-container">
-        <Link to="/create-task" className="button">Create Task</Link>
-        <Link to="/create-event" className="button">Create Event</Link>
-      </div>
-      
-      <h2>My Upcoming Tasks</h2>
-      <div className="main-page-table-container">
-      <table className="tasks-table">
-        <thead>
-          <tr>
-            <th onClick={() => handleSort('taskName')}>
-              Task Name {sortConfig.key === 'taskName' && (
-                sortConfig.direction === 'asc' ? '▼' : '▲'
-              )}
-            </th>
-            <th onClick={() => handleSort('taskDate')}>
-              Due Date {sortConfig.key === 'taskDate' && (
-                sortConfig.direction === 'asc' ? '▼' : '▲'
-              )}
-            </th>
-            <th>Status</th>
-            <th onClick={() => handleSort('budget')}>
-              Budget {sortConfig.key === 'budget' && (
-                sortConfig.direction === 'asc' ? '▼' : '▲'
-              )}
-            </th>
-            <th>Event Name</th>
-          </tr>
-        </thead>
-      </table>
-        <div className="main-page-table-body">
+        <div className="button-container">
+          <Link to="/create-task" className="button">Create Task</Link>
+          <Link to="/create-event" className="button">Create Event</Link>
+        </div>
+        
+        <h2>My Upcoming Tasks</h2>
+        <div className="main-page-table-container">
           <table className="tasks-table">
+            <thead>
+              <tr>
+                <th onClick={() => handleSort('taskName')}>
+                  Task Name {sortConfig.key === 'taskName' && (
+                    sortConfig.direction === 'asc' ? '▼' : '▲'
+                  )}
+                </th>
+                <th onClick={() => handleSort('taskDate')}>
+                  Due Date {sortConfig.key === 'taskDate' && (
+                    sortConfig.direction === 'asc' ? '▼' : '▲'
+                  )}
+                </th>
+                <th>Status</th>
+                <th onClick={() => handleSort('budget')}>
+                  Budget {sortConfig.key === 'budget' && (
+                    sortConfig.direction === 'asc' ? '▼' : '▲'
+                  )}
+                </th>
+                <th>Event Name</th>
+              </tr>
+            </thead>
             <tbody>
               {filteredTasks.map(task => (
                 <tr key={task.taskId}>
@@ -141,14 +117,13 @@ function MainPage() {
                   <td>{formatISODate(task.taskDate)}</td>
                   <td>{getStatusLabel(task.status)}</td>
                   <td>{task.budget}{getCurrencyLabel(task.currency)}</td>
-                  <td>{eventNames[task.eventId] || 'Loading...'}</td>
+                  <td>{task.eventName || 'Loading...'}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
       </div>
-    </div>
     </Layout>
   );
 }

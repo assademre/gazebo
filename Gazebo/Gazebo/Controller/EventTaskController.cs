@@ -60,6 +60,12 @@ namespace EventOrganizationApp.Controller
             var allTasks = await _eventTaskRepository.GetAllUserTasks(userId);
             var mappedTasks = _mapper.Map<IList<EventTaskDto>>(allTasks);
 
+            foreach (var taskDto in mappedTasks)
+            {
+                var taskEvent = await _eventRepository.GetEventByEventId(taskDto.EventId);
+                taskDto.EventName = taskEvent.EventName;
+            }
+
             if (mappedTasks.IsNullOrEmpty())
             {
                 return NotFound();
