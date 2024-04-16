@@ -99,6 +99,9 @@ function GetTasks() {
                 <th></th>
               </tr>
             </thead>
+            </table>
+            <div className="tasks-table-body">
+            <table className="tasks-table">
             <tbody>
               {sortedTasks.map(task => (
                 <tr key={task.taskId}>
@@ -112,6 +115,7 @@ function GetTasks() {
               ))}
             </tbody>
           </table>
+          </div>
         </div>
         <button className="button" onClick={handleBack}>Back to Main Page</button>
       </div>

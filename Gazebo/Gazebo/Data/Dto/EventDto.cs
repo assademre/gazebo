@@ -1,6 +1,4 @@
-﻿using EventOrganizationApp.Models;
-using EventOrganizationApp.Models.Enums;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace EventOrganizationApp.Data.Dto
 {
@@ -11,7 +9,6 @@ namespace EventOrganizationApp.Data.Dto
         public string EventType { get; set; }
 
         [Required]
-        [MinLength(5, ErrorMessage ="Event name must be minimum 5 characters")]
         [MaxLength(50, ErrorMessage = "Event name cannot access 50 characters")]
         public string EventName { get; set; }
         public decimal Budget { get; set; }

@@ -72,7 +72,6 @@ function GetEvents() {
   return (
     <Layout>
       <div className="get-events-page">
-
         <h2>My Events</h2>
         <div className="events-table-container">
         <table className="events-table">

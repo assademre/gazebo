@@ -88,7 +88,7 @@ function MainPage() {
         
         <h2>My Upcoming Tasks</h2>
         <div className="main-page-table-container">
-          <table className="tasks-table">
+          <table className="main-page-table">
             <thead>
               <tr>
                 <th onClick={() => handleSort('taskName')}>
@@ -110,6 +110,9 @@ function MainPage() {
                 <th>Event Name</th>
               </tr>
             </thead>
+            </table>
+            <div className="main-page-table-body">
+            <table className="main-page-table">
             <tbody>
               {filteredTasks.map(task => (
                 <tr key={task.taskId}>
@@ -122,6 +125,7 @@ function MainPage() {
               ))}
             </tbody>
           </table>
+          </div>
         </div>
       </div>
     </Layout>

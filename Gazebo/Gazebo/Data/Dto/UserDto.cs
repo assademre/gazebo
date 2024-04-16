@@ -8,7 +8,7 @@ namespace Gazebo.Data.Dto
 
         [Required]
         [MinLength(5, ErrorMessage = "Username must be minimum 5 characters")]
-        [MaxLength(20, ErrorMessage = "Event name cannot access 20 characters")]
+        [MaxLength(20, ErrorMessage = "Username cannot access 20 characters")]
         public string Username { get; set; }
 
         [Required]
