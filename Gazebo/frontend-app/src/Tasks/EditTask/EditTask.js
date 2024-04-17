@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getTaskByTaskIdAPI, updateTaskAPI } from '../../api';
 import { format } from 'date-fns';
@@ -7,6 +8,7 @@ import "./EditTask.css";
 import Layout from '../../NavigationBar/Layout';
 
 function EditTask() {
+  const { t } = useTranslation();
   const { taskId } = useParams();
   const [task, setTask] = useState(null);
   const [editMode, setEditMode] = useState(false);
@@ -54,7 +56,7 @@ function EditTask() {
   };
 
   if (!task) {
-    return <div>Loading...</div>;
+    return <div>{t('loading')}</div>;
   }
 
   const formattedDate = format(new Date(task.taskDate), 'dd-MM-yyyy');
@@ -65,7 +67,7 @@ function EditTask() {
     <div className="task-page-container">
       <div className="task-details">
         <div className="task-detail-item">
-        <strong>Task Name:</strong> 
+        <strong>{t('taskName')}:</strong> 
             <input
               type="text"
               value={updatedTask.taskName || ''}
@@ -73,7 +75,7 @@ function EditTask() {
             />
           </div>
           <div className="edit-task-detail-item">
-          <strong>Task Date:</strong> 
+          <strong>{t('taskDate')}:</strong> 
           <input
             type="date"
             value={updatedTask.taskDate ? format(new Date(updatedTask.taskDate), 'yyyy-MM-dd') : ''}
@@ -81,7 +83,7 @@ function EditTask() {
           />
           </div>
         <div className="event-detail-item">
-          <strong>Status:</strong>
+          <strong>{t('status')}:</strong>
             <select
               value={updatedTask.status}
               onChange={(e) => setUpdatedTask({ ...updatedTask, status: e.target.value })}
@@ -92,8 +94,8 @@ function EditTask() {
             </select>
             </div>
             <div className="button-container">
-            <button onClick={handleSave}>Save</button>
-            <button onClick={handleCancel}>Cancel</button>
+            <button onClick={handleSave}>{t('save')}</button>
+            <button onClick={handleCancel}>{t('cancel')}</button>
             </div>
         </div>
       </div>

@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { getNotificationsAPI, updateNotificationAPI } from '../../api';
 import { useNavigate } from 'react-router-dom';
 import './NotificationPanel.css';
 
 const NotificationPanel = ({ setNotifications: updateNotifications }) => {
+    const { t } = useTranslation();
     const [notifications, setNotificationsLocal] = useState([]);
     const navigate = useNavigate();
 
@@ -40,7 +42,7 @@ const NotificationPanel = ({ setNotifications: updateNotifications }) => {
                         </div>
                     ))
                 ) : (
-                    <p onClick={() => navigate('/notifications')}>No new notification</p>
+                    <p onClick={() => navigate('/notifications')}>{t('noNewNotification')}</p>
                 )}
             </div>
         </div>

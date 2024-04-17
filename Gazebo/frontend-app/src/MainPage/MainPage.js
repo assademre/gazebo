@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from 'react-i18next';
 import { fetchTasksAPI, getUsernameAPI } from "../api";
 import "./MainPage.css";
 import statusOptions from "../helpers/statusOptions";
@@ -7,6 +8,7 @@ import currencySymbols from "../helpers/currencySymbols";
 import Layout from "../NavigationBar/Layout";
 
 function MainPage() {
+  const { t } = useTranslation();
   const [events, setEvents] = useState([]);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
   const [user, setUsername] = useState("");
@@ -78,36 +80,37 @@ function MainPage() {
     <Layout>
       <div className="main-page">
         <div className="welcome-message">
-          Welcome <span className="name">{user}</span>
+        {console.log('Translated welcomeMessage:', t('welcomeMessage'))}
+          {t('welcomeMessage')} <span className="name">{user}</span>
         </div>
 
         <div className="button-container">
-          <Link to="/create-event" className="button">Create Event</Link>
-          <Link to="/create-task" className="button">Create Task</Link>
+          <Link to="/create-event" className="button">{t('createEvent')}</Link>
+          <Link to="/create-task" className="button">{t('createTask')}</Link>
         </div>
         
-        <h2>My Upcoming Tasks</h2>
+        <h2>{t('myUpcomingTasks')}</h2>
         <div className="main-page-table-container">
           <table className="main-page-table">
             <thead>
               <tr>
                 <th onClick={() => handleSort('taskName')}>
-                  Task Name {sortConfig.key === 'taskName' && (
+                  {t('taskName')} {sortConfig.key === 'taskName' && (
                     sortConfig.direction === 'asc' ? '▼' : '▲'
                   )}
                 </th>
                 <th onClick={() => handleSort('taskDate')}>
-                  Due Date {sortConfig.key === 'taskDate' && (
+                  {t('dueDate')} {sortConfig.key === 'taskDate' && (
                     sortConfig.direction === 'asc' ? '▼' : '▲'
                   )}
                 </th>
-                <th>Status</th>
+                <th>{t('status')} </th>
                 <th onClick={() => handleSort('budget')}>
-                  Budget {sortConfig.key === 'budget' && (
+                {t('budget')}  {sortConfig.key === 'budget' && (
                     sortConfig.direction === 'asc' ? '▼' : '▲'
                   )}
                 </th>
-                <th>Event Name</th>
+                <th>{t('eventName')} </th>
               </tr>
             </thead>
             </table>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { getEventByEventIdAPI } from '../../api';
 import { format } from 'date-fns';
@@ -6,6 +7,7 @@ import "./Event.css";
 import Layout from '../../NavigationBar/Layout';
 
 function Event() {
+  const {t} = useTranslation();
   const { eventId } = useParams();
   const [event, setEvent] = useState(null);
   const navigate = useNavigate();
@@ -25,7 +27,7 @@ function Event() {
   };
 
   if (!event) {
-    return <div>Loading...</div>;
+    return <div>{t('loading')}</div>;
   }
 
   const formattedDate = format(new Date(event.eventDate), 'dd-MM-yyyy');
@@ -35,16 +37,16 @@ function Event() {
       <div className="event-page-container">
         <div className="event-details">
           <div className="event-detail-item">
-            <strong>Event Name:</strong> <span>{event.eventName}</span>
+            <strong>{t('eventName')}:</strong> <span>{event.eventName}</span>
           </div>
           <div className="event-detail-item">
-            <strong>Event Date:</strong> <span>{formattedDate}</span>
+            <strong>{t('eventDate')}:</strong> <span>{formattedDate}</span>
           </div>
           <div className="event-detail-item">
-            <strong>Status:</strong> <span>{event.status}</span>
+            <strong>{t('status')}:</strong> <span>{event.status}</span>
           </div>
           <Link to={`/edit-event/${eventId}`}>
-            <button>Edit</button>
+            <button>{t('edit')}</button>
           </Link>
         </div>
       </div>

@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { getNotificationsAPI } from '../../api';
 import './NotificationPage.css';
 import Layout from '../Layout';
 
 const NotificationPage = () => {
+  const { t } = useTranslation();
   const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
@@ -26,9 +28,9 @@ const NotificationPage = () => {
       yesterday.setDate(today.getDate() - 1);
       let formattedDate = dateString;
       if (date.toDateString() === today.toDateString()) {
-        formattedDate = 'Today';
+        formattedDate = t('today');
       } else if (date.toDateString() === yesterday.toDateString()) {
-        formattedDate = 'Yesterday';
+        formattedDate = t('yesterday');
       }
       if (groupedNotifications[formattedDate]) {
         groupedNotifications[formattedDate].push(notification);
@@ -42,7 +44,7 @@ const NotificationPage = () => {
   return (
     <Layout>
         <div className="notification-page">
-      <h1>Notifications</h1>
+      <h1>{t('Notifications')}</h1>
       {groupNotificationsByDate().map(([date, notifications]) => (
         <div key={date} className="notification-group">
           <h2 className="notification-group-date">{date}</h2>

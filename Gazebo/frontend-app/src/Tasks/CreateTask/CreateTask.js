@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useTranslation } from 'react-i18next';
 import { createTaskAPI, getEventByUserIdAPI, getUsersAPI } from "./../../api";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -8,6 +9,7 @@ import Layout from "./../../NavigationBar/Layout";
 import currencySymbols from "./../../helpers/currencySymbols";
 
 function CreateTask() {
+  const { t } = useTranslation();
   const [ownerId, setOwnerId] = useState(() => localStorage.getItem('userId') ?? 0);
   const [eventId, setEventId] = useState('');
   const [taskName, setTaskName] = useState('');
@@ -100,13 +102,13 @@ function CreateTask() {
   return (
     <Layout>
       <div className="container">
-        <div>Create a new Task</div>
+        <div>{t('createANewTask')}</div>
 
-        <div className="label">Task Owner</div>
+        <div className="label">{t('taskOwner')}</div>
         <input
           type="text"
           className="input-field"
-          placeholder="Search Task Owner..."
+          placeholder={t('searchTaskOwner')}
           value={searchTerm}
           onChange={(e) => {
             setSearchTerm(e.target.value);
@@ -120,7 +122,7 @@ function CreateTask() {
             checked={isMeClicked}
             onChange={() => setIsMeClicked(!isMeClicked)}
           /> 
-          <span>Assign this task to me</span>
+          <span>{t('assignThisTaskToMe')}</span>
         </label>
         {showSuggestions && searchTerm && (
           <div className="autocomplete-suggestions">
@@ -132,36 +134,36 @@ function CreateTask() {
           </div>
         )}
 
-        <div className="label">Event</div>
+        <div className="label">{t('event')}</div>
         <select className="select-field" value={eventId} onChange={(e) => setEventId(e.target.value)}>
-          <option value="">Select Event</option>
+          <option value="">{t('selectEvent')}</option>
           {eventOptions.map((option) => (
             <option key={option.value} value={option.value}>{option.label}</option>
           ))}
         </select>
 
-        <div className="label">Task Name</div>
+        <div className="label">{t('taskName')}</div>
         <input type="text" className="input-field" value={taskName} onChange={(e) => setTaskName(e.target.value)} />
 
-        <div className="label">Budget</div>
+        <div className="label">{t('budget')}</div>
         <input type="number" className="input-field" value={budget} onChange={(e) => setBudget(parseInt(e.target.value))} />
 
         <select className="select-field" value={currency} onChange={(e) => setCurrency(e.target.value)}>
-          <option value="">Select Currency</option>
+          <option value="">{t('selectCurrency')}</option>
           {currencySymbols.map((option) => (
             <option key={option.value} value={option.value}>{option.label}</option>
           ))}
         </select>
 
-        <div className="label">Place</div>
+        <div className="label">{t('place')}</div>
         <input type="text" className="input-field" value={place} onChange={(e) => setPlace(e.target.value)} />
 
-        <div className="label">Task Due Date</div>
+        <div className="label">{t('taskDueDate')}</div>
         <DatePicker selected={taskDate} onChange={(date) => setTaskDate(date)} />
 
         <div className="button-container">
-          <button className="button" onClick={handleBack}>Back to Main Page</button>
-          <button className="button" onClick={handleSave}>Create Task</button>
+          <button className="button" onClick={handleBack}>{t('backToMainPage')}</button>
+          <button className="button" onClick={handleSave}>{t('createTask')}</button>
         </div>
       </div>
     </Layout>

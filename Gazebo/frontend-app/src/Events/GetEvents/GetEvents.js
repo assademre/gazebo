@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from "react-router-dom";
 import { getEventByUserIdAPI } from "./../../api";
 import "./GetEvents.css";
@@ -7,6 +8,7 @@ import currencySymbols from "../../helpers/currencySymbols";
 import Layout from "../../NavigationBar/Layout";
 
 function GetEvents() {
+  const {t} = useTranslation();
   const [events, setEvents] = useState([]);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
 
@@ -72,28 +74,28 @@ function GetEvents() {
   return (
     <Layout>
       <div className="get-events-page">
-        <h2>My Events</h2>
+        <h2>{t('myEvents')}</h2>
         <div className="events-table-container">
         <table className="events-table">
           <thead>
             <tr>
               <th onClick={() => handleSort('eventName')}>
-                Event Name {sortConfig.key === 'eventName' && (
+              {t('eventName')} {sortConfig.key === 'eventName' && (
                   sortConfig.direction === 'asc' ? '▼' : '▲'
                 )}
               </th>
               <th onClick={() => handleSort('eventDate')}>
-                Due Date {sortConfig.key === 'eventDate' && (
+              {t('dueDate')} {sortConfig.key === 'eventDate' && (
                   sortConfig.direction === 'asc' ? '▼' : '▲'
                 )}
               </th>
-              <th>Status</th>
+              <th>{t('status')}</th>
               <th onClick={() => handleSort('budget')}>
-                Budget {sortConfig.key === 'budget' && (
+              {t('budget')} {sortConfig.key === 'budget' && (
                   sortConfig.direction === 'asc' ? '▼' : '▲'
                 )}
               </th>
-              <th>Event Type</th>
+              <th>{t('eventType')}</th>
               <th></th>
             </tr>
           </thead>
@@ -108,14 +110,14 @@ function GetEvents() {
                     <td>{getStatusLabel(event.status)}</td>
                     <td>{event.budget}{getCurrencyLabel(event.currency)}</td>
                     <td>{event.eventType}</td>
-                    <td><button onClick={() => navigate(`/edit-event/${event.eventId}`)}>Edit</button></td>
+                    <td><button onClick={() => navigate(`/edit-event/${event.eventId}`)}>{t('edit')}</button></td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
         </div>
-        <button className="button" onClick={handleBack}>Back to Main Page</button>
+        <button className="button" onClick={handleBack}>{t('backToMainPage')}</button>
       </div>
     </Layout>
   );

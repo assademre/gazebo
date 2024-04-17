@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getEventByEventIdAPI, updateEventAPI } from '../../api';
 import { format } from 'date-fns';
@@ -7,9 +8,9 @@ import "./EditEvent.css";
 import Layout from '../../NavigationBar/Layout';
 
 function EditEvent() {
+  const {t} = useTranslation();
   const { eventId } = useParams();
   const navigate = useNavigate();
-
   const [event, setEvent] = useState(null);
   const [updatedEvent, setUpdatedEvent] = useState({});
 
@@ -29,11 +30,6 @@ function EditEvent() {
     }
   };
 
-  // const getStatusLabel = (statusValue) => {
-  //   const statusOption = statusOptions.find(option => option.value === statusValue);
-  //   return statusOption ? statusOption.label : 'Unknown';
-  // };
-
   const handleSave = async () => {
     try {
       const currentDate = new Date().toISOString();
@@ -51,7 +47,7 @@ function EditEvent() {
   };
 
   if (!event) {
-    return <div>Loading...</div>;
+    return <div>{t('loading')}</div>;
   }
 
   return (
@@ -59,7 +55,7 @@ function EditEvent() {
       <div className="edit-event-page-container">
         <div className="edit-event-details">
           <div className="edit-event-detail-item">
-            <strong>Event Name:</strong> 
+            <strong>{t('eventName')}:</strong> 
             <input
               type="text"
               value={updatedEvent.eventName || ''}
@@ -67,7 +63,7 @@ function EditEvent() {
             />
           </div>
           <div className="edit-event-detail-item">
-          <strong>Event Date:</strong> 
+          <strong>{t('eventDate')}:</strong> 
           <input
             type="date"
             value={updatedEvent.eventDate ? format(new Date(updatedEvent.eventDate), 'yyyy-MM-dd') : ''}
@@ -75,7 +71,7 @@ function EditEvent() {
           />
           </div>
           <div className="edit-event-detail-item">
-            <strong>Status:</strong> 
+            <strong>{t('status')}:</strong> 
             <select
               value={updatedEvent.status || ''}
               onChange={(e) => setUpdatedEvent({ ...updatedEvent, status: e.target.value })}
@@ -86,8 +82,8 @@ function EditEvent() {
             </select>
           </div>
           <div className="button-container">
-            <button onClick={handleSave}>Save</button>
-            <button onClick={handleCancel}>Cancel</button>
+            <button onClick={handleSave}>{t('save')}</button>
+            <button onClick={handleCancel}>{t('cancel')}</button>
           </div>
         </div>
       </div>
