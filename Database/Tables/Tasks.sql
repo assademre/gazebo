@@ -13,5 +13,7 @@ CREATE TABLE Tasks (
 
 	CONSTRAINT FK_Tasks_Currency FOREIGN KEY (currencyId) REFERENCES Currency(currencyId),
 	CONSTRAINT FK_Tasks_CreaterId FOREIGN KEY (ownerId) REFERENCES Users(userId),
-	CONSTRAINT FK_Tasks_EventId FOREIGN KEY (eventId) REFERENCES Events(eventId)
+	CONSTRAINT FK_Tasks_EventId FOREIGN KEY (eventId) REFERENCES Events(eventId),
+
+	CONSTRAINT UQ_EventId_TaskName UNIQUE (eventId, taskName)
 )

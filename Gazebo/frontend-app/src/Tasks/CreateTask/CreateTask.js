@@ -60,6 +60,21 @@ function CreateTask() {
   };
 
   const handleSave = async () => {
+    if (!taskDate) {
+      alert("Date field cannot be left empty.");
+      return;
+    }
+
+    if (!taskName) {
+      alert("Task name cannot be left empty.");
+      return;
+    }
+
+    if (!place) {
+      alert("Place cannot be left empty.");
+      return;
+    }
+
     const data = {
       ownerId: ownerId,
       eventId: eventId,

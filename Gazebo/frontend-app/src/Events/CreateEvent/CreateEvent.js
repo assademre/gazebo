@@ -26,6 +26,21 @@ function CreateEvent() {
   };
 
   const handleSave = async () => {
+    if (!eventDate) {
+      alert("Date field cannot be left empty.");
+      return;
+    }
+
+    if (!eventName) {
+      alert("Event name cannot be left empty.");
+      return;
+    }
+
+    if (!place) {
+      alert("Place cannot be left empty.");
+      return;
+    }
+
     const data = {
       createrId: createrId,
       eventType: eventType,
