@@ -89,7 +89,7 @@ function EditTask() {
               onChange={(e) => setUpdatedTask({ ...updatedTask, status: e.target.value })}
             >
               {statusOptions.map(option => (
-                <option key={option.value} value={option.value}>{option.label}</option>
+                <option key={option.value} value={option.value}>{t(option.label)}</option>
               ))}
             </select>
             </div>

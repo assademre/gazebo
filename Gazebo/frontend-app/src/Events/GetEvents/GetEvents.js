@@ -107,7 +107,7 @@ function GetEvents() {
                   <tr key={event.eventId}>
                     <td><Link className="event" to={`/event/${event.eventId}`}>{event.eventName}</Link></td>
                     <td>{formatISODate(event.eventDate)}</td>
-                    <td>{getStatusLabel(event.status)}</td>
+                    <td>{t(getStatusLabel(event.status))}</td>
                     <td>{event.budget}{getCurrencyLabel(event.currency)}</td>
                     <td>{event.eventType}</td>
                     <td><button onClick={() => navigate(`/edit-event/${event.eventId}`)}>{t('edit')}</button></td>

@@ -121,7 +121,7 @@ function MainPage() {
                 <tr key={task.taskId}>
                   <td>{task.taskName}</td>
                   <td>{formatISODate(task.taskDate)}</td>
-                  <td>{getStatusLabel(task.status)}</td>
+                  <td>{t(getStatusLabel(task.status))}</td>
                   <td>{task.budget}{getCurrencyLabel(task.currency)}</td>
                   <td>{task.eventName || 'Loading...'}</td>
                 </tr>

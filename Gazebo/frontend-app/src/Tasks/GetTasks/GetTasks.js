@@ -109,7 +109,7 @@ function GetTasks() {
                 <tr key={task.taskId}>
                   <td><Link className="task" to={`/task/${task.taskId}`}>{task.taskName}</Link></td>
                   <td>{formatISODate(task.taskDate)}</td>
-                  <td>{getStatusLabel(task.status)}</td>
+                  <td>{t(getStatusLabel(task.status))}</td>
                   <td>{task.budget}{getCurrencyLabel(task.currency)}</td>
                   <td>{task.eventName || 'Loading...'}</td>
                   <td><button onClick={() => navigate(`/edit-task/${task.taskId}`)}>{t('edit')}</button></td>

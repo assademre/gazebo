@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { getEventByEventIdAPI } from '../../api';
+import statusOptions from '../../helpers/statusOptions';
 import { format } from 'date-fns';
 import "./Event.css";
 import Layout from '../../NavigationBar/Layout';
@@ -15,6 +16,11 @@ function Event() {
   useEffect(() => {
     fetchData();
   }, []);
+
+  const getStatusLabel = (statusValue) => {
+    const statusOption = statusOptions.find(option => option.value === statusValue);
+    return statusOption ? statusOption.label : 'Unknown';
+  };
 
   const fetchData = async () => {
     try {
@@ -43,7 +49,7 @@ function Event() {
             <strong>{t('eventDate')}:</strong> <span>{formattedDate}</span>
           </div>
           <div className="event-detail-item">
-            <strong>{t('status')}:</strong> <span>{event.status}</span>
+            <strong>{t('status')}:</strong> <span>{t(getStatusLabel(event.status))}</span>
           </div>
           <Link to={`/edit-event/${eventId}`}>
             <button>{t('edit')}</button>

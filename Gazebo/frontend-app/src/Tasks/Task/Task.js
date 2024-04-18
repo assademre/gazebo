@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { getTaskByTaskIdAPI } from '../../api';
+import statusOptions from '../../helpers/statusOptions';
 import { format } from 'date-fns';
 import "./Task.css";
 import Layout from '../../NavigationBar/Layout';
@@ -15,6 +16,11 @@ function Task() {
   useEffect(() => {
     fetchData();
   }, []);
+
+  const getStatusLabel = (statusValue) => {
+    const statusOption = statusOptions.find(option => option.value === statusValue);
+    return statusOption ? statusOption.label : 'Unknown';
+  };
 
   const fetchData = async () => {
     try {
@@ -43,7 +49,7 @@ function Task() {
             <strong>{t('taskDate')}:</strong> <span>{formattedDate}</span>
           </div>
           <div className="task-detail-item">
-            <strong>{t('status')}:</strong> <span>{task.status}</span>
+            <strong>{t('status')}:</strong> <span>{t(getStatusLabel(task.status))}</span>
           </div>
           <Link to={`/edit-task/${taskId}`}>
             <button>{t('edit')}</button>

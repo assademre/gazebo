@@ -1,8 +1,8 @@
 const statusOptions = [
-    { label: "Not Started", value: "NotStarted" },
-    { label: "In Progress", value: "InProgress" },
-    { label: "Completed", value: "Completed" },
-    { label: "Cancelled", value: "Cancelled" },
+    { label: "notStarted", value: "NotStarted" },
+    { label: "inProgress", value: "InProgress" },
+    { label: "completed", value: "Completed" },
+    { label: "cancelled", value: "Cancelled" },
   ];
   
   export default statusOptions;
