@@ -74,7 +74,7 @@ function GetEvents() {
   return (
     <Layout>
       <div className="get-events-page">
-        <h2>{t('myEvents')}</h2>
+        <h2 className="get-events-text">{t('myEvents')}</h2>
         <div className="events-table-container">
         <table className="events-table">
           <thead>

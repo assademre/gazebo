@@ -60,7 +60,7 @@ const SignupForm = () => {
       <h2>Signup</h2>
       <form className='signup-form' onSubmit={handleSubmit}>
         <div>
-          <label>Username:</label>
+          <label>Username</label>
           <input
             type="text"
             name="username"
@@ -74,23 +74,23 @@ const SignupForm = () => {
           )}
         </div>
         <div>
-          <label>Password:</label>
+          <label>Password</label>
           <input type="password" name="password" value={formData.password} onChange={handleChange} required />
         </div>
         <div>
-          <label>Name:</label>
+          <label>Name</label>
           <input type="text" name="name" value={formData.name} onChange={handleChange} required />
         </div>
         <div>
-          <label>Surname:</label>
+          <label>Surname</label>
           <input type="text" name="surname" value={formData.surname} onChange={handleChange} required />
         </div>
         <div>
-          <label>Email:</label>
+          <label>Email</label>
           <input type="email" name="email" value={formData.email} onChange={handleChange} required />
         </div>
         <div>
-          <label>Phone Number:</label>
+          <label>Phone Number</label>
           <input type="tel" name="phoneNumber" value={formData.phoneNumber} onChange={handleChange} required />
         </div>
         <button type="submit" disabled={!usernameAvailable || isLoading}>{isLoading ? 'Signing up...' : 'Signup'}</button>

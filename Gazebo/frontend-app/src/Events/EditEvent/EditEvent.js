@@ -63,6 +63,22 @@ function EditEvent() {
             />
           </div>
           <div className="edit-event-detail-item">
+            <strong>{t('budget')}:</strong> 
+            <input
+              type="text"
+              value={updatedEvent.budget || ''}
+              onChange={(e) => setUpdatedEvent({ ...updatedEvent, budget: e.target.value })}
+            />
+          </div>
+          <div className="edit-event-detail-item">
+            <strong>{t('place')}:</strong> 
+            <input
+              type="text"
+              value={updatedEvent.place || ''}
+              onChange={(e) => setUpdatedEvent({ ...updatedEvent, place: e.target.value })}
+            />
+          </div>
+          <div className="edit-event-detail-item">
           <strong>{t('eventDate')}:</strong> 
           <input
             type="date"

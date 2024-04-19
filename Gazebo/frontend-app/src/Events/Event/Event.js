@@ -46,6 +46,12 @@ function Event() {
             <strong>{t('eventName')}:</strong> <span>{event.eventName}</span>
           </div>
           <div className="event-detail-item">
+            <strong>{t('budget')}:</strong> <span>{event.budget}</span>
+          </div>
+          <div className="event-detail-item">
+            <strong>{t('place')}:</strong> <span>{event.place}</span>
+          </div>
+          <div className="event-detail-item">
             <strong>{t('eventDate')}:</strong> <span>{formattedDate}</span>
           </div>
           <div className="event-detail-item">

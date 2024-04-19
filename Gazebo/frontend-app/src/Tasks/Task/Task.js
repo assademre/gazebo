@@ -46,6 +46,9 @@ function Task() {
             <strong>{t('taskName')}:</strong> <span>{task.taskName}</span>
           </div>
           <div className="task-detail-item">
+            <strong>{t('eventName')}:</strong> <span>{task.eventName}</span>
+          </div>
+          <div className="task-detail-item">
             <strong>{t('taskDate')}:</strong> <span>{formattedDate}</span>
           </div>
           <div className="task-detail-item">

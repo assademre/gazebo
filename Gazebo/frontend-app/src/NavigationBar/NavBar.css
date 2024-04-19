@@ -100,3 +100,39 @@ header {
     font-size: 14px;
 }
 
+.language-selector {
+    display: inline-block;
+    position: relative;
+    font-family: Arial, sans-serif;
+}
+
+.language-selector select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 8px 12px;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.language-selector select::after {
+    content: '\25BC';
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+.language-selector select:hover,
+.language-selector select:focus {
+    border-color: #aaa;
+}
+
+.language-selector option {
+    background-color: #fff;
+}
+

@@ -58,15 +58,15 @@ namespace EventOrganizationApp.Controller
             }
 
             var allTasks = await _eventTaskRepository.GetAllUserTasks(userId);
-            var mappedTasks = _mapper.Map<IList<EventTaskDto>>(allTasks);
+            var mappedList = _mapper.Map<IList<EventTaskDto>>(allTasks);
 
-            foreach (var taskDto in mappedTasks)
+            foreach (var taskDto in mappedList)
             {
                 var taskEvent = await _eventRepository.GetEventByEventId(taskDto.EventId);
                 taskDto.EventName = taskEvent.EventName;
             }
 
-            if (mappedTasks.IsNullOrEmpty())
+            if (mappedList.IsNullOrEmpty())
             {
                 return NotFound();
             }
@@ -167,6 +167,9 @@ namespace EventOrganizationApp.Controller
             }
 
             var mappedTaskInfo = _mapper.Map<EventTaskDto>(taskInfo);
+
+            var taskEvent = await _eventRepository.GetEventByEventId(mappedTaskInfo.EventId);
+            mappedTaskInfo.EventName = taskEvent.EventName;
 
             if (mappedTaskInfo == null)
             {

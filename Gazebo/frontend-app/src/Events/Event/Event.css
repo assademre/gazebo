@@ -3,14 +3,13 @@
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background-color: #f0f0f0;
     padding: 20px;
   }
   
   .event-details {
     width: 20%;
-    height: 15vh;
-    background-color: #fff;
+    height: 20vh;
+    background-color: #d7d7e9;
     padding: 20px;
     border-radius: 12px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
