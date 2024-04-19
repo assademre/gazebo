@@ -8,7 +8,7 @@
   
   .event-details {
     width: 20%;
-    height: 20vh;
+    height: 25vh;
     background-color: #d7d7e9;
     padding: 20px;
     border-radius: 12px;
@@ -32,4 +32,3 @@
     height: 40px;
     font-size: 16px;
   }
- 

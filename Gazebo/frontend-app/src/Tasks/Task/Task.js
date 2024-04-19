@@ -46,7 +46,10 @@ function Task() {
             <strong>{t('taskName')}:</strong> <span>{task.taskName}</span>
           </div>
           <div className="task-detail-item">
-            <strong>{t('eventName')}:</strong> <span>{task.eventName}</span>
+            <strong>{t('eventName')}:</strong>
+            <span>
+              <Link to={`/event/${task.eventId}`} style={{ color: 'black' }}>{task.eventName}</Link>
+            </span>
           </div>
           <div className="task-detail-item">
             <strong>{t('taskDate')}:</strong> <span>{formattedDate}</span>
@@ -54,9 +57,12 @@ function Task() {
           <div className="task-detail-item">
             <strong>{t('status')}:</strong> <span>{t(getStatusLabel(task.status))}</span>
           </div>
-          <Link to={`/edit-task/${taskId}`}>
-            <button>{t('edit')}</button>
-          </Link>
+          <div className="button-container">
+            <Link to={`/edit-task/${taskId}`}>
+              <button>{t('edit')}</button>
+            </Link>
+            <button onClick={() => navigate(-1)}>{t('cancel')}</button>
+          </div>
         </div>
       </div>
     </Layout>

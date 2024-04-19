@@ -57,9 +57,12 @@ function Event() {
           <div className="event-detail-item">
             <strong>{t('status')}:</strong> <span>{t(getStatusLabel(event.status))}</span>
           </div>
+          <div className="button-container">
           <Link to={`/edit-event/${eventId}`}>
             <button>{t('edit')}</button>
           </Link>
+          <button onClick={() => navigate(-1)}>{t('cancel')}</button>
+          </div>
         </div>
       </div>
     </Layout>

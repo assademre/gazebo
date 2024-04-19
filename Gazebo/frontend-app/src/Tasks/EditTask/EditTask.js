@@ -65,7 +65,7 @@ function EditTask() {
     <Layout>
       
     <div className="task-page-container">
-      <div className="task-details">
+      <div className="edit-task-details">
         <div className="task-detail-item">
         <strong>{t('taskName')}:</strong> 
             <input
