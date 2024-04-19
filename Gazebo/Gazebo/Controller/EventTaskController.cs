@@ -76,7 +76,7 @@ namespace EventOrganizationApp.Controller
                 return BadRequest(ModelState);
             }
 
-            return Ok(mappedTasks);
+            return Ok(mappedList);
         }
 
         [HttpGet("eventid={eventId:int}/event-task")]
