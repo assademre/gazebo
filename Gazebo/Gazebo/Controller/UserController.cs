@@ -14,13 +14,16 @@ namespace EventOrganizationApp.Controller
     public class UserController : ControllerBase
     {
         private readonly IUserRepository _profileRepository;
-
         public IMapper _mapper;
+
+        private readonly int _userId;
 
         public UserController(IUserRepository profileRepository, IMapper mapper)
         {
             _profileRepository = profileRepository;
             _mapper = mapper;
+
+            _userId = GetUser();
         }
 
         [HttpGet("profile")]
@@ -28,21 +31,12 @@ namespace EventOrganizationApp.Controller
         [ProducesResponseType(200, Type = typeof(User))]
         public IActionResult GetProfileInfo()
         {
-            var claim = User.Claims
-                .FirstOrDefault(x => x.Type == "userId");
-
-            if (claim == null)
+            if (_userId == 0)
             {
-                return BadRequest("The userId claim is missing");
-            }
-            var userIdString = claim?.Value;
-
-            if (!int.TryParse(userIdString, out int userId))
-            {
-                return BadRequest("The userId claim is not a valid integer");
+                return BadRequest("The user not found");
             }
 
-            var profileInfo = _profileRepository.GetUserInfo(userId);
+            var profileInfo = _profileRepository.GetUserInfo(_userId);
 
             if (profileInfo.UserId == 0)
             {
@@ -76,6 +70,25 @@ namespace EventOrganizationApp.Controller
             }
 
             return Ok(users);
+        }
+
+        private int GetUser()
+        {
+            var claim = User.Claims
+               .FirstOrDefault(x => x.Type == "userId");
+
+            if (claim == null)
+            {
+                return 0;
+            }
+            var userIdString = claim?.Value;
+
+            if (!int.TryParse(userIdString, out int userId))
+            {
+                return 0;
+            }
+
+            return userId;
         }
     }
 }

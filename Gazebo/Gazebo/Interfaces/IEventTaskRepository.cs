@@ -10,6 +10,7 @@ namespace Gazebo.Interfaces
         Task<IList<EventsTask>> GetAllUserTasks(int userId);
         Task<IList<EventsTask>> GetUserTasksForAnEvent(int userId, int eventId);
         Task<IList<EventsTask>> GetTasksForEvent(int eventId);
+        Task<int> GetEventIdByTaskId (int taskId);
         Task<EventsTask> GetTask(int taskId);
         Task<bool> CreateTask(EventsTask task);
         Task<bool> UpdateTask(EventsTask task);

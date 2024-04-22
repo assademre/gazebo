@@ -71,6 +71,21 @@ namespace Gazebo.Repository
             return tasksForAnEvent;
         }
 
+        public async Task<int> GetEventIdByTaskId(int taskId)
+        {
+            if (taskId == 0)
+            {
+                return 0;
+            }
+
+            var eventId = await _context.Tasks
+                .Where (x => x.TaskId == taskId)
+                .Select(x => x.EventId)
+                .FirstOrDefaultAsync();
+
+            return eventId;
+        }
+
         public async Task<EventsTask> GetTask(int taskId)
         {
             if (taskId == 0)

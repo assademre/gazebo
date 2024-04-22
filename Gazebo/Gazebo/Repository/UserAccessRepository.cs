@@ -30,9 +30,9 @@ namespace Gazebo.Repository
 
             var hashedPassword = _hashPassword.HashPassword(password);
 
-            var respond =  _context.UserAccess
+            var respond = await _context.UserAccess
                 .Where(x => x.Username == username && x.PasswordHash == hashedPassword)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
             return respond?.UserId ?? 0;
         }

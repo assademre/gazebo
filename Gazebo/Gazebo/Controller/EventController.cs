@@ -2,12 +2,9 @@
 using EventOrganizationApp.Data.Dto;
 using EventOrganizationApp.Models;
 using Gazebo.Interfaces;
-using Gazebo.Repository;
-using Gazebo.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using System.Security.Claims;
 
 namespace EventOrganizationApp.Controller
 {
@@ -19,11 +16,15 @@ namespace EventOrganizationApp.Controller
         private readonly IEventMemberRepository _eventMemberRepository;
         public IMapper _mapper;
 
+        private readonly int _userId;
+
         public EventController(IEventRepository eventRepository, IMapper mapper, IEventMemberRepository eventMemberRepository)
         {
             _eventRepository = eventRepository;
             _mapper = mapper;
             _eventMemberRepository = eventMemberRepository;
+
+            _userId = GetUser();
         }
 
         [HttpGet("created-events")]
@@ -32,26 +33,17 @@ namespace EventOrganizationApp.Controller
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetEventUserCreated()
         {
-            var claim = User.Claims
-                .FirstOrDefault(x => x.Type == "userId");
-
-            if (claim == null)
+            if (_userId == 0) 
             {
-                return BadRequest("The userId claim is missing");
-            }
-            var userIdString = claim?.Value;
-
-            if (!int.TryParse(userIdString, out int userId))
-            {
-                return BadRequest("The userId claim is not a valid integer");
+                return BadRequest("The user not found");
             }
 
-            var createdEvents = await _eventRepository.GetEventsUserCreated(userId);
+            var createdEvents = await _eventRepository.GetEventsUserCreated(_userId);
             var mappedEvents = _mapper.Map<IList<EventDto>>(createdEvents);
 
             if (mappedEvents.IsNullOrEmpty())
             {
-                return NotFound();
+                return BadRequest("events not found");
             }
 
             if (!ModelState.IsValid)
@@ -68,21 +60,12 @@ namespace EventOrganizationApp.Controller
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetMyEvents()
         {
-            var claim = User.Claims
-                .FirstOrDefault(x => x.Type == "userId");
-
-            if (claim == null)
+            if (_userId == 0)
             {
-                return BadRequest("The userId claim is missing");
-            }
-            var userIdString = claim?.Value;
-
-            if (!int.TryParse(userIdString, out int userId))
-            {
-                return BadRequest("The userId claim is not a valid integer");
+                return BadRequest("The user not found");
             }
 
-            var userMemberEvents = await _eventMemberRepository.GetUserEvents(userId);
+            var userMemberEvents = await _eventMemberRepository.GetUserEvents(_userId);
 
             var createdEvents = await _eventRepository.GetEventsByEventsId(userMemberEvents);
 
@@ -107,6 +90,18 @@ namespace EventOrganizationApp.Controller
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetEventByEventId([FromRoute] int eventId)
         {
+            if (_userId == 0)
+            {
+                return BadRequest("The user not found");
+            }
+
+            var isMember = await _eventMemberRepository.IsUserMember(eventId, _userId);
+
+            if (isMember == false)
+            {
+                return BadRequest("User does not have the permission for this action");
+            }
+
             var wholeEvent = await _eventRepository.GetEventByEventId(eventId);
 
             var mappedEvents = _mapper.Map<EventDto>(wholeEvent);
@@ -124,34 +119,16 @@ namespace EventOrganizationApp.Controller
             return Ok(mappedEvents);
         }
 
-
-        [HttpGet("{eventId:int}/event-status")]
-        [Authorize]
-        [ProducesResponseType(200, Type = typeof(string))]
-        [ProducesResponseType(400)]
-        public async Task<IActionResult> GetStatusByEventId([FromRoute] int eventId)
-        {
-            var eventStatus = await _eventRepository.GetStatusByEventId(eventId);
-
-            if (eventStatus == string.Empty)
-            {
-                return NotFound();
-            }
-
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            return Ok(eventStatus);
-        }
-
         [HttpPost]
         [Authorize]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         public async Task<IActionResult> CreateEvent([FromBody] EventDto newEvent)
         {
+            if (_userId == 0)
+            {
+                return BadRequest("The user not found");
+            }
             var mappedEvent = _mapper.Map<Event>(newEvent);
 
             if (!ModelState.IsValid)
@@ -165,7 +142,7 @@ namespace EventOrganizationApp.Controller
                 ModelState.AddModelError("", "Encounter an error while creating the event");
             }
 
-            var eventId = await _eventRepository.GetEventIdByEventNameAndUserId(newEvent.CreaterId, newEvent.EventName);
+            var eventId = await _eventRepository.GetEventIdByEventNameAndUserId(_userId, newEvent.EventName);
 
             if (eventId == 0)
             {
@@ -195,21 +172,12 @@ namespace EventOrganizationApp.Controller
         [ProducesResponseType(400)]
         public async Task<IActionResult> EditEvent([FromBody] EventDto eventDto)
         {
-            var claim = User.Claims
-                .FirstOrDefault(x => x.Type == "userId");
-
-            if (claim == null)
+            if (_userId == 0)
             {
-                return BadRequest("The userId claim is missing");
-            }
-            var userIdString = claim?.Value;
-
-            if (!int.TryParse(userIdString, out int userId))
-            {
-                return BadRequest("The userId claim is not a valid integer");
+                return BadRequest("The user not found");
             }
 
-            var isAdmin = await _eventMemberRepository.IsUserAdmin(eventDto.EventId, userId);
+            var isAdmin = await _eventMemberRepository.IsUserAdmin(eventDto.EventId, _userId);
 
             if (!isAdmin)
             {
@@ -230,6 +198,25 @@ namespace EventOrganizationApp.Controller
             }
 
             return Ok("Succesfully updated!");
+        }
+
+        private int GetUser()
+        {
+            var claim = User.Claims
+               .FirstOrDefault(x => x.Type == "userId");
+
+            if (claim == null)
+            {
+                return 0;
+            }
+            var userIdString = claim?.Value;
+
+            if (!int.TryParse(userIdString, out int userId))
+            {
+                return 0;
+            }
+
+            return userId;
         }
     }
 }

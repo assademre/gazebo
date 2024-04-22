@@ -18,8 +18,9 @@ namespace EventOrganizationApp.Controller
         private readonly IEventMemberRepository _eventMemberRepository;
         private readonly INotificationRepository _notificationRepository;
         private readonly IUserRepository _userRepository;
-
         public IMapper _mapper;
+
+        private readonly int _userId;
 
         public EventTaskController(IEventTaskRepository eventTaskRepository,
             IEventRepository eventRepository,
@@ -34,6 +35,8 @@ namespace EventOrganizationApp.Controller
             _notificationRepository = notificationRepository;
             _userRepository = userRepository;
             _mapper = mapper;
+
+            _userId = GetUser();
         }
 
 
@@ -43,21 +46,12 @@ namespace EventOrganizationApp.Controller
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetAllUserTasks()
         {
-            var claim = User.Claims
-                .FirstOrDefault(x => x.Type == "userId");
-
-            if (claim == null)
+            if (_userId == 0)
             {
-                return BadRequest("The userId claim is missing");
-            }
-            var userIdString = claim?.Value;
-
-            if (!int.TryParse(userIdString, out int userId))
-            {
-                return BadRequest("The userId claim is not a valid integer");
+                return BadRequest("The user not found");
             }
 
-            var allTasks = await _eventTaskRepository.GetAllUserTasks(userId);
+            var allTasks = await _eventTaskRepository.GetAllUserTasks(_userId);
             var mappedList = _mapper.Map<IList<EventTaskDto>>(allTasks);
 
             foreach (var taskDto in mappedList)
@@ -85,21 +79,12 @@ namespace EventOrganizationApp.Controller
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetUserTasksForAnEvent([FromRoute] int eventId)
         {
-            var claim = User.Claims
-                .FirstOrDefault(x => x.Type == "userId");
-
-            if (claim == null)
+            if (_userId == 0)
             {
-                return BadRequest("The userId claim is missing");
-            }
-            var userIdString = claim?.Value;
-
-            if (!int.TryParse(userIdString, out int userId))
-            {
-                return BadRequest("The userId claim is not a valid integer");
+                return BadRequest("The user not found");
             }
 
-            var userEventTasks = await _eventTaskRepository.GetUserTasksForAnEvent(userId, eventId);
+            var userEventTasks = await _eventTaskRepository.GetUserTasksForAnEvent(_userId, eventId);
             var mappedeventTasks = _mapper.Map<IList<EventTaskDto>>(userEventTasks);
 
             if (mappedeventTasks.IsNullOrEmpty())
@@ -121,6 +106,18 @@ namespace EventOrganizationApp.Controller
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetTasksForEvent([FromRoute] int eventId)
         {
+            if (_userId == 0)
+            {
+                return BadRequest("The user not found");
+            }
+
+            var isUserMember = await _eventMemberRepository.IsUserMember(eventId, _userId);
+
+            if (!isUserMember)
+            {
+                return BadRequest("User does not have a permission for this action");
+            }
+
             var tasksList = await _eventTaskRepository.GetTasksForEvent(eventId);
             var mappedList = _mapper.Map<IList<EventTaskDto>>(tasksList);
 
@@ -143,23 +140,14 @@ namespace EventOrganizationApp.Controller
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetTask([FromRoute] int taskId)
         {
-            var claim = User.Claims
-               .FirstOrDefault(x => x.Type == "userId");
-
-            if (claim == null)
+            if (_userId == 0)
             {
-                return BadRequest("The userId claim is missing");
-            }
-            var userIdString = claim?.Value;
-
-            if (!int.TryParse(userIdString, out int userId))
-            {
-                return BadRequest("The userId claim is not a valid integer");
+                return BadRequest("The user not found");
             }
 
             var taskInfo = await _eventTaskRepository.GetTask(taskId);
 
-            var isUserMember = await _eventMemberRepository.IsUserMember(taskInfo.EventId, userId);
+            var isUserMember = await _eventMemberRepository.IsUserMember(taskInfo.EventId, _userId);
 
             if (!isUserMember)
             {
@@ -169,6 +157,7 @@ namespace EventOrganizationApp.Controller
             var mappedTaskInfo = _mapper.Map<EventTaskDto>(taskInfo);
 
             var taskEvent = await _eventRepository.GetEventByEventId(mappedTaskInfo.EventId);
+
             mappedTaskInfo.EventName = taskEvent.EventName;
 
             if (mappedTaskInfo == null)
@@ -185,20 +174,12 @@ namespace EventOrganizationApp.Controller
         [ProducesResponseType(400)]
         public async Task<IActionResult> CreateTask([FromBody] EventTaskDto task)
         {
-            var claim = User.Claims
-               .FirstOrDefault(x => x.Type == "userId");
-
-            if (claim == null)
+            if (_userId == 0)
             {
-                return BadRequest("The userId claim is missing");
+                return BadRequest("The user not found");
             }
-            var userIdString = claim?.Value;
 
-            if (!int.TryParse(userIdString, out int userId))
-            {
-                return BadRequest("The userId claim is not a valid integer");
-            }
-            var isUserAdmin = await _eventMemberRepository.IsUserAdmin(task.EventId, userId);
+            var isUserAdmin = await _eventMemberRepository.IsUserAdmin(task.EventId, _userId);
             
             var mappedTask = _mapper.Map<EventsTask>(task);
 
@@ -229,7 +210,7 @@ namespace EventOrganizationApp.Controller
 
             var eventInfo = await _eventRepository.GetEventByEventId(task.EventId);
 
-            var createrName = _userRepository.GetUserInfo(userId).Username;
+            var createrName = _userRepository.GetUserInfo(_userId).Username;
 
             var notificationResponse = await _notificationRepository.CreateNewTaskNotification(task.OwnerId, createrName, eventInfo.EventName);
 
@@ -247,6 +228,18 @@ namespace EventOrganizationApp.Controller
         [ProducesResponseType(400)]
         public async Task<IActionResult> EditTask([FromBody] EventTaskDto task)
         {
+            if (_userId == 0)
+            {
+                return BadRequest("The user not found");
+            }
+
+            var isUserAdmin = await _eventMemberRepository.IsUserAdmin(task.EventId, task.OwnerId);
+
+            if (!(isUserAdmin || _userId == task.OwnerId))
+            {
+                return BadRequest("User does not have a permission for this action.");
+            }
+
             var mappedTask = _mapper.Map<EventsTask>(task);
 
             if (!ModelState.IsValid)
@@ -263,6 +256,7 @@ namespace EventOrganizationApp.Controller
             return Ok("Succesfully updated!");
         }
 
+        // TODO: Do we still need this?
         [HttpPut("{taskId:int}/status")]
         [Authorize]
         [ProducesResponseType(200)]
@@ -305,19 +299,29 @@ namespace EventOrganizationApp.Controller
         [ProducesResponseType(400)]
         public async Task<IActionResult> DeleteTask([FromRoute] int taskId)
         {
+            if (_userId == 0)
+            {
+                return BadRequest("The user not found");
+            }
+
             if (taskId == 0)
             {
                 ModelState.AddModelError("", "taskId is wrong");
             }
 
+            var eventId = await _eventTaskRepository.GetEventIdByTaskId(taskId);
+
             var task = await _eventTaskRepository.GetTask(taskId);
-            var mappedTask = _mapper.Map<EventsTask>(task);
 
 
-            if (!ModelState.IsValid)
+            var isUserAdmin = await _eventMemberRepository.IsUserAdmin(eventId, _userId);
+
+            if (!(isUserAdmin || _userId == task.OwnerId))
             {
-                return BadRequest(ModelState);
+                return BadRequest("User does not have a permission for this action.");
             }
+
+            var mappedTask = _mapper.Map<EventsTask>(task);
 
             var result = await _eventTaskRepository.DeleteTask(mappedTask);
             if (!result)
@@ -326,6 +330,25 @@ namespace EventOrganizationApp.Controller
             }
 
             return Ok("Succesfully deleted!");
+        }
+
+        private int GetUser()
+        {
+            var claim = User.Claims
+               .FirstOrDefault(x => x.Type == "userId");
+
+            if (claim == null)
+            {
+                return 0;
+            }
+            var userIdString = claim?.Value;
+
+            if (!int.TryParse(userIdString, out int userId))
+            {
+                return 0;
+            }
+
+            return userId;
         }
     }
 }

@@ -33,21 +33,6 @@ namespace Gazebo.Repository
             return userEvents;
         }
 
-        public async Task<string> GetStatusByEventId(int eventId)
-        {
-            if (eventId == 0)
-            {
-                return string.Empty;
-            }
-
-            var eventStatus = await _context.Events
-                .Where(x => x.EventId == eventId)
-                .Select(x => ((Status)x.StatusId).ToString())
-                .FirstOrDefaultAsync() ?? string.Empty;
-
-            return eventStatus;
-        }
-
         public async Task<int> GetEventIdByEventNameAndUserId(int userId, string eventName)
         {
             if (userId == 0 || eventName == string.Empty)

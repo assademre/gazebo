@@ -11,9 +11,12 @@ namespace Gazebo.Controller
     public class NotificationController : ControllerBase
     {
         private readonly INotificationRepository _notificationRepository;
+        private readonly int _userId;
         public NotificationController(INotificationRepository notificationRepository) 
         {
             _notificationRepository = notificationRepository;
+
+            _userId = GetUser();
         }
 
         [HttpGet()]
@@ -22,21 +25,12 @@ namespace Gazebo.Controller
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetNotification()
         {
-            var claim = User.Claims
-                .FirstOrDefault(x => x.Type == "userId");
-
-            if (claim == null)
+            if (_userId == 0)
             {
-                return BadRequest("The userId claim is missing");
-            }
-            var userIdString = claim?.Value;
-
-            if (!int.TryParse(userIdString, out int userId))
-            {
-                return BadRequest("The userId claim is not a valid integer");
+                return BadRequest("The user not found");
             }
 
-            var notifications = await _notificationRepository.GetTaskNotifications(userId);
+            var notifications = await _notificationRepository.GetTaskNotifications(_userId);
 
 
             if (notifications == null)
@@ -53,21 +47,12 @@ namespace Gazebo.Controller
         [ProducesResponseType(400)]
         public async Task<IActionResult> MakeNotificationRead([FromBody] int notificationId)
         {
-            var claim = User.Claims
-                .FirstOrDefault(x => x.Type == "userId");
-
-            if (claim == null)
+            if (_userId == 0)
             {
-                return BadRequest("The userId claim is missing");
-            }
-            var userIdString = claim?.Value;
-
-            if (!int.TryParse(userIdString, out int userId))
-            {
-                return BadRequest("The userId claim is not a valid integer");
+                return BadRequest("The user not found");
             }
 
-            var result = await _notificationRepository.MakeNotificationRead(userId, notificationId);
+            var result = await _notificationRepository.MakeNotificationRead(_userId, notificationId);
 
 
             if (!result)
@@ -76,6 +61,25 @@ namespace Gazebo.Controller
             }
 
             return Ok(result);
+        }
+
+        private int GetUser()
+        {
+            var claim = User.Claims
+               .FirstOrDefault(x => x.Type == "userId");
+
+            if (claim == null)
+            {
+                return 0;
+            }
+            var userIdString = claim?.Value;
+
+            if (!int.TryParse(userIdString, out int userId))
+            {
+                return 0;
+            }
+
+            return userId;
         }
     }
 }

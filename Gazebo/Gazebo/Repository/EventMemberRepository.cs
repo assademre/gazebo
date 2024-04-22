@@ -2,7 +2,6 @@
 using EventOrganizationApp.Models;
 using Gazebo.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration.UserSecrets;
 
 namespace Gazebo.Repository
 {
