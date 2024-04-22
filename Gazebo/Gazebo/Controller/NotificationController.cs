@@ -11,12 +11,9 @@ namespace Gazebo.Controller
     public class NotificationController : ControllerBase
     {
         private readonly INotificationRepository _notificationRepository;
-        private readonly int _userId;
         public NotificationController(INotificationRepository notificationRepository) 
         {
             _notificationRepository = notificationRepository;
-
-            _userId = GetUser();
         }
 
         [HttpGet()]
@@ -25,12 +22,14 @@ namespace Gazebo.Controller
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetNotification()
         {
-            if (_userId == 0)
+            var userId = GetUser();
+
+            if (userId == 0)
             {
                 return BadRequest("The user not found");
             }
 
-            var notifications = await _notificationRepository.GetTaskNotifications(_userId);
+            var notifications = await _notificationRepository.GetTaskNotifications(userId);
 
 
             if (notifications == null)
@@ -47,12 +46,14 @@ namespace Gazebo.Controller
         [ProducesResponseType(400)]
         public async Task<IActionResult> MakeNotificationRead([FromBody] int notificationId)
         {
-            if (_userId == 0)
+            var userId = GetUser();
+
+            if (userId == 0)
             {
                 return BadRequest("The user not found");
             }
 
-            var result = await _notificationRepository.MakeNotificationRead(_userId, notificationId);
+            var result = await _notificationRepository.MakeNotificationRead(userId, notificationId);
 
 
             if (!result)

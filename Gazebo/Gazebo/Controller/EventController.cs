@@ -16,15 +16,11 @@ namespace EventOrganizationApp.Controller
         private readonly IEventMemberRepository _eventMemberRepository;
         public IMapper _mapper;
 
-        private readonly int _userId;
-
         public EventController(IEventRepository eventRepository, IMapper mapper, IEventMemberRepository eventMemberRepository)
         {
             _eventRepository = eventRepository;
             _mapper = mapper;
             _eventMemberRepository = eventMemberRepository;
-
-            _userId = GetUser();
         }
 
         [HttpGet("created-events")]
@@ -33,12 +29,14 @@ namespace EventOrganizationApp.Controller
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetEventUserCreated()
         {
-            if (_userId == 0) 
+            var userId = GetUser();
+
+            if (userId == 0) 
             {
                 return BadRequest("The user not found");
             }
 
-            var createdEvents = await _eventRepository.GetEventsUserCreated(_userId);
+            var createdEvents = await _eventRepository.GetEventsUserCreated(userId);
             var mappedEvents = _mapper.Map<IList<EventDto>>(createdEvents);
 
             if (mappedEvents.IsNullOrEmpty())
@@ -60,12 +58,14 @@ namespace EventOrganizationApp.Controller
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetMyEvents()
         {
-            if (_userId == 0)
+            var userId = GetUser();
+
+            if (userId == 0)
             {
                 return BadRequest("The user not found");
             }
 
-            var userMemberEvents = await _eventMemberRepository.GetUserEvents(_userId);
+            var userMemberEvents = await _eventMemberRepository.GetUserEvents(userId);
 
             var createdEvents = await _eventRepository.GetEventsByEventsId(userMemberEvents);
 
@@ -90,12 +90,14 @@ namespace EventOrganizationApp.Controller
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetEventByEventId([FromRoute] int eventId)
         {
-            if (_userId == 0)
+            var userId = GetUser();
+
+            if (userId == 0)
             {
                 return BadRequest("The user not found");
             }
 
-            var isMember = await _eventMemberRepository.IsUserMember(eventId, _userId);
+            var isMember = await _eventMemberRepository.IsUserMember(eventId, userId);
 
             if (isMember == false)
             {
@@ -125,7 +127,9 @@ namespace EventOrganizationApp.Controller
         [ProducesResponseType(400)]
         public async Task<IActionResult> CreateEvent([FromBody] EventDto newEvent)
         {
-            if (_userId == 0)
+            var userId = GetUser();
+
+            if (userId == 0)
             {
                 return BadRequest("The user not found");
             }
@@ -142,7 +146,7 @@ namespace EventOrganizationApp.Controller
                 ModelState.AddModelError("", "Encounter an error while creating the event");
             }
 
-            var eventId = await _eventRepository.GetEventIdByEventNameAndUserId(_userId, newEvent.EventName);
+            var eventId = await _eventRepository.GetEventIdByEventNameAndUserId(userId, newEvent.EventName);
 
             if (eventId == 0)
             {
@@ -172,12 +176,14 @@ namespace EventOrganizationApp.Controller
         [ProducesResponseType(400)]
         public async Task<IActionResult> EditEvent([FromBody] EventDto eventDto)
         {
-            if (_userId == 0)
+            var userId = GetUser();
+
+            if (userId == 0)
             {
                 return BadRequest("The user not found");
             }
 
-            var isAdmin = await _eventMemberRepository.IsUserAdmin(eventDto.EventId, _userId);
+            var isAdmin = await _eventMemberRepository.IsUserAdmin(eventDto.EventId, userId);
 
             if (!isAdmin)
             {

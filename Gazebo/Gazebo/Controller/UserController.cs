@@ -16,14 +16,10 @@ namespace EventOrganizationApp.Controller
         private readonly IUserRepository _profileRepository;
         public IMapper _mapper;
 
-        private readonly int _userId;
-
         public UserController(IUserRepository profileRepository, IMapper mapper)
         {
             _profileRepository = profileRepository;
             _mapper = mapper;
-
-            _userId = GetUser();
         }
 
         [HttpGet("profile")]
@@ -31,12 +27,14 @@ namespace EventOrganizationApp.Controller
         [ProducesResponseType(200, Type = typeof(User))]
         public IActionResult GetProfileInfo()
         {
-            if (_userId == 0)
+            var userId = GetUser();
+
+            if (userId == 0)
             {
                 return BadRequest("The user not found");
             }
 
-            var profileInfo = _profileRepository.GetUserInfo(_userId);
+            var profileInfo = _profileRepository.GetUserInfo(userId);
 
             if (profileInfo.UserId == 0)
             {
