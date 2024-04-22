@@ -100,6 +100,18 @@ namespace Gazebo.Repository
             return result;
         }
 
+        public async Task<bool> DeleteEvent(Event eventInfo)
+        {
+            if (eventInfo == null)
+            {
+                return false;
+            }
+
+            _context.Remove(eventInfo);
+
+            return await SaveChanges();
+        }
+
         public async Task<bool> SaveChanges()
         {
             var savedData = await _context.SaveChangesAsync();

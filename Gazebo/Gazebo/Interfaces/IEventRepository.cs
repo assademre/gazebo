@@ -11,5 +11,6 @@ namespace Gazebo.Interfaces
         Task<bool> UpdateEvent(Event newEvent);
         Task<Event> GetEventByEventId(int eventId);
         Task<List<Event>> GetEventsByEventsId(List<int> eventIds);
+        Task<bool> DeleteEvent(Event eventInfo);
     }
 }

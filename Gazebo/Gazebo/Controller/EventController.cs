@@ -2,6 +2,7 @@
 using EventOrganizationApp.Data.Dto;
 using EventOrganizationApp.Models;
 using Gazebo.Interfaces;
+using Gazebo.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -204,6 +205,42 @@ namespace EventOrganizationApp.Controller
             }
 
             return Ok("Succesfully updated!");
+        }
+
+        [HttpDelete("{eventId:int}")]
+        [Authorize]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        public async Task<IActionResult> DeleteEvent([FromRoute] int eventId)
+        {
+            var userId = GetUser();
+
+            if (userId == 0)
+            {
+                return BadRequest("The user not found");
+            }
+
+            if (eventId == 0)
+            {
+                ModelState.AddModelError("", "eventId is wrong");
+            }
+
+            var eventInfo = await _eventRepository.GetEventByEventId(eventId);
+
+            if (userId != eventInfo.CreaterId)
+            {
+                return BadRequest("User does not have a permission for this action.");
+            }
+
+            var mappedEvent = _mapper.Map<Event>(eventInfo);
+
+            var result = await _eventRepository.DeleteEvent(mappedEvent);
+            if (!result)
+            {
+                ModelState.AddModelError("", "Encounter an error while deleting the event");
+            }
+
+            return Ok("Succesfully deleted!");
         }
 
         private int GetUser()
