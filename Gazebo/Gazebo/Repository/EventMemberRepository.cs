@@ -41,6 +41,49 @@ namespace Gazebo.Repository
             return member.Count() > 0;
         }
 
+        public async Task<bool> IsUserAdmin(int eventId, int userId)
+        {
+            if (eventId == 0 || userId == 0)
+            {
+                return false;
+            }
+
+            var isAdmin = await _context.EventMembers
+                .AnyAsync(x => x.UserId == userId && x.EventId == eventId && x.IsAdmin);
+
+            return isAdmin;
+        }
+
+        public async Task<List<int>> GetAdminEvents(int userId)
+        {
+            if (userId == 0)
+            {
+                return new List<int>();
+            }
+
+            var adminEvents = await _context.EventMembers
+                .Where(x => x.IsAdmin && x.UserId == userId)
+                .Select(x => x.EventId)
+                .ToListAsync();
+
+            return adminEvents;
+        }
+
+        public async Task<List<int>> GetUserEvents(int userId)
+        {
+            if (userId == 0)
+            {
+                return new List<int>();
+            }
+
+            var userEvents = await _context.EventMembers
+                .Where(x => x.UserId == userId)
+                .Select(x => x.EventId)
+                .ToListAsync();
+
+            return userEvents;
+        }
+
 
         public async Task<bool> SaveChanges()
         {

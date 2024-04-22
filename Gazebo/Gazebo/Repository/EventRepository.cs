@@ -101,6 +101,20 @@ namespace Gazebo.Repository
             return result;
         }
 
+        public async Task<List<Event>> GetEventsByEventsId(List<int> eventIds)
+        {
+            if (!eventIds.Any())
+            {
+                return new List<Event>();
+            }
+
+            var result = await _context.Events
+                .Where(x => eventIds.Contains(x.EventId))
+                .ToListAsync();
+
+            return result;
+        }
+
         public async Task<bool> SaveChanges()
         {
             var savedData = await _context.SaveChangesAsync();

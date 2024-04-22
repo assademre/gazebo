@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from "react-router-dom";
-import { getEventByUserIdAPI } from "./../../api";
+import { getAdminEventByUserIdAPI } from "./../../api";
 import "./GetEvents.css";
 import statusOptions from "../../helpers/statusOptions";
 import currencySymbols from "../../helpers/currencySymbols";
@@ -24,7 +24,7 @@ function GetEvents() {
 
   const fetchData = async () => {
     try {
-      const eventsData = await getEventByUserIdAPI();
+      const eventsData = await getAdminEventByUserIdAPI();
       setEvents(eventsData);
     } catch (error) {
       console.log(error);

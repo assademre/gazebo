@@ -92,6 +92,15 @@ export const getEventByUserIdAPI = async () => {
   }
 };
 
+export const getAdminEventByUserIdAPI = async () => {
+  try {
+      const response = await api.get(`/api/event/my-events`);
+      return response.data;
+  } catch (error) {
+      throw error.response.data || error.message;
+  }
+};
+
 export const updateEventAPI = async (data) => {
   try {
     const response = await api.put('/api/event', data);

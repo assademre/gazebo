@@ -62,6 +62,45 @@ namespace EventOrganizationApp.Controller
             return Ok(mappedEvents);
         }
 
+        [HttpGet("my-events")]
+        [Authorize]
+        [ProducesResponseType(200, Type = typeof(IList<Event>))]
+        [ProducesResponseType(400)]
+        public async Task<IActionResult> GetMyEvents()
+        {
+            var claim = User.Claims
+                .FirstOrDefault(x => x.Type == "userId");
+
+            if (claim == null)
+            {
+                return BadRequest("The userId claim is missing");
+            }
+            var userIdString = claim?.Value;
+
+            if (!int.TryParse(userIdString, out int userId))
+            {
+                return BadRequest("The userId claim is not a valid integer");
+            }
+
+            var userMemberEvents = await _eventMemberRepository.GetUserEvents(userId);
+
+            var createdEvents = await _eventRepository.GetEventsByEventsId(userMemberEvents);
+
+            var mappedEvents = _mapper.Map<IList<EventDto>>(createdEvents);
+
+            if (mappedEvents.IsNullOrEmpty())
+            {
+                return NotFound();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            return Ok(mappedEvents);
+        }
+
         [HttpGet("{eventId:int}/event")]
         [Authorize]
         [ProducesResponseType(200)]
@@ -156,6 +195,27 @@ namespace EventOrganizationApp.Controller
         [ProducesResponseType(400)]
         public async Task<IActionResult> EditEvent([FromBody] EventDto eventDto)
         {
+            var claim = User.Claims
+                .FirstOrDefault(x => x.Type == "userId");
+
+            if (claim == null)
+            {
+                return BadRequest("The userId claim is missing");
+            }
+            var userIdString = claim?.Value;
+
+            if (!int.TryParse(userIdString, out int userId))
+            {
+                return BadRequest("The userId claim is not a valid integer");
+            }
+
+            var isAdmin = await _eventMemberRepository.IsUserAdmin(eventDto.EventId, userId);
+
+            if (!isAdmin)
+            {
+                return BadRequest("The user has no permission for this action");
+            }
+
             var mappedEvent = _mapper.Map<Event>(eventDto);
 
             if (!ModelState.IsValid)

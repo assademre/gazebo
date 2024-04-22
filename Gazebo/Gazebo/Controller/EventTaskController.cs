@@ -198,12 +198,13 @@ namespace EventOrganizationApp.Controller
             {
                 return BadRequest("The userId claim is not a valid integer");
             }
-
+            var isUserAdmin = await _eventMemberRepository.IsUserAdmin(task.EventId, userId);
+            
             var mappedTask = _mapper.Map<EventsTask>(task);
 
-            if (!ModelState.IsValid)
+            if (!isUserAdmin)
             {
-                return BadRequest(ModelState);
+                return BadRequest("The user has no permission for this action.");
             }
 
             var result = await _eventTaskRepository.CreateTask(mappedTask);
@@ -212,16 +213,17 @@ namespace EventOrganizationApp.Controller
                 ModelState.AddModelError("", "Encounter an error while creating the task");
             }
 
-            var eventMember = new EventMember
-            {
-                EventId = task.EventId,
-                UserId = task.OwnerId,
-                IsAdmin = false
-            };
-
             var isUserAdded = await _eventMemberRepository.IsUserMember(task.EventId, task.OwnerId);
+
             if (!isUserAdded)
             {
+                var eventMember = new EventMember
+                {
+                    EventId = task.EventId,
+                    UserId = task.OwnerId,
+                    IsAdmin = false // for now it's false. We will have add admin option later.
+                };
+
                 await _eventMemberRepository.AddEventMember(eventMember);
             }
 
