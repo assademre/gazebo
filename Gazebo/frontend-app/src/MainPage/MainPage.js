@@ -10,7 +10,7 @@ import Layout from "../NavigationBar/Layout";
 function MainPage() {
   const { t } = useTranslation();
   const [events, setEvents] = useState([]);
-  const [sortConfig, setSortConfig] = useState({ key: 'taskDate', direction: 'asc' });
+  const [sortConfig] = useState({ key: 'taskDate', direction: 'asc' });
   const [user, setUsername] = useState("");
 
   useEffect(() => {
@@ -67,8 +67,6 @@ function MainPage() {
 
   const filteredTasks = sortedTasks.filter(task => {
     const taskDate = new Date(task.taskDate);
-    console.log(today);
-    console.log(futureDate);
     return taskDate >= today && taskDate < futureDate && !['cancelled', 'completed'].includes(task.status.toLowerCase());
   });
 
@@ -76,7 +74,6 @@ function MainPage() {
     <Layout>
       <div className="main-page">
         <div className="welcome-message">
-        {console.log('Translated welcomeMessage:', t('welcomeMessage'))}
           {t('welcomeMessage')} <span className="name">{user}</span>
         </div>
 
@@ -92,9 +89,10 @@ function MainPage() {
               <tr>
                 <th>{t('taskName')}</th>
                 <th>{t('dueDate')}</th>
+                <th>{t('place')}</th>
                 <th>{t('status')} </th>
-                <th>{t('budget')}</th>
                 <th>{t('eventName')} </th>
+                <th>{t('budget')}</th>
               </tr>
             </thead>
             </table>
@@ -105,9 +103,10 @@ function MainPage() {
                 <tr key={task.taskId}>
                   <td>{task.taskName}</td>
                   <td>{formatISODate(task.taskDate)}</td>
+                  <td>{task.place}</td>
                   <td>{t(getStatusLabel(task.status))}</td>
+                  <td>{task.eventName || t('Loading')}</td>
                   <td>{task.budget}{getCurrencyLabel(task.currency)}</td>
-                  <td>{task.eventName || 'Loading...'}</td>
                 </tr>
               ))}
             </tbody>

@@ -24,8 +24,11 @@ function GetTasks() {
 
   const fetchData = async () => {
     try {
-      const eventsData = await fetchTasksAPI();
-      setEvents(eventsData);
+      const taskData= await fetchTasksAPI();
+      const sortedTasks = taskData.sort((a, b) => {
+        return new Date(b.createdDate) - new Date(a.createdDate);
+      });
+      setEvents(sortedTasks);
     } catch (error) {
       console.error('Error fetching data:', error);
     }

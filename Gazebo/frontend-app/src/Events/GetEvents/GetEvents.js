@@ -25,7 +25,10 @@ function GetEvents() {
   const fetchData = async () => {
     try {
       const eventsData = await getAdminEventByUserIdAPI();
-      setEvents(eventsData);
+      const sortedEvents = eventsData.sort((a, b) => {
+        return new Date(b.createdDate) - new Date(a.createdDate);
+      });
+      setEvents(sortedEvents);
     } catch (error) {
       console.log(error);
       console.error('Error fetching data:', error);
@@ -85,7 +88,7 @@ function GetEvents() {
                 )}
               </th>
               <th onClick={() => handleSort('eventDate')}>
-              {t('dueDate')} {sortConfig.key === 'eventDate' && (
+              {t('eventDate')} {sortConfig.key === 'eventDate' && (
                   sortConfig.direction === 'asc' ? '▼' : '▲'
                 )}
               </th>
