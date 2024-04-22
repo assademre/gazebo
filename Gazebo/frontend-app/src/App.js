@@ -32,7 +32,7 @@ function App() {
           <Route path="/signup" element={<SignupPage setSignupSuccessMessage={setSignupSuccessMessage} />} />
           <Route path="/login" element={<Login onLoginSuccess={handleLoginSuccess} />} />
           <Route path="/logout" element={<Logout />} />
-          <Route path="/main-page" element={isLoggedIn ? <MainPage /> : <Login onLoginSuccess={handleLoginSuccess} />} />
+          <Route path="/main-page" element={<MainPage />} />
           <Route path="/create-event" element={<CreateEvent />} />
           <Route path="/create-task" element={<CreateTask />} />
           <Route path="/get-events" element={<GetEvents />} />

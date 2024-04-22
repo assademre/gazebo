@@ -10,7 +10,7 @@ import Layout from "../NavigationBar/Layout";
 function MainPage() {
   const { t } = useTranslation();
   const [events, setEvents] = useState([]);
-  const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
+  const [sortConfig, setSortConfig] = useState({ key: 'taskDate', direction: 'asc' });
   const [user, setUsername] = useState("");
 
   useEffect(() => {
@@ -39,14 +39,6 @@ function MainPage() {
     return currencySymbol ? currencySymbol.label : "currency";
   };
 
-  const handleSort = (key) => {
-    let direction = 'asc';
-    if (sortConfig.key === key && sortConfig.direction === 'asc') {
-      direction = 'desc';
-    }
-    setSortConfig({ key, direction });
-  };
-
   const formatISODate = (dateString) => {
     const dateObj = new Date(dateString);
     const day = dateObj.getDate().toString().padStart(2, '0');
@@ -57,14 +49,16 @@ function MainPage() {
 
   const today = new Date();
   const futureDate = new Date();
-  futureDate.setDate(today.getDate() + 5);
+  futureDate.setDate(today.getDate() + 7);
 
   const sortedTasks = [...events].sort((a, b) => {
-    if (sortConfig.key && a[sortConfig.key] && b[sortConfig.key]) {
-      if (a[sortConfig.key] < b[sortConfig.key]) {
+    if (sortConfig.key === 'taskDate') {
+      const dateA = new Date(a.taskDate);
+      const dateB = new Date(b.taskDate);
+      if (dateA < dateB) {
         return sortConfig.direction === 'asc' ? -1 : 1;
       }
-      if (a[sortConfig.key] > b[sortConfig.key]) {
+      if (dateA > dateB) {
         return sortConfig.direction === 'asc' ? 1 : -1;
       }
     }
@@ -73,7 +67,9 @@ function MainPage() {
 
   const filteredTasks = sortedTasks.filter(task => {
     const taskDate = new Date(task.taskDate);
-    return taskDate < futureDate && !['cancelled', 'completed'].includes(task.status.toLowerCase());
+    console.log(today);
+    console.log(futureDate);
+    return taskDate >= today && taskDate < futureDate && !['cancelled', 'completed'].includes(task.status.toLowerCase());
   });
 
   return (
@@ -94,22 +90,10 @@ function MainPage() {
           <table className="main-page-table">
             <thead>
               <tr>
-                <th onClick={() => handleSort('taskName')}>
-                  {t('taskName')} {sortConfig.key === 'taskName' && (
-                    sortConfig.direction === 'asc' ? '▼' : '▲'
-                  )}
-                </th>
-                <th onClick={() => handleSort('taskDate')}>
-                  {t('dueDate')} {sortConfig.key === 'taskDate' && (
-                    sortConfig.direction === 'asc' ? '▼' : '▲'
-                  )}
-                </th>
+                <th>{t('taskName')}</th>
+                <th>{t('dueDate')}</th>
                 <th>{t('status')} </th>
-                <th onClick={() => handleSort('budget')}>
-                {t('budget')}  {sortConfig.key === 'budget' && (
-                    sortConfig.direction === 'asc' ? '▼' : '▲'
-                  )}
-                </th>
+                <th>{t('budget')}</th>
                 <th>{t('eventName')} </th>
               </tr>
             </thead>
