@@ -6,6 +6,7 @@
         InProgress = 2,
         Completed = 3,
         Cancelled = 4,
-        Deleted = 5
+        Deleted = 5,
+        Delayed = 6,
     }
 }
