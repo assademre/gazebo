@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from 'react-i18next';
-import { createTaskAPI, getEventByUserIdAPI, getUsersAPI } from "./../../api";
+import { createTaskAPI, getEventByUserIdAPI, getUsersAPI, setUserAsAdminAPI } from "./../../api";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./CreateTask.css";
@@ -25,6 +25,7 @@ function CreateTask() {
   const [taskOwner, setTaskOwner] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [isMeClicked, setIsMeClicked] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -85,12 +86,17 @@ function CreateTask() {
       status: status,
       createdDate: new Date().toISOString(),
       updatedDate: new Date().toISOString(),
-      taskDate: taskDate.toISOString(),
+      taskDate: taskDate.toISOString()
     };
 
     try {
       const result = await createTaskAPI(data);
       alert(result);
+      console.log("ownerId", ownerId)
+      if (isAdmin) {
+        console.log("isAdmin", isAdmin)
+        await setUserAsAdminAPI(eventId, ownerId);
+      }
       navigate('/get-tasks');
     } catch (error) {
       alert(error);
@@ -148,6 +154,15 @@ function CreateTask() {
             ))}
           </div>
         )}
+
+        <label className="checkbox-container">
+          <input
+            type="checkbox"
+            checked={isAdmin}
+            onChange={() => setIsAdmin(!isAdmin)}
+          /> 
+          <span>{t('setUserAsAdmin')}</span>
+        </label>
 
         <div className="label">{t('event')}</div>
         <select className="select-field" value={eventId} onChange={(e) => setEventId(e.target.value)}>

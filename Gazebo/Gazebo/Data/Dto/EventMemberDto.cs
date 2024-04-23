@@ -1,8 +1,7 @@
-﻿namespace EventOrganizationApp.Models
+﻿namespace Gazebo.Data.Dto
 {
-    public class EventMember
+    public class EventMemberDto
     {
-        public int EventMembersId { get; set; }
         public int EventId { get; set; }
         public int UserId { get; set; }
         public bool IsAdmin { get; set; }

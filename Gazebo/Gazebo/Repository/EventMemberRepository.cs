@@ -83,6 +83,28 @@ namespace Gazebo.Repository
             return userEvents;
         }
 
+        public async Task<bool> SetUserAsAdmin(int eventId, int userId)
+        {
+            if (eventId == 0 || userId == 0)
+            {
+                return false;
+            }
+
+            var userEvent = await _context.EventMembers
+                .Where(x => x.EventId == eventId && x.UserId == userId)
+                .FirstOrDefaultAsync();
+
+            if (userEvent == null)
+            {
+                return false;
+            }
+
+            userEvent.IsAdmin = true;
+
+            _context.Update(userEvent);
+
+            return await SaveChanges();
+        }
 
         public async Task<bool> SaveChanges()
         {

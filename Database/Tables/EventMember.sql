@@ -5,5 +5,7 @@ CREATE TABLE EventMembers (
 	isAdmin BIT
 
 	CONSTRAINT FK_EventMembers_EventId FOREIGN KEY (eventId) REFERENCES Events(eventId),
-	CONSTRAINT FK_EventMembers_UserId FOREIGN KEY (userId) REFERENCES UserAccess(userId)
+	CONSTRAINT FK_EventMembers_UserId FOREIGN KEY (userId) REFERENCES UserAccess(userId),
+
+	CONSTRAINT UQ_EventMembers_eventId_userId UNIQUE (eventId, userId)
 )

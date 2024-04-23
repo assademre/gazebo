@@ -56,14 +56,23 @@ export const getUsernameAPI = async () => {
     }
   };
 
-  export const getUsersAPI = async () => {
-    try {
-        const response = await api.get(`/api/user/user-list`);
-        return response.data;
-    } catch (error) {
-        throw error.response.data || error.message;
-    }
-  };
+export const getUsersAPI = async () => {
+  try {
+      const response = await api.get(`/api/user/user-list`);
+      return response.data;
+  } catch (error) {
+      throw error.response.data || error.message;
+  }
+};
+
+export const setUserAsAdminAPI = async (eventId, userId) => {
+  try {
+      const response = await api.put(`/api/event/${eventId}/${userId}/admin`);
+      return response.data;
+  } catch (error) {
+      throw error.response.data || error.message;
+  }
+};
 
 export const getEventByEventIdAPI = async (eventId) => {
   try {

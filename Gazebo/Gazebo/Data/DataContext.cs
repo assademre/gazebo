@@ -55,7 +55,7 @@ namespace EventOrganizationApp.Data
                 .HasForeignKey(et => et.OwnerId);
 
             builder.Entity<EventMember>()
-                .HasKey(c => c.UserId);
+                .HasKey(c => c.EventMembersId);
 
             builder.Entity<Notification>()
                 .HasKey(c => c.NotificationId);

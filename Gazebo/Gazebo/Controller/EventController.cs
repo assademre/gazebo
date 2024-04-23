@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EventOrganizationApp.Data.Dto;
 using EventOrganizationApp.Models;
+using Gazebo.Data.Dto;
 using Gazebo.Interfaces;
 using Gazebo.Repository;
 using Microsoft.AspNetCore.Authorization;
@@ -205,6 +206,32 @@ namespace EventOrganizationApp.Controller
             }
 
             return Ok("Succesfully updated!");
+        }
+
+        [HttpPut("{eventId}/{ownerId}/admin")]
+        [Authorize]
+        [ProducesResponseType(200, Type = typeof(User))]
+        public async Task<IActionResult> SetUserAsAdminAsync([FromRoute] int eventId, [FromRoute] int ownerId)
+        {
+            var isOwnerAdmin = await _eventMemberRepository.IsUserAdmin(eventId, ownerId);
+
+            if (isOwnerAdmin)
+            {
+                return Ok(isOwnerAdmin);
+            }
+
+            var userId = GetUser();
+
+            var isUserAdmin = await _eventMemberRepository.IsUserAdmin(eventId, userId);
+
+            if (!isUserAdmin)
+            {
+                return BadRequest("User does not have a permission for this action.");
+            }
+
+            var response = await _eventMemberRepository.SetUserAsAdmin(eventId, ownerId);
+
+            return Ok(response);
         }
 
         [HttpDelete("{eventId:int}")]
