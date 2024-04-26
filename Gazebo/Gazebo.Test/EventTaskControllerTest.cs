@@ -40,7 +40,7 @@ namespace Gazebo.Test
             _eventTaskRepositoryMock.Setup(repo => repo.GetAllUserTasks(It.IsAny<int>())).ReturnsAsync(new List<EventsTask>());
             _eventTaskRepositoryMock.Setup(repo => repo.CreateTask(It.IsAny<EventsTask>())).ReturnsAsync(true);
             _eventTaskRepositoryMock.Setup(repo => repo.GetAllUserTasks(It.IsAny<int>()))
-                            .ReturnsAsync(new List<EventsTask> { new EventsTask { /* populate with necessary properties */ } });
+                            .ReturnsAsync(new List<EventsTask> { new EventsTask() }); // TODO: send EventTask
 
             _eventRepositoryMock.Setup(repo => repo.GetEventByEventId(It.IsAny<int>())).ReturnsAsync(new Event());
 

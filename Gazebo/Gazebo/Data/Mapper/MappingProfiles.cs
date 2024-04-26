@@ -36,8 +36,8 @@ namespace EventOrganizationApp.Data.Dto.Mapper
                 .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId))
                 .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.Username));
 
-            CreateMap<NotificationDto, Notification>();
-            CreateMap<Notification, NotificationDto>();
+            CreateMap<Notification, Notification>();
+            CreateMap<Notification, Notification>();
         }
     }
 }
