@@ -30,10 +30,11 @@ namespace Gazebo.Test
             _eventRepositoryMock.Setup(repo => repo.GetEventIdByEventNameAndUserId(It.IsAny<int>(), It.IsAny<string>())).ReturnsAsync(1);
             _eventMemberRepositoryMock.Setup(repo => repo.AddEventMember(It.IsAny<EventMember>())).ReturnsAsync(true);
 
-            _controller = new EventController(_eventRepositoryMock.Object, _mapperMock.Object, _eventMemberRepositoryMock.Object);
+            _controller = new EventController(_eventRepositoryMock.Object,
+                _eventMemberRepositoryMock.Object,
+                _mapperMock.Object);
 
             SetupHttpContext();
-
         }
 
         private void SetupHttpContext()
@@ -55,26 +56,34 @@ namespace Gazebo.Test
         [Test]
         public async Task GetEventUserCreated_ReturnsOkResult()
         {
+            // Arrange
             var events = GetTestEvents();
             var mappedEvents = MapEventsToDto(events);
 
             _eventRepositoryMock.Setup(repo => repo.GetEventsUserCreated(TestUserId)).ReturnsAsync(events);
             _mapperMock.Setup(m => m.Map<IList<EventDto>>(events)).Returns(mappedEvents);
+
+            // Act
             var result = await _controller.GetEventUserCreated();
 
+            // Assert
             Assert.IsInstanceOf<OkObjectResult>(result);
         }
 
         [Test]
         public async Task CreateEvent_ReturnsOkResult()
         {
+            // Arrange
             var newEvent = GetTestEventDto();
             var mappedEvent = MapEventDtoToEvent(newEvent);
 
             _mapperMock.Setup(m => m.Map<Event>(newEvent)).Returns(mappedEvent);
             _eventRepositoryMock.Setup(repo => repo.CreateEvent(mappedEvent)).ReturnsAsync(true);
+
+            // Act
             var result = await _controller.CreateEvent(newEvent);
 
+            // Assert
             Assert.IsInstanceOf<OkObjectResult>(result);
         }
 

@@ -18,7 +18,7 @@ namespace EventOrganizationApp.Controller
         private readonly IEventMemberRepository _eventMemberRepository;
         public IMapper _mapper;
 
-        public EventController(IEventRepository eventRepository, IMapper mapper, IEventMemberRepository eventMemberRepository)
+        public EventController(IEventRepository eventRepository, IEventMemberRepository eventMemberRepository, IMapper mapper)
         {
             _eventRepository = eventRepository;
             _mapper = mapper;
