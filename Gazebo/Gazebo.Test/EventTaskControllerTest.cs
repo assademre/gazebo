@@ -8,8 +8,6 @@ using Gazebo.Interfaces;
 using EventOrganizationApp.Models.Enums;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
-using Gazebo.Repository;
-using System.Threading.Tasks;
 
 namespace Gazebo.Test
 {

@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
-using EventOrganizationApp.Data.Dto;
 using EventOrganizationApp.Models;
-using Gazebo.Repository;
 using Gazebo.Data.Dto;
 using Gazebo.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -55,7 +53,8 @@ namespace EventOrganizationApp.Controller
         [ProducesResponseType(200, Type = typeof(User))]
         public IActionResult GetUsersName()
         {
-            var users = _mapper.Map<IList<UserDto>>(_profileRepository.GetUsersName());
+            var userProfile = _profileRepository.GetUsersName();
+            var users = _mapper.Map<IList<UserDto>>(userProfile);   
 
             if (users.Count() == 0)
             {

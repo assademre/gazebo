@@ -15,7 +15,6 @@ namespace Gazebo.Test
     {
         private NotificationController _controller;
         private Mock<INotificationRepository> _notificationRepositoryMock;
-        private Mock<IMapper> _mapperMock;
         private const int TestUserId = 1;
 
         [SetUp]
