@@ -9,7 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace EventOrganizationApp.Controller
 {
-    [Route("api/event-task")]
+    [Route("api/eventtask")]
     [ApiController]
     public class EventTaskController : ControllerBase
     {
@@ -36,7 +36,7 @@ namespace EventOrganizationApp.Controller
         }
 
 
-        [HttpGet("all-tasks")]
+        [HttpGet("alltasks")]
         [Authorize]
         [ProducesResponseType(200, Type = typeof(IList<Event>))]
         [ProducesResponseType(400)]
@@ -71,7 +71,7 @@ namespace EventOrganizationApp.Controller
             return Ok(mappedList);
         }
 
-        [HttpGet("eventid={eventId:int}/event-task")]
+        [HttpGet("{eventId:int}/eventtask")]
         [Authorize]
         [ProducesResponseType(200, Type = typeof(IList<EventTaskDto>))]
         [ProducesResponseType(400)]

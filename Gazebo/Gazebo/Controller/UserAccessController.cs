@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Gazebo.Controller
 {
-    [Route("api/user-access")]
+    [Route("api/useraccess")]
     [ApiController]
     public class UserAccessController : ControllerBase
     {
@@ -20,7 +20,7 @@ namespace Gazebo.Controller
             _tokenGenerator = tokenGenerator;
         }
 
-        [HttpGet("username-availability/{username}")]
+        [HttpGet("usernameavailability/{username}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]

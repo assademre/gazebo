@@ -25,7 +25,7 @@ namespace EventOrganizationApp.Controller
             _eventMemberRepository = eventMemberRepository;
         }
 
-        [HttpGet("created-events")]
+        [HttpGet("createdevents")]
         [Authorize]
         [ProducesResponseType(200, Type = typeof(IList<Event>))]
         [ProducesResponseType(400)]
@@ -54,7 +54,7 @@ namespace EventOrganizationApp.Controller
             return Ok(mappedEvents);
         }
 
-        [HttpGet("my-events")]
+        [HttpGet("myevents")]
         [Authorize]
         [ProducesResponseType(200, Type = typeof(IList<Event>))]
         [ProducesResponseType(400)]

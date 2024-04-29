@@ -48,7 +48,7 @@ namespace EventOrganizationApp.Controller
         }
 
 
-        [HttpGet("user-list")]
+        [HttpGet("userlist")]
         [Authorize]
         [ProducesResponseType(200, Type = typeof(User))]
         public IActionResult GetUsersName()
