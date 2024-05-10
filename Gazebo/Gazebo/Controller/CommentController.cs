@@ -24,11 +24,11 @@ namespace Gazebo.Controller
             _mapper = mapper;
         }
 
-        [HttpPost("comment")]
+        [HttpPost]
         [Authorize]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> AddComment([FromBody] CommentDto comment)
+        public async Task<IActionResult> AddComment([FromBody] Models.Comment comment)
         {
             var userId = GetUser();
 
@@ -52,11 +52,11 @@ namespace Gazebo.Controller
             return Ok(response);
         }
 
-        [HttpGet("comment/{postGroupTypeId:int}&{postGroupId:int}")]
+        [HttpGet("postgrouptypeid={postGroupTypeId:int}&postgroupid={postGroupId:int}&pagenumber={pageNumber}&pagesize={pageSize}")]
         [Authorize]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> GetCommentsByPostGroupId([FromRoute] int postGroupTypeId, [FromRoute] int postGroupId)
+        public async Task<IActionResult> GetCommentsByPostGroupId([FromRoute] int postGroupTypeId, [FromRoute] int postGroupId, int pageNumber, int pageSize)
         {
             var userId = GetUser();
             var eventId = 0;
@@ -93,7 +93,12 @@ namespace Gazebo.Controller
                 return BadRequest("User does not have the permission for this action");
             }
 
-            var commentList = _commentRepository.GetCommentsByPostGroupId(postGroupTypeId, postGroupId);
+            var commentList = await _commentRepository.GetCommentsByPostGroupId(postGroupTypeId, postGroupId, pageNumber, pageSize);
+
+            if (commentList == null)
+            {
+                return Ok(new List<CommentDto>());
+            }
 
             return Ok(commentList);
         }

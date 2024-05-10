@@ -1,55 +1,77 @@
 ﻿using AutoMapper;
 using EventOrganizationApp.Data;
-using EventOrganizationApp.Data.Dto;
-using EventOrganizationApp.Models;
 using Gazebo.Data.Dto;
 using Gazebo.Interfaces;
 using Gazebo.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
+using System.Runtime.InteropServices;
 
 namespace Gazebo.Repository
 {
     public class CommentRepository : ICommentRepository
     {
         private readonly DataContext _context;
+        private readonly IUserRepository _userRepository;
         public IMapper _mapper;
 
-        public CommentRepository(DataContext context, IMapper mapper)
+        public CommentRepository(DataContext context, IUserRepository userRepository,  IMapper mapper)
         {
             _context = context;
+            _userRepository = userRepository;
             _mapper = mapper;
         }
 
-        public async Task<bool> AddComment(CommentDto comment)
+        public async Task<bool> AddComment(Comment comment)
         {
             if (comment == null)
             {
                 return false;
             }
 
-            var mappedComment = _mapper.Map<Comment>(comment);
-
-            await _context.AddAsync(mappedComment);
+            await _context.AddAsync(comment);
 
             return await SaveChanges();
         }
 
-        public async Task<IList<CommentDto>> GetCommentsByPostGroupId(int postGroupTypeId, int postGroupId)
+        public async Task<IList<CommentDto>> GetCommentsByPostGroupId(int postGroupTypeId, int postGroupId, int pageNumber, int pageSize)
         {
             if (postGroupTypeId == 0 || postGroupId == 0)
             {
                 throw new ArgumentException($"postGroupTypeId {postGroupTypeId} or postGroupId {postGroupId} is not correct");
             }
 
-            var commentList = await _context.Comments
-                .Where(x => x.PostGroupId == postGroupId &&  x.PostGroupTypeId == postGroupTypeId)
+            var query = _context.Comments
+                .Where(x => x.PostGroupId == postGroupId && x.PostGroupTypeId == postGroupTypeId)
+                .OrderByDescending(x => x.CommentDate);
+
+            var totalComments = await query.CountAsync();
+            var totalPages = (int)Math.Ceiling((double)totalComments / pageSize);
+
+            var commentList = await query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
                 .ToListAsync();
 
-            var mappedComment = _mapper.Map<IList<CommentDto>>(commentList);
+            if (commentList == null || !commentList.Any())
+            {
+                return new List<CommentDto>();
+            }
 
-            return mappedComment;
+            var commentDtoList = new List<CommentDto>();
+
+            foreach (var comment in commentList)
+            {
+                var commentDto = _mapper.Map<CommentDto>(comment);
+                var userId = comment.CommentOwnerId;
+                var username = _userRepository.GetUserInfo(userId).Username;
+                commentDto.CommentOwnerName = username;
+                commentDtoList.Add(commentDto);
+            }
+
+            return commentDtoList;
         }
+
+
 
         private async Task<bool> SaveChanges()
         {

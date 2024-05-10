@@ -147,6 +147,26 @@ export const getNotificationsAPI = async () => {
   }
 };
 
+// Comments API Calls
+
+export const addCommentAPI = async (comment) => {
+  try {
+    const response = await api.post(`/api/comment`, comment);
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response.data.message || 'Failed while adding the comment');
+  }
+};
+
+export const getCommentsAPI = async (postGroupTypeId, postGroupId, pageNumber, pageSize) => {
+  try {
+    const response = await api.get(`/api/comment/postgrouptypeid=${postGroupTypeId}&postgroupid=${postGroupId}&pagenumber=${pageNumber}&pagesize=${pageSize}`);
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response.data.message || 'Failed while getting comments');
+  }
+};
+
 // User Access API Calls
 export const checkUsernameAvailabilityAPI = async (username) => {
   try {

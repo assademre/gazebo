@@ -5,6 +5,7 @@
     "budget": "Budżet",
     "cancel": "Anuluj",
     "cancelled": "Anulowane",
+    "comments": "Komentarze",
     "completed": "Zakończone",
     "createANewEvent": "Utwórz nowe wydarzenie",
     "createANewTask": "Utwórz nowe zadanie",
@@ -36,6 +37,7 @@
     "searchTaskOwner": "Wybierz właściciela zadania",
     "selectCurrency": "Wybierz walutę",
     "selectEvent": "Wybierz wydarzenie",
+    "send": "Wyślij",
     "setUserAsAdmin": "Ustaw Użytkownika jako Administratora",
     "status": "Status",
     "task": "Zadanie",
@@ -46,6 +48,7 @@
     "today": "Dziś",
     "turkish": "Turecki",
     "yesterday": "Wczoraj",
-    "welcomeMessage": "Witaj"
+    "welcomeMessage": "Witaj",
+    "writeComment": "Napisz komentarz"
   }
   

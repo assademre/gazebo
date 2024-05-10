@@ -5,6 +5,7 @@
     "budget": "Bütçe",
     "cancel": "İptal",
     "cancelled": "İptal edildi",
+    "comments": "Yorumlar",
     "completed": "Tamamlandı",
     "createANewEvent": "Yeni bir etkinlik oluştur",
     "createANewTask": "Yeni bir görev oluştur",
@@ -36,6 +37,7 @@
     "searchTaskOwner": "Görev Sahibi Bul",
     "selectCurrency": "Para Birimi Seç",
     "selectEvent": "Etkinlik Seç",
+    "send": "Gönder",
     "setUserAsAdmin": "Kullanıcıyı Admin Olarak Ayarla",
     "status": "Durum",
     "task": "Görev",
@@ -46,6 +48,7 @@
     "today": "Bugün",
     "turkish": "Türkçe",
     "yesterday": "Dün",
-    "welcomeMessage": "Hoş Geldin"
+    "welcomeMessage": "Hoş Geldin",
+    "writeComment": "Yorum yaz"
   }
   

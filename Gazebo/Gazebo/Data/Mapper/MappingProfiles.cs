@@ -38,11 +38,10 @@ namespace EventOrganizationApp.Data.Dto.Mapper
                 .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.Username));
 
             CreateMap<Comment, CommentDto>()
-                .ForMember(dest => dest.PostGroupTypeId, opt => opt.MapFrom(src => (int)src.PostGroupTypeId));
+                .ForMember(dest => dest.CommentOwnerName, opt => opt.Ignore());
 
             CreateMap<CommentDto, Comment>()
-                .ForMember(dest => dest.PostGroupTypeId, opt => opt.MapFrom(src => (PostGroup)src.PostGroupTypeId));
-
+                .ForMember(dest => dest.CommentOwnerId, opt => opt.Ignore());
 
         }
     }

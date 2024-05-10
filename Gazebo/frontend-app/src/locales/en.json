@@ -5,6 +5,7 @@
     "budget": "Budget",
     "cancel": "Cancel",
     "cancelled": "Cancelled",
+    "comments": "Comments",
     "completed": "Completed",
     "createANewEvent": "Create a new event",
     "createANewTask": "Create a new task",
@@ -36,6 +37,7 @@
     "searchTaskOwner": "Search Task Owner",
     "selectCurrency": "Select Currency",
     "selectEvent": "Select Event",
+    "send": "Send",
     "setUserAsAdmin": "Set User As Admin",
     "status": "Status",
     "task": "Task",
@@ -46,6 +48,7 @@
     "today": "Today",
     "turkish": "Turkish",
     "yesterday": "Yesterday",
-    "welcomeMessage": "Welcome"
+    "welcomeMessage": "Welcome",
+    "writeComment": "Write Comment"
   }
   
