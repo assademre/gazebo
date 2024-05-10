@@ -1,6 +1,5 @@
 ﻿using EventOrganizationApp.Data;
 using EventOrganizationApp.Models;
-using EventOrganizationApp.Models.Enums;
 using Gazebo.Interfaces;
 using Microsoft.EntityFrameworkCore;
 

@@ -3,6 +3,7 @@ using EventOrganizationApp.Models;
 using EventOrganizationApp.Models.Enums;
 using Gazebo.Data.Dto;
 using Gazebo.Models;
+using Gazebo.Models.Enums;
 
 namespace EventOrganizationApp.Data.Dto.Mapper
 {
@@ -35,6 +36,14 @@ namespace EventOrganizationApp.Data.Dto.Mapper
             CreateMap<UserDto, User>()
                 .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId))
                 .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.Username));
+
+            CreateMap<Comment, CommentDto>()
+                .ForMember(dest => dest.PostGroupTypeId, opt => opt.MapFrom(src => (int)src.PostGroupTypeId));
+
+            CreateMap<CommentDto, Comment>()
+                .ForMember(dest => dest.PostGroupTypeId, opt => opt.MapFrom(src => (PostGroup)src.PostGroupTypeId));
+
+
         }
     }
 }

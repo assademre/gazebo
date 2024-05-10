@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
 using EventOrganizationApp.Data.Dto;
 using EventOrganizationApp.Models;
-using Gazebo.Data.Dto;
 using Gazebo.Interfaces;
-using Gazebo.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -21,8 +19,8 @@ namespace EventOrganizationApp.Controller
         public EventController(IEventRepository eventRepository, IEventMemberRepository eventMemberRepository, IMapper mapper)
         {
             _eventRepository = eventRepository;
-            _mapper = mapper;
             _eventMemberRepository = eventMemberRepository;
+            _mapper = mapper;
         }
 
         [HttpGet("createdevents")]
