@@ -83,6 +83,21 @@ namespace Gazebo.Repository
             return userEvents;
         }
 
+        public async Task<List<int>> GetMemberListForAnEvent(int eventId)
+        {
+            if (eventId == 0)
+            {
+                return new List<int>();
+            }
+
+            var memberList = await _context.EventMembers
+                .Where(x => x.EventId == eventId)
+                .Select(x => x.UserId)
+                .ToListAsync();
+
+            return memberList;
+        }
+
         public async Task<bool> SetUserAsAdmin(int eventId, int userId)
         {
             if (eventId == 0 || userId == 0)

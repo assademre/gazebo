@@ -12,13 +12,20 @@ namespace Gazebo.Controller
     public class CommentController : ControllerBase
     {
         private readonly ICommentRepository _commentRepository;
+        private readonly INotificationRepository _notificationRepository;
         private readonly IEventTaskRepository _eventTaskRepository;
         private readonly IEventMemberRepository _eventMemberRepository;
         public IMapper _mapper;
 
-        public CommentController(ICommentRepository commentRepository, IEventTaskRepository eventTaskRepository, IEventMemberRepository eventMemberRepository,  IMapper mapper)
+        public CommentController(
+            ICommentRepository commentRepository,
+            INotificationRepository notificationRepository,
+            IEventTaskRepository eventTaskRepository,
+            IEventMemberRepository eventMemberRepository,
+            IMapper mapper)
         {
             _commentRepository = commentRepository;
+            _notificationRepository = notificationRepository;
             _eventTaskRepository = eventTaskRepository;
             _eventMemberRepository = eventMemberRepository;
             _mapper = mapper;
@@ -47,6 +54,13 @@ namespace Gazebo.Controller
             if (!response)
             {
                 return BadRequest("Encounter an error while adding the comment");
+            }
+
+            var notificationResponse = await _notificationRepository.CreateNewCommentNotifications(userId, comment.PostGroupId, comment.PostGroupTypeId);
+
+            if (!notificationResponse)
+            {
+                return BadRequest("Encounter an error while creating notifications");
             }
 
             return Ok(response);

@@ -1,11 +1,9 @@
-﻿
-using EventOrganizationApp.Data;
+﻿using EventOrganizationApp.Data;
 using EventOrganizationApp.Models;
 using Gazebo.Interfaces;
 using Gazebo.Models;
 using Gazebo.Security;
 using Microsoft.EntityFrameworkCore;
-using System.Web.Helpers;
 
 namespace Gazebo.Repository
 {
