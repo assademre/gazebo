@@ -18,7 +18,7 @@ function Event() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchData(pageNumber, pageSize);
+    fetchData();
   }, [pageNumber, pageSize]);
 
   const fetchData = async () => {
@@ -54,12 +54,19 @@ function Event() {
           commentDate: new Date().toISOString()
         };
         await addCommentAPI(commentData);
-        const updatedComments = [...comments, commentData];
-        setComments(updatedComments);
+        const updatedComments = await getCommentsAPI(1, eventId, pageNumber, pageSize);
+        setComments(updatedComments || []);
         setNewComment('');
       } catch (error) {
         console.error('Error adding comment:', error);
       }
+    }
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleAddComment();
     }
   };
 
@@ -93,8 +100,28 @@ function Event() {
               <Link to={`/edit-event/${eventId}`}>
                 <button>{t('edit')}</button>
               </Link>
-          <button onClick={() => navigate(-1)}>{t('cancel')}</button>
+              <button onClick={() => navigate(-1)}>{t('cancel')}</button>
+            </div>
           </div>
+          <div className="comments-section">
+            <h3>{t('comments')}</h3>
+            <div className="comments-list">
+              {comments.map((comment) => (
+                <div key={comment.commentId} className="comment-item">
+                  <p><strong>{comment.commentOwnerName}</strong> {format(new Date(comment.commentDate), 'dd-MM-yyyy HH:mm')}</p>
+                  <p>{comment.commentText}</p>
+                </div>
+              ))}
+            </div>
+            <div className="add-comment">
+              <textarea 
+                value={newComment}
+                onChange={handleCommentChange}
+                onKeyPress={handleKeyPress}
+                placeholder={t('addYourComment')}
+              />
+              <button onClick={handleAddComment}>{t('addComment')}</button>
+            </div>
           </div>
         </div>
       </div>

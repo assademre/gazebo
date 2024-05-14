@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { getTaskByTaskIdAPI } from '../../api';
+import { getTaskByTaskIdAPI, addCommentAPI, getCommentsAPI } from '../../api';
 import statusOptions from '../../helpers/statusOptions';
 import { format } from 'date-fns';
 import "./Task.css";
@@ -11,24 +11,62 @@ function Task() {
   const { t } = useTranslation();
   const { taskId } = useParams();
   const [task, setTask] = useState(null);
+  const [comments, setComments] = useState([]);
+  const [newComment, setNewComment] = useState('');
+  const [pageNumber, setPageNumber] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [pageNumber, pageSize]);
+
+  const fetchData = async () => {
+    try {
+      const taskData = await getTaskByTaskIdAPI(taskId);
+      setTask(taskData);
+      const commentsData = await getCommentsAPI(2, taskId, pageNumber, pageSize);
+      setComments(commentsData || []);
+    } catch (error) {
+      console.error('Error fetching task data:', error);
+      navigate('/get-tasks');
+    }
+  };
 
   const getStatusLabel = (statusValue) => {
     const statusOption = statusOptions.find(option => option.value === statusValue);
     return statusOption ? statusOption.label : 'Unknown';
   };
 
-  const fetchData = async () => {
-    try {
-      const taskData = await getTaskByTaskIdAPI(taskId);
-      setTask(taskData);
-    } catch (error) {
-      console.error('Error fetching task data:', error);
-      navigate('/get-tasks');
+  const handleCommentChange = (e) => {
+    setNewComment(e.target.value);
+  };
+
+  const handleAddComment = async () => {
+    if (newComment.trim() !== '') {
+      try {
+        const userId = localStorage.getItem('userId');
+        const commentData = {
+          postGroupTypeId: 2,
+          postGroupId: taskId,
+          commentOwnerId: userId,
+          commentText: newComment,
+          commentDate: new Date().toISOString()
+        };
+        await addCommentAPI(commentData);
+        const updatedComments = await getCommentsAPI(2, taskId, pageNumber, pageSize);
+        setComments(updatedComments || []);
+        setNewComment('');
+      } catch (error) {
+        console.error('Error adding comment:', error);
+      }
+    }
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleAddComment();
     }
   };
 
@@ -62,6 +100,26 @@ function Task() {
               <button>{t('edit')}</button>
             </Link>
             <button onClick={() => navigate(-1)}>{t('cancel')}</button>
+          </div>
+        </div>
+        <div className="comments-section">
+          <h3>{t('comments')}</h3>
+          <div className="comments-list">
+            {comments.map((comment) => (
+              <div key={comment.commentId} className="comment-item">
+              <p><strong>{comment.commentOwnerName}</strong> {format(new Date(comment.commentDate), 'dd-MM-yyyy HH:mm')}</p>
+              <p>{comment.commentText}</p>
+            </div>
+            ))}
+          </div>
+          <div className="add-comment">
+            <textarea 
+              value={newComment}
+              onChange={handleCommentChange}
+              onKeyPress={handleKeyPress}
+              placeholder={t('addYourComment')}
+            />
+            <button onClick={handleAddComment}>{t('addComment')}</button>
           </div>
         </div>
       </div>
