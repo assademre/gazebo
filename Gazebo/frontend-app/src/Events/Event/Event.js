@@ -14,19 +14,21 @@ function Event() {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
   const [pageNumber, setPageNumber] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize] = useState(10);
+  const [totalPages, setTotalPages] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchData();
-  }, [pageNumber, pageSize]);
+  }, [pageNumber]);
 
   const fetchData = async () => {
     try {
       const eventData = await getEventByEventIdAPI(eventId);
       setEvent(eventData);
-      const commentsData = await getCommentsAPI(1, eventId, pageNumber, pageSize);
+      const { comments: commentsData, totalPages: totalPagesData } = await getCommentsAPI(1, eventId, pageNumber, pageSize);
       setComments(commentsData || []);
+      setTotalPages(totalPagesData);
     } catch (error) {
       console.error('Error fetching event data:', error);
       navigate('/get-events');
@@ -54,8 +56,7 @@ function Event() {
           commentDate: new Date().toISOString()
         };
         await addCommentAPI(commentData);
-        const updatedComments = await getCommentsAPI(1, eventId, pageNumber, pageSize);
-        setComments(updatedComments || []);
+        fetchData();
         setNewComment('');
       } catch (error) {
         console.error('Error adding comment:', error);
@@ -67,6 +68,18 @@ function Event() {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleAddComment();
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (pageNumber > 1) {
+      setPageNumber(pageNumber - 1);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (pageNumber < totalPages) {
+      setPageNumber(pageNumber + 1);
     }
   };
 
@@ -112,6 +125,11 @@ function Event() {
                   <p>{comment.commentText}</p>
                 </div>
               ))}
+            </div>
+            <div className="pagination">
+              <button onClick={handlePreviousPage} disabled={pageNumber === 1}>&lt;</button>
+              <span>{`${t('page')} ${pageNumber} ${t('of')} ${totalPages}`}</span>
+              <button onClick={handleNextPage} disabled={pageNumber >= totalPages}>&gt;</button>
             </div>
             <div className="add-comment">
               <textarea 

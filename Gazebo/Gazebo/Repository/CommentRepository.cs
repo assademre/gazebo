@@ -33,7 +33,7 @@ namespace Gazebo.Repository
             return await SaveChanges();
         }
 
-        public async Task<IList<CommentDto>> GetCommentsByPostGroupId(int postGroupTypeId, int postGroupId, int pageNumber, int pageSize)
+        public async Task<PaginatedCommentsDto> GetCommentsByPostGroupId(int postGroupTypeId, int postGroupId, int pageNumber, int pageSize)
         {
             if (postGroupTypeId == 0 || postGroupId == 0)
             {
@@ -52,11 +52,6 @@ namespace Gazebo.Repository
                 .Take(pageSize)
                 .ToListAsync();
 
-            if (commentList == null || !commentList.Any())
-            {
-                return new List<CommentDto>();
-            }
-
             var commentDtoList = new List<CommentDto>();
 
             foreach (var comment in commentList)
@@ -68,7 +63,11 @@ namespace Gazebo.Repository
                 commentDtoList.Add(commentDto);
             }
 
-            return commentDtoList;
+            return new PaginatedCommentsDto
+            {
+                Comments = commentDtoList,
+                TotalPages = totalPages
+            };
         }
 
 

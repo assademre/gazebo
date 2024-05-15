@@ -7,6 +7,6 @@ namespace Gazebo.Interfaces
     {
         Task<bool> AddComment(Comment comment);
 
-        Task<IList<CommentDto>> GetCommentsByPostGroupId(int postGroupTypeId, int postGroupId, int pageNumber, int pageSize);
+        Task<PaginatedCommentsDto> GetCommentsByPostGroupId(int postGroupTypeId, int postGroupId, int pageNumber, int pageSize);
     }
 }
