@@ -21,6 +21,7 @@ const Login = ({ onLoginSuccess }) => {
             const userId = userData.data.userId;
             localStorage.setItem('token', token);
             localStorage.setItem('userId', userId);
+            localStorage.setItem('username', username);
             onLoginSuccess();
             navigate('/main-page');
         } catch (error) {

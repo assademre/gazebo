@@ -10,6 +10,8 @@ function Logout() {
       try {
         await logoutAPI();
         localStorage.removeItem('token');
+        localStorage.removeItem('userId');
+        localStorage.removeItem('username');
         navigate('/login');
       } catch (error) {
         console.error('Logout failed', error)
