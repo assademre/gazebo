@@ -88,6 +88,7 @@ const NavBar = () => {
                     <span className="username">{username}</span>
                     {showProfileDropdown && (
                         <div className="profile-dropdown">
+                            <Link to="/friendship">{t('friendship')}</Link>
                             <button onClick={handleLogout}>{t('logout')}</button>
                         </div>
                     )}

@@ -23,6 +23,7 @@ builder.Services.AddScoped<IUserAccessRepository, UserAccessRepository>();
 builder.Services.AddScoped<IEventMemberRepository, EventMemberRepository>();
 builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+builder.Services.AddScoped<IFriendshipRepository, FriendshipRepository>();
 builder.Services.AddScoped<IHashPassword, PasswordHash>();
 builder.Services.AddScoped<ITokenGenerator, TokenGenerator>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

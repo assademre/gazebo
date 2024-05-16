@@ -167,6 +167,53 @@ export const getCommentsAPI = async (postGroupTypeId, postGroupId, pageNumber, p
   }
 };
 
+// Friendship API Calls
+
+export const getFriendsAPI = async () => {
+  try {
+    const response = await api.get(`/api/friendship`);
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response.data.message || 'Failed while getting friends');
+  }
+};
+
+export const getFriendshipRequestAPI = async () => {
+  try {
+    const response = await api.get(`/api/friendship/friendshiprequests`);
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response.data.message || 'Failed while getting friendship requests');
+  }
+};
+
+export const sendFriendshipRequestAPI = async (receiverId) => {
+  try {
+    const response = await api.put(`/api/friendship/request/${receiverId}`);
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response.data.message || 'Failed while sending a friendship request');
+  }
+};
+
+export const respondFriendshipRequestAPI = async (senderId, responseId) => {
+  try {
+    const response = await api.put(`/api/friendship/response/${senderId}/${responseId}`);
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response.data.message || 'Failed while responding to a friendship request');
+  }
+};
+
+export const deleteFriendAPI = async (friendId) => {
+  try {
+    const response = await api.delete(`/api/friendship/${friendId}`);
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response.data.message || 'Failed while deleting a friend');
+  }
+};
+
 // User Access API Calls
 export const checkUsernameAvailabilityAPI = async (username) => {
   try {

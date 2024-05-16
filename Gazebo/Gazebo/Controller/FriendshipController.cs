@@ -35,12 +35,30 @@ namespace Gazebo.Controller
 
             return Ok(friendsList);
         }
-        
+
+        [HttpGet("friendshiprequests")]
+        [Authorize]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        public async Task<IActionResult> GetFriendshipRequests()
+        {
+            var userId = GetUser();
+
+            if (userId == 0)
+            {
+                return BadRequest("The user not found");
+            }
+
+            var friendshipRequestsList = await _friendshipRepository.FriendshipRequests(userId);
+
+            return Ok(friendshipRequestsList);
+        }
+
         [HttpPut("request/{receiverId}")]
         [Authorize]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> SendFriendshipRequest([FromRoute] int receiverId)
+        public async Task<IActionResult> SendFriendshipRequest([FromRoute] int receiverId) // must have POST
         {
             var userId = GetUser();
             if (userId == 0 || receiverId == 0)

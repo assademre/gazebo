@@ -60,6 +60,33 @@ namespace Gazebo.Repository
                 var userInfo = _userRepository.GetUserInfo(friendId);
                 friendshipListDto.Add(new FriendshipDto
                 {
+                    FriendId = userInfo.UserId,
+                    FriendName = userInfo.Username
+                });
+            }
+
+            return friendshipListDto;
+        }
+
+        public async Task<IList<FriendshipDto>> FriendshipRequests(int userId)
+        {
+            if (userId == 0)
+            {
+                return new List<FriendshipDto>();
+            }
+
+            var friendshipRequestList = await _context.Friendships
+                .Where(x => x.ReceiverId == userId && x.FriendshipStatusId == (int)FriendshipStatus.Pending)
+                .ToListAsync();
+
+            var friendshipListDto = new List<FriendshipDto>();
+
+            foreach (var request in friendshipRequestList)
+            {
+                var userInfo = _userRepository.GetUserInfo(request.SenderId);
+                friendshipListDto.Add(new FriendshipDto
+                {
+                    FriendId = userInfo.UserId,
                     FriendName = userInfo.Username
                 });
             }
