@@ -126,6 +126,42 @@ namespace Gazebo.Repository
             return await SaveChanges();
         }
 
+        public async Task<bool> CreateFriendshipNotification(int senderId, int receiverId)
+        {
+            var senderName = _userRepository.GetUserInfo(senderId).Username;
+
+            var notification = new Notification
+            {
+                UserId = receiverId,
+                Subject = "New Friendship Request",
+                Body = $"{senderName} sent you a friendship request",
+                CreatedDate = DateTime.UtcNow,
+                IsRead = false
+            };
+
+            await _context.Notifications.AddAsync(notification);
+
+            return await SaveChanges();
+        }
+
+        public async Task<bool> AcceptNotification(int senderId, int receiverId)
+        {
+            var receiverName = _userRepository.GetUserInfo(receiverId).Username;
+
+            var notification = new Notification
+            {
+                UserId = senderId,
+                Subject = "New Friendship Request",
+                Body = $"{receiverName} accepted your friendship request",
+                CreatedDate = DateTime.UtcNow,
+                IsRead = false
+            };
+
+            await _context.Notifications.AddAsync(notification);
+
+            return await SaveChanges();
+        }
+
         public async Task<bool> MakeNotificationRead(int userId, int notificationId)
         {
             if (userId == 0 || notificationId == 0)

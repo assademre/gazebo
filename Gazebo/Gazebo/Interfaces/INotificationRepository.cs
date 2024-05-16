@@ -8,6 +8,8 @@ namespace Gazebo.Interfaces
         Task<bool> CreateNewTaskNotification(int userId, string creatorName, string eventName);
         Task<bool> CreateNewCommentNotifications(int userId, int postGroupId, int postGroupTypeId);
         Task<List<Notification>> GetTaskNotifications(int userId);
+        Task<bool> CreateFriendshipNotification(int senderId, int receiverId);
+        Task<bool> AcceptNotification(int senderId, int receiverId);
         Task<bool> MakeNotificationRead(int userId, int notificationId);
     }
 }

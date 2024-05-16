@@ -4,7 +4,6 @@ using Gazebo.Data.Dto;
 using Gazebo.Interfaces;
 using Gazebo.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Runtime.InteropServices;
 
 namespace Gazebo.Repository
 {
@@ -69,8 +68,6 @@ namespace Gazebo.Repository
                 TotalPages = totalPages
             };
         }
-
-
 
         private async Task<bool> SaveChanges()
         {
