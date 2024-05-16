@@ -14,7 +14,8 @@ function Task() {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
   const [pageNumber, setPageNumber] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize] = useState(10); // Assuming the pageSize is constant
+  const [totalPages, setTotalPages] = useState(1);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -25,8 +26,9 @@ function Task() {
     try {
       const taskData = await getTaskByTaskIdAPI(taskId);
       setTask(taskData);
-      const commentsData = await getCommentsAPI(2, taskId, pageNumber, pageSize);
+      const { comments: commentsData, totalPages } = await getCommentsAPI(2, taskId, pageNumber, pageSize);
       setComments(commentsData || []);
+      setTotalPages(totalPages);
     } catch (error) {
       console.error('Error fetching task data:', error);
       navigate('/get-tasks');
@@ -54,8 +56,7 @@ function Task() {
           commentDate: new Date().toISOString()
         };
         await addCommentAPI(commentData);
-        const updatedComments = await getCommentsAPI(2, taskId, pageNumber, pageSize);
-        setComments(updatedComments || []);
+        fetchData();
         setNewComment('');
       } catch (error) {
         console.error('Error adding comment:', error);
@@ -68,6 +69,14 @@ function Task() {
       e.preventDefault();
       handleAddComment();
     }
+  };
+
+  const handlePreviousPage = () => {
+    setPageNumber(prevPageNumber => Math.max(prevPageNumber - 1, 1));
+  };
+
+  const handleNextPage = () => {
+    setPageNumber(prevPageNumber => Math.min(prevPageNumber + 1, totalPages));
   };
 
   if (!task) {
@@ -107,10 +116,15 @@ function Task() {
           <div className="comments-list">
             {comments.map((comment) => (
               <div key={comment.commentId} className="comment-item">
-              <p><strong>{comment.commentOwnerName}</strong> {format(new Date(comment.commentDate), 'dd-MM-yyyy HH:mm')}</p>
-              <p>{comment.commentText}</p>
-            </div>
+                <p><strong>{comment.commentOwnerName}</strong> {format(new Date(comment.commentDate), 'dd-MM-yyyy HH:mm')}</p>
+                <p>{comment.commentText}</p>
+              </div>
             ))}
+          </div>
+          <div className="pagination">
+            <button onClick={handlePreviousPage} disabled={pageNumber === 1}>&lt;</button>
+            <span>{t('page')} {pageNumber} {t('of')} {totalPages}</span>
+            <button onClick={handleNextPage} disabled={pageNumber === totalPages}>&gt;</button>
           </div>
           <div className="add-comment">
             <textarea 

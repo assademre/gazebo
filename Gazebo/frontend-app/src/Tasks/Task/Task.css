@@ -47,6 +47,27 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
+.pagination-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.pagination-buttons button {
+  background-color: #d7d7e9;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 0 10px;
+  font-size: 16px;
+}
+
+.pagination-buttons span {
+  font-size: 16px;
+}
+
 .add-comment {
   display: flex;
   flex-direction: column;
@@ -64,7 +85,7 @@
 
 .add-comment button {
   align-self: flex-end;
-  width: 120px; 
+  width: 120px;
   height: 50px;
-  font-size: 16px; 
+  font-size: 16px;
 }
