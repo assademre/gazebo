@@ -59,6 +59,7 @@ namespace Gazebo.Repository
                 var userId = comment.CommentOwnerId;
                 var username = _userRepository.GetUserInfo(userId).Username;
                 commentDto.CommentOwnerName = username;
+                commentDto.CommentOwnerId = userId;
                 commentDtoList.Add(commentDto);
             }
 

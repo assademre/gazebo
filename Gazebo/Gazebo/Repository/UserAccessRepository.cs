@@ -92,9 +92,9 @@ namespace Gazebo.Repository
             var additionalData = new Additional
             {
                 UserId = addedUser.UserId,
-                PhoneNumber = "test",
+                PhoneNumber = string.Empty,
                 DateOfBirth = DateTime.UtcNow,
-                Bio = "test"
+                Bio = string.Empty
             };
 
             var profileCreate = await _profileRepository.CreateProfile(additionalData);

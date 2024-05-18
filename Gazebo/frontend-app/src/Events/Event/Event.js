@@ -121,7 +121,13 @@ function Event() {
             <div className="comments-list">
               {comments.map((comment) => (
                 <div key={comment.commentId} className="comment-item">
-                  <p><strong>{comment.commentOwnerName}</strong> {format(new Date(comment.commentDate), 'dd-MM-yyyy HH:mm')}</p>
+                  <p>
+                    <Link to={`/profile/${comment.commentOwnerId}`} style={{ color: 'black' }}>
+                      <strong>{comment.commentOwnerName}</strong>
+                    </Link>
+                    {' '}
+                    {format(new Date(comment.commentDate), 'dd-MM-yyyy HH:mm')}
+                  </p>
                   <p>{comment.commentText}</p>
                 </div>
               ))}

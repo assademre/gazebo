@@ -14,7 +14,7 @@ function Task() {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
   const [pageNumber, setPageNumber] = useState(1);
-  const [pageSize] = useState(10); // Assuming the pageSize is constant
+  const [pageSize] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
   const navigate = useNavigate();
 
@@ -116,7 +116,13 @@ function Task() {
           <div className="comments-list">
             {comments.map((comment) => (
               <div key={comment.commentId} className="comment-item">
-                <p><strong>{comment.commentOwnerName}</strong> {format(new Date(comment.commentDate), 'dd-MM-yyyy HH:mm')}</p>
+                <p>
+                  <strong>
+                    <Link to={`/profile/${comment.commentOwnerId}`} style={{ color: 'black' }}>
+                      {comment.commentOwnerName}
+                    </Link>
+                  </strong> {format(new Date(comment.commentDate), 'dd-MM-yyyy HH:mm')}
+                </p>
                 <p>{comment.commentText}</p>
               </div>
             ))}
