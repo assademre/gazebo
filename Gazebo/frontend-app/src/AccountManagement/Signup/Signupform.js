@@ -8,8 +8,7 @@ const SignupForm = () => {
     password: '',
     name: '',
     surname: '',
-    email: '',
-    phoneNumber: ''
+    email: ''
   });
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -88,10 +87,6 @@ const SignupForm = () => {
         <div>
           <label>Email</label>
           <input type="email" name="email" value={formData.email} onChange={handleChange} required />
-        </div>
-        <div>
-          <label>Phone Number</label>
-          <input type="tel" name="phoneNumber" value={formData.phoneNumber} onChange={handleChange} required />
         </div>
         <button type="submit" disabled={!usernameAvailable || isLoading}>{isLoading ? 'Signing up...' : 'Signup'}</button>
       </form>

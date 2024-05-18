@@ -60,6 +60,19 @@ const NavBar = () => {
         navigate('/logout');
     };
 
+    const handleFriendship = () => {
+        navigate('/friendship');
+    };
+
+    const handleProfile = () => {
+        const userId = localStorage.getItem('userId');
+        if (userId) {
+          navigate(`/profile/${userId}`);
+        } else {
+          alert('User ID not found in local storage');
+        }
+      };
+
     return (
         <nav className='navbar-container'>
             <Link to="/main-page">
@@ -88,7 +101,8 @@ const NavBar = () => {
                     <span className="username">{username}</span>
                     {showProfileDropdown && (
                         <div className="profile-dropdown">
-                            <Link to="/friendship">{t('friendship')}</Link>
+                            <button onClick={handleProfile}>{t('profile')}</button>
+                            <button onClick={handleFriendship}>{t('friendship')}</button>
                             <button onClick={handleLogout}>{t('logout')}</button>
                         </div>
                     )}

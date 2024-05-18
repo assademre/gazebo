@@ -15,6 +15,7 @@ import Logout from "./AccountManagement/Logout/Logout";
 import Splash from "./AccountManagement/SplashScreen/Splash";
 import NotificationPage from "./NavigationBar/NotificationPage/NotificationPage";
 import FriendshipPage from "./Friendship/FriendshipPage";
+import ProfilePage from "./Profile/Profile";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -44,6 +45,7 @@ function App() {
           <Route path="/edit-task/:taskId" element={<EditTask />} />
           <Route path="/notifications" element={<NotificationPage />} />
           <Route path="/friendship" element={<FriendshipPage />} />
+          <Route path="/profile/:userId" element={<ProfilePage />} />
           <Route path="*" element={<Navigate to="/login" />} />
         </Routes>
       </div>

@@ -167,6 +167,26 @@ export const getCommentsAPI = async (postGroupTypeId, postGroupId, pageNumber, p
   }
 };
 
+// Profile API Calls
+
+export const getProfileAPI = async (userId) => {
+  try {
+    const response = await api.get(`/api/profile/${userId}`);
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response.data.message || 'Failed while getting profile');
+  }
+};
+
+export const updateProfileAPI = async (profile) => {
+  try {
+    const response = await api.get(`/api/profile`, profile);
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response.data.message || 'Failed while updating the profile');
+  }
+};
+
 // Friendship API Calls
 
 export const getFriendsAPI = async () => {

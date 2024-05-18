@@ -3,7 +3,7 @@ using EventOrganizationApp.Models;
 using EventOrganizationApp.Models.Enums;
 using Gazebo.Data.Dto;
 using Gazebo.Models;
-using Gazebo.Models.Enums;
+using Profile = AutoMapper.Profile;
 
 namespace EventOrganizationApp.Data.Dto.Mapper
 {

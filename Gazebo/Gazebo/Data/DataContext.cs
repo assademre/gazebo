@@ -22,6 +22,7 @@ namespace EventOrganizationApp.Data
         public DbSet<Notification>Notifications { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Friendship> Friendships { get; set; }
+        public DbSet<Additional> AdditionalData { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -67,6 +68,9 @@ namespace EventOrganizationApp.Data
 
             builder.Entity<Friendship>()
                 .HasKey(c => c.FriendshipId);
+
+            builder.Entity<Additional>()
+                .HasKey(c => c.UserId);
 
             List<IdentityRole> roles = new List<IdentityRole>
             {

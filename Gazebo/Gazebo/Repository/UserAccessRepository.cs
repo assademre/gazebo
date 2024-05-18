@@ -12,11 +12,13 @@ namespace Gazebo.Repository
         private readonly DataContext _context;
         private readonly IUserRepository _userRepository;
         private readonly IHashPassword _hashPassword;
-        public UserAccessRepository(DataContext context, IHashPassword hashPassword, IUserRepository userRepository)
+        private readonly IProfileRepository _profileRepository;
+        public UserAccessRepository(DataContext context, IHashPassword hashPassword, IUserRepository userRepository, IProfileRepository profileRepository)
         {
             _context = context;
             _hashPassword = hashPassword;
             _userRepository = userRepository;
+            _profileRepository = profileRepository;
         }
 
         public async Task<int> UserLogin(string username, string password)
@@ -77,11 +79,32 @@ namespace Gazebo.Repository
                 Username = addedUser.Username,
                 Name = signup.Name,
                 Surname = signup.Surname,
-                PhoneNumber = signup.PhoneNumber,
                 Email = signup.Email
             };
 
-            return _userRepository.CreateUser(newUserInfo);
+            var userCreation = _userRepository.CreateUser(newUserInfo);
+
+            if (!userCreation)
+            {
+                return false;
+            }
+
+            var additionalData = new Additional
+            {
+                UserId = addedUser.UserId,
+                PhoneNumber = "test",
+                DateOfBirth = DateTime.UtcNow,
+                Bio = "test"
+            };
+
+            var profileCreate = await _profileRepository.CreateProfile(additionalData);
+
+            if (!profileCreate)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         public async Task<bool> IsUsernameOrEmailExists(string username)
