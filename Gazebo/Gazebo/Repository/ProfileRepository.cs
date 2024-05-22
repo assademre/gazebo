@@ -10,24 +10,28 @@ namespace Gazebo.Repository
     {
         private readonly DataContext _context;
         private readonly IUserRepository _userRepository;
+        private readonly IFriendshipRepository _friendshipRepository;
 
-        public ProfileRepository(DataContext context, IUserRepository userRepository)
+        public ProfileRepository(DataContext context, IUserRepository userRepository, IFriendshipRepository friendshipRepository)
         {
             _context = context;
             _userRepository = userRepository;   
+            _friendshipRepository = friendshipRepository;
         }
-        public async Task<ProfileDto> GetProfile(int userId)
+        public async Task<ProfileDto> GetProfile(int userId, int profileId)
         {
-            if (userId == 0)
+            if (profileId == 0 || userId == 0)
             {
                 return new ProfileDto();
             }
 
             var additionalData = await _context.AdditionalData
-                .Where(p => p.UserId == userId)
+                .Where(p => p.UserId == profileId)
                 .FirstOrDefaultAsync();
 
-            var userInfo = _userRepository.GetUserInfo(userId);
+            var friendshipStatus = await _friendshipRepository.GetFriendshipStatus(userId, profileId);
+
+            var userInfo = _userRepository.GetUserInfo(profileId);
 
             var profile = new ProfileDto
             {
@@ -38,6 +42,7 @@ namespace Gazebo.Repository
                 Email = userInfo.Email,
                 PhoneNumber = additionalData.PhoneNumber,
                 DateOfBirth = additionalData.DateOfBirth,
+                FriendshipStatus = friendshipStatus,
                 Bio = additionalData.Bio
             };
 

@@ -5,7 +5,7 @@ namespace Gazebo.Interfaces
 {
     public interface IProfileRepository
     {
-        Task<ProfileDto> GetProfile(int userId);
+        Task<ProfileDto> GetProfile(int profileId, int userId);
         Task<bool> CreateProfile(Additional additionalData);
         Task<bool> UpdateProfile(Additional additionalData);
     }

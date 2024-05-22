@@ -124,18 +124,49 @@ namespace Gazebo.Repository
                 return false;
             }
 
-            var friendship = new Friendship()
-            {
-                SenderId = userId,
-                ReceiverId = receiverId,
-                FriendshipStatusId = (int)FriendshipStatus.Pending,
-                UpdateDate = DateTime.UtcNow
-            };
+            var isFriendshipAdded = GetFriendshipStatus(userId, receiverId) != null;
 
-            await _context.AddAsync(friendship);
+            if (isFriendshipAdded)
+            {
+                var friendship = await _context.Friendships
+                .Where(x => (x.SenderId == receiverId && x.ReceiverId == userId) || (x.SenderId == userId && x.ReceiverId == receiverId))
+                .FirstOrDefaultAsync();
+
+                friendship.FriendshipStatusId = (int)FriendshipStatus.Pending;
+
+                _context.Update(friendship);
+            }
+            else
+            {
+                var friendship = new Friendship()
+                {
+                    SenderId = userId,
+                    ReceiverId = receiverId,
+                    FriendshipStatusId = (int)FriendshipStatus.Pending,
+                    UpdateDate = DateTime.UtcNow
+                };
+
+                await _context.AddAsync(friendship);
+            }
 
             return await SaveChanges();
         }
+
+        public async Task<int> GetFriendshipStatus(int userId, int friendId)
+        {
+            if (userId == 0 || friendId == 0)
+            {
+                return 0;
+            }
+
+            var friendshipStatus = await _context.Friendships
+                .Where(x => (x.SenderId == friendId && x.ReceiverId == userId) || (x.SenderId == userId && x.ReceiverId == friendId))
+                .Select(x => x.FriendshipStatusId)
+                .FirstOrDefaultAsync();
+
+            return friendshipStatus;
+        }
+
 
         private async Task<bool> SaveChanges()
         {

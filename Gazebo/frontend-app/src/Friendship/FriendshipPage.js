@@ -44,6 +44,7 @@ function FriendshipPage() {
   };
 
   const handleDeleteFriend = async (friendId) => {
+    console.log(friendId);
     try {
       await deleteFriendAPI(friendId);
       fetchFriends();
@@ -77,9 +78,9 @@ function FriendshipPage() {
           <p>{t("noFriends")}</p>
         ) : (
           friends.map((friend) => (
-            <div key={friend.id} className="friend">
+            <div key={friend.friendId} className="friend">
               <p>{friend.friendName}</p>
-              <button onClick={() => handleDeleteFriend(friend.id)}>{t("delete")}</button>
+              <button onClick={() => handleDeleteFriend(friend.friendId)}>{t("delete")}</button>
             </div>
           ))
         )}

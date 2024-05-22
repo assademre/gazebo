@@ -17,18 +17,20 @@ namespace Gazebo.Controller
             _profileRepository = profileRepository;
         }
 
-        [HttpGet("{userId}")]
+        [HttpGet("{profileId}")]
         [Authorize]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> GetProfile(int userId)
+        public async Task<IActionResult> GetProfile(int profileId)
         {
-            if (userId == 0)
+            var userId = GetUser();
+
+            if (profileId == 0 || userId == 0)
             {
-                return BadRequest("user id is not correct");
+                return BadRequest("user id or profileId is not correct");
             }
 
-            var profile = await _profileRepository.GetProfile(userId);
+            var profile = await _profileRepository.GetProfile(userId, profileId);
 
             if (profile == null)
             {

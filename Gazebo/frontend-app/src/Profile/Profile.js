@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { getProfileAPI, updateProfileAPI, sendFriendshipRequestAPI } from '../api';
+import { getProfileAPI, updateProfileAPI, sendFriendshipRequestAPI, deleteFriendAPI } from '../api';
 import Layout from '../NavigationBar/Layout';
 import './Profile.css';
 
@@ -23,6 +23,7 @@ const ProfilePage = () => {
     bio: ''
   });
   const [requestSent, setRequestSent] = useState(false);
+  const [friendshipStatus, setFriendshipStatus] = useState(null);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -39,6 +40,9 @@ const ProfilePage = () => {
           bio: profileData.bio
         });
         setLoading(false);
+        if (profileData.friendshipStatus) {
+          setFriendshipStatus(profileData.friendshipStatus);
+        }
       } catch (error) {
         setError(error.message);
         setLoading(false);
@@ -75,6 +79,16 @@ const ProfilePage = () => {
     }
   };
 
+  const handleRemoveFriend = async () => {
+    try {
+      await deleteFriendAPI(userId);
+      setFriendshipStatus(null);
+      alert('Friend removed successfully!');
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
   if (loading) return <div className="loading">{t("loading")}</div>;
   if (error) return <div className="error">{t("error")} {error}</div>;
 
@@ -95,8 +109,14 @@ const ProfilePage = () => {
         {storedUserId === userId && !editMode && (
           <button onClick={() => setEditMode(true)}>{t("updateProfile")}</button>
         )}
-        {storedUserId !== userId && !requestSent && (
-          <button onClick={handleSendFriendshipRequest}>{t("sendFriendshipRequest")}</button>
+        {storedUserId !== userId && friendshipStatus !== null && (
+          friendshipStatus === 1 ? (
+            <button disabled>{t("friendshipRequestPending")}</button>
+          ) : friendshipStatus === 2 ? (
+            <button onClick={handleRemoveFriend}>{t("removeFriend")}</button>
+          ) : (
+            <button onClick={handleSendFriendshipRequest}>{t("sendFriendshipRequest")}</button>
+          )
         )}
         {editMode && (
           <form className="profile-form" onSubmit={handleSubmit}>

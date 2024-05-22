@@ -9,5 +9,6 @@ namespace Gazebo.Interfaces
         Task<bool> RespondFriendshipRequest(int userId, int senderId, int respondId);
         Task<IList<FriendshipDto>> FriendshipRequests(int userId);
         Task<bool> RemoveFriend(int userId, int friendId);
+        Task<int> GetFriendshipStatus(int userId, int friendId);
     }
 }

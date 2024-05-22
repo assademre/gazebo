@@ -75,9 +75,7 @@ namespace Gazebo.Test
                         Username = TestUsername,
                         Name = TestUsername,
                         Surname = TestUsername,
-                        Email = TestEmail,
-                        PhoneNumber = TestPhoneNumber
-
+                        Email = TestEmail
                     } 
                 };
                 _mockProfileRepository.Setup(repo => repo.GetUsersName()).Returns(users);
