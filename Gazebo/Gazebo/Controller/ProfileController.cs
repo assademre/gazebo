@@ -59,7 +59,7 @@ namespace Gazebo.Controller
             }
 
 
-            var updateResponse = await _profileRepository.UpdateProfile(additionalData);
+            var updateResponse = await _profileRepository.UpdateProfile(userId, additionalData);
 
             if (!updateResponse)
             {

@@ -7,6 +7,6 @@ namespace Gazebo.Interfaces
     {
         Task<ProfileDto> GetProfile(int profileId, int userId);
         Task<bool> CreateProfile(Additional additionalData);
-        Task<bool> UpdateProfile(Additional additionalData);
+        Task<bool> UpdateProfile(int userId, Additional additionalData);
     }
 }

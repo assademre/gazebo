@@ -180,7 +180,7 @@ export const getProfileAPI = async (userId) => {
 
 export const updateProfileAPI = async (profile) => {
   try {
-    const response = await api.get(`/api/profile`, profile);
+    const response = await api.put(`/api/profile`, profile);
     return response.data;
   } catch (error) {
     throw new Error(error.response.data.message || 'Failed while updating the profile');

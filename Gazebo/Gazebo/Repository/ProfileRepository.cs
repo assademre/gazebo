@@ -61,12 +61,14 @@ namespace Gazebo.Repository
             return await SaveChanges();
         }
 
-        public async Task<bool> UpdateProfile(Additional additionalData)
+        public async Task<bool> UpdateProfile(int userId,Additional additionalData)
         {
             if (additionalData == null)
             {
                 return false;
             }
+
+            additionalData.UserId = userId;
 
             _context.Update(additionalData);
 

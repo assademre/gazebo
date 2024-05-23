@@ -155,7 +155,7 @@ const ProfilePage = () => {
                 onChange={handleChange}
               />
             </div>
-            <button type="submit">{t("saveChanges")}</button>
+            <button type="submit">{t("save")}</button>
             <button type="button" onClick={() => setEditMode(false)}>{t("cancel")}</button>
           </form>
         )}
